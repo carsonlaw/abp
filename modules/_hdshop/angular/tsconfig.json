@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.prod.json",
+  "compilerOptions": {
+    "paths": {
+      "@my-company-name/h-dShop": [
+        "projects/h-dShop/src/public-api.ts"
+      ],
+      "@my-company-name/h-dShop/config": [
+        "projects/h-dShop/config/src/public-api.ts"
+      ],
+      "@proxy": ["projects/h-dShop/src/lib/proxy/index.ts"],
+      "@proxy/*": ["projects/h-dShop/src/lib/proxy/*"]
+    }
+  }
+}
