@@ -6,14 +6,12 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "buildDbmigrator",
-            "program": "${workspaceFolder}/src/FreeERP.DbMigrator/bin/Debug/net5.0/FreeERP.DbMigrator.dll",
+            "program": "${workspaceFolder}/src/FreeERP.DbMigrator/bin/Debug/net6.0/FreeERP.DbMigrator.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/FreeERP.DbMigrator",
             "stopAtEntry": false,
             "console": "internalConsole"
         },
-
-
         {
             // Use IntelliSense to find out which attributes exist for C# debugging
             // Use hover for the description of the existing attributes
@@ -23,7 +21,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/FreeERP.Web/bin/Debug/net5.0/FreeERP.Web.dll",
+            "program": "${workspaceFolder}/src/FreeERP.Web/bin/Debug/net6.0/FreeERP.Web.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/FreeERP.Web",
             "stopAtEntry": false,
