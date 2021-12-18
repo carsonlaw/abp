@@ -5,10 +5,10 @@ namespace FreeERP
 {
     public static class SlugNormalizer
     {
-         static readonly SlugHelper SlugHelper = new();
-    public static string Normalize(string value)
-    {
-        return SlugHelper.GenerateSlug(value?.Unidecode());
-    }
+        static readonly SlugHelper SlugHelper = new();
+        public static string Normalize(string value)
+        {
+            return SlugHelper.GenerateSlug(value?.Unidecode());
+        }
     }
 }

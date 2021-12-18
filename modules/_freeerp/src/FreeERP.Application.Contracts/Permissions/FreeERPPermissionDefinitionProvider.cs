@@ -17,7 +17,6 @@ namespace FreeERP.Permissions
             categoryManagement.AddChild(FreeERPPermissions.Categories.Update, L("Permission:CategoryManagement.Update"));
             categoryManagement.AddChild(FreeERPPermissions.Categories.Delete, L("Permission:CategoryManagement.Delete"));
             var productManagement = myGroup.AddPermission(FreeERPPermissions.Products.Default, L("Permission:ProductManagement"));
-            //.RequireGlobalFeatures(typeof(BlogsFeature));
             productManagement.AddChild(FreeERPPermissions.Products.Create, L("Permission:ProductManagement.Create"));
             productManagement.AddChild(FreeERPPermissions.Products.Update, L("Permission:ProductManagement.Update"));
             productManagement.AddChild(FreeERPPermissions.Products.Delete, L("Permission:ProductManagement.Delete"));
