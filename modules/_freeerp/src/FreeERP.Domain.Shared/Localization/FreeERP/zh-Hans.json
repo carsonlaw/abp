@@ -2,8 +2,12 @@
   "culture": "zh-Hans",
   "texts": {
     "Menu:Home": "首页",
+    "Menu:ProductsGroupName": "产品管理",
+    "Menu:Category": "类别管理",
+    "Menu:Product": "产品管理",
     "Welcome": "欢迎",
     "LongWelcomeMessage": "欢迎来到该应用程序. 这是一个基于ABP框架的启动项目. 有关更多信息, 请访问 abp.io.",
+    "Permission:ProductsGroupName": "产品管理",
     "Permission:CategoryManagement": "类别管理",
     "Permission:CategoryManagement.Create": "创建",
     "Permission:CategoryManagement.Update": "更新",
@@ -11,6 +15,11 @@
     "Permission:ProductManagement": "产品管理",
     "Permission:ProductManagement.Create": "创建",
     "Permission:ProductManagement.Update": "更新",
-    "Permission:ProductManagement.Delete": "删除"
+    "Permission:ProductManagement.Delete": "删除",
+    "Permission:PurchaseGroupName": "采购管理",
+    "Permission:PurchaseOrderManagement": "订单管理",
+    "Permission:PurchaseOrderManagement.Create": "创建",
+    "Permission:PurchaseOrderManagement.Update": "更新",
+    "Permission:PurchaseOrderManagement.Delete": "删除"
   }
 }

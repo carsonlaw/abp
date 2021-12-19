@@ -37,6 +37,8 @@ using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using FreeERP.Permissions;
 
 namespace FreeERP.Web
 {
@@ -85,6 +87,16 @@ namespace FreeERP.Web
             ConfigureNavigationServices();
             ConfigureAutoApiControllers();
             ConfigureSwaggerServices(context.Services);
+            ConfigureUrlOption();
+        }
+
+        private void ConfigureUrlOption()
+        {
+            Configure<RazorPagesOptions>(option =>
+            {
+                //option.Conventions.AuthorizeFolder("/Products/Product", FreeERPPermissions.Products.Default);
+                option.Conventions.AuthorizePage("/Products/Product", FreeERPPermissions.Products.Default);
+            });
         }
 
         private void ConfigureUrls(IConfiguration configuration)
