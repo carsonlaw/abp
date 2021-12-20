@@ -10,11 +10,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\FreeERP.EntityFrameworkCore\FreeERP.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\FreeERP.TestBase\FreeERP.TestBase.csproj" />
-    <PackageReference Include="Volo.Abp.EntityFrameworkCore.Sqlite" Version="4.4.4" />
+    <PackageReference Include="Volo.Abp.EntityFrameworkCore.Sqlite" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
   </ItemGroup>
 
 </Project>

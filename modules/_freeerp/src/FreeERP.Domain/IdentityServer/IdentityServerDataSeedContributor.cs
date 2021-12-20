@@ -111,10 +111,10 @@ namespace FreeERP.IdentityServer
 
         private async Task<ApiScope> CreateApiScopeAsync(string name)
         {
-            var apiScope = await _apiScopeRepository.GetByNameAsync(name);
-            if (apiScope == null)
+            var apiScope = await _apiScopeRepository.GetListByNameAsync(new string[] { name });
+            if (apiScope == null || apiScope.Count <= 0)
             {
-                apiScope = await _apiScopeRepository.InsertAsync(
+                var scope = await _apiScopeRepository.InsertAsync(
                     new ApiScope(
                         _guidGenerator.Create(),
                         name,
@@ -122,9 +122,10 @@ namespace FreeERP.IdentityServer
                     ),
                     autoSave: true
                 );
+                apiScope.Add(scope);
             }
 
-            return apiScope;
+            return apiScope[0];
         }
 
         private async Task CreateClientsAsync()
@@ -160,9 +161,9 @@ namespace FreeERP.IdentityServer
                     corsOrigins: new[] { webClientRootUrl.RemovePostFix("/") }
                 );
             }
-            
-            
-            
+
+
+
             // Swagger Client
             var swaggerClientId = configurationSection["FreeERP_Swagger:ClientId"];
             if (!swaggerClientId.IsNullOrWhiteSpace())

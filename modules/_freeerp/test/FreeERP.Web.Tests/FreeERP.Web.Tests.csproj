@@ -14,11 +14,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.32" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.39" />
     <ProjectReference Include="..\FreeERP.Application.Tests\FreeERP.Application.Tests.csproj" />
     <ProjectReference Include="..\..\src\FreeERP.Web\FreeERP.Web.csproj" />
-    <PackageReference Include="Volo.Abp.AspNetCore.TestBase" Version="4.4.4" />
+    <PackageReference Include="Volo.Abp.AspNetCore.TestBase" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
