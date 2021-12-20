@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
 
 namespace FreeERP.Products
@@ -7,5 +8,6 @@ namespace FreeERP.Products
     {
         public string Name { get; set; }
         public string Slug { get; set; }
+        public IList<CategoryDto> Items { get; set; }
     }
 }

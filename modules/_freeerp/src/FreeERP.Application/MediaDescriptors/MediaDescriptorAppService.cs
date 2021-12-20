@@ -6,12 +6,12 @@ using Volo.Abp.Domain.Repositories;
 
 namespace FreeERP.MediaDescriptors
 {
-    public class MediaDescriptorAdminAppService : FreeERPAppService, IMediaDescriptorAdminAppService
+    public class MediaDescriptorAppService : FreeERPAppService, IMediaDescriptorAppService
     {
         protected IBlobContainer<MediaContainer> MediaContainer { get; }
         protected IRepository<MediaDescriptor> MediaDescriptorRepository { get; }
 
-        public MediaDescriptorAdminAppService(
+        public MediaDescriptorAppService(
             IBlobContainer<MediaContainer> mediaContainer,
             IRepository<MediaDescriptor> mediaDescriptorRepository)
         {
