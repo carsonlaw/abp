@@ -32,11 +32,13 @@ namespace FreeERP.Products
         {
             var list = query.Where(f => f.Pid == pid)
             .ToList()
-            .Select(f => MapToGetOutputDto(f));
-            foreach (var cate in list)
+            .Select(f => MapToGetOutputDto(f))
+            .ToList();
+            for (int i = 0; i < list.Count(); i++)
             {
-                cate.Items = await buildTree(query, cate.Id);
+                list[i].Items = await buildTree(query, list[i].Id);
             }
+
             return list.ToList();
         }
 

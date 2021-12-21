@@ -1,4 +1,5 @@
 @using FreeERP.Products;
+@using FreeERP.Web.Components;
 @model List<CategoryDto>;
 
 <div class="navbar">
@@ -10,21 +11,7 @@
 
             @foreach (var cate in Model)
             {
-                <div class="dropdown-submenu">
-                    <a role="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
-                        <span>
-                            @cate.Name
-                        </span>
-                    </a>
-                    <div class="dropdown-menu border-0 shadow-sm">
-                        @foreach (var item in cate.Items)
-                        {
-                            <abp-dropdown-item>@item.Name</abp-dropdown-item>
-                        }
-                    </div>
-                </div>
-
+                @await Component.InvokeAsync(typeof(CategoryItemWidgetViewComponent),cate)
             }
         </div>
     </div>
