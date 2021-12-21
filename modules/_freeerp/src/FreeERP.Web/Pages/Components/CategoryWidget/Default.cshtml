@@ -1,0 +1,31 @@
+@using FreeERP.Products;
+@model List<CategoryDto>;
+
+<div class="navbar">
+    <div class="dropdown">
+        <a class="btn dropdown-toggle" id="Menu_" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            选择类别
+        </a>
+        <div class="dropdown-menu border-0 shadow-sm " aria-labelledby="Menu_">
+
+            @foreach (var cate in Model)
+            {
+                <div class="dropdown-submenu">
+                    <a role="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                        <span>
+                            @cate.Name
+                        </span>
+                    </a>
+                    <div class="dropdown-menu border-0 shadow-sm">
+                        @foreach (var item in cate.Items)
+                        {
+                            <abp-dropdown-item>@item.Name</abp-dropdown-item>
+                        }
+                    </div>
+                </div>
+
+            }
+        </div>
+    </div>
+</div>
