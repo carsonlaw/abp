@@ -13,7 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace FreeERP.Migrations
 {
     [DbContext(typeof(FreeERPDbContext))]
-    [Migration("20211220064506_Init")]
+    [Migration("20211220131646_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

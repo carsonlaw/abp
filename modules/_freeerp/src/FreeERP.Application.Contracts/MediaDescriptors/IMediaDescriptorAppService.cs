@@ -5,7 +5,7 @@ using Volo.Abp.Content;
 
 namespace FreeERP.MediaDescriptors
 {
-    public interface IMediaDescriptorAdminAppService : IApplicationService
+    public interface IMediaDescriptorAppService : IApplicationService
     {
         Task<RemoteStreamContent> DownloadAsync(Guid id);
         Task<MediaDescriptorDto> CreateAsync(string entityType, CreateMediaInputWithStream inputStream);

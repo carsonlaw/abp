@@ -11,12 +11,12 @@ namespace FreeERP.MediaDescriptors
     public class MediaDescriptorAdminAppService_Tests : FreeERPApplicationTestBase
     {
         private Guid mediaId;
-        private readonly IMediaDescriptorAdminAppService _mediaDescriptorAdminAppService;
+        private readonly IMediaDescriptorAppService _mediaDescriptorAdminAppService;
         private readonly IRepository<MediaDescriptor> _mediaDescriptorRepository;
 
         public MediaDescriptorAdminAppService_Tests()
         {
-            _mediaDescriptorAdminAppService = GetRequiredService<IMediaDescriptorAdminAppService>();
+            _mediaDescriptorAdminAppService = GetRequiredService<IMediaDescriptorAppService>();
             _mediaDescriptorRepository = GetRequiredService<IRepository<MediaDescriptor>>();
         }
 
