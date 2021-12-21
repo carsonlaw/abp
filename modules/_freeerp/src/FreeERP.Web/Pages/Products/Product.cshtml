@@ -1,6 +1,7 @@
 @page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using FreeERP.Localization
+@using FreeERP.Web.Components;
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Slugify
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPageToolbar
 
@@ -19,6 +20,7 @@
 <div id="ProductWrapper">
     <abp-card>
         <abp-card-body>
+            @await Component.InvokeAsync(typeof(CategoryWidgetViewComponent))
             <abp-table striped-rows="true" id="ProductTable" class="nowrap"></abp-table>
         </abp-card-body>
     </abp-card>
