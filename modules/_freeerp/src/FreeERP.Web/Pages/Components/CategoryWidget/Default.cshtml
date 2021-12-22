@@ -2,12 +2,14 @@
 @using FreeERP.Web.Components;
 @model List<CategoryDto>;
 
-<div class="navbar">
+<div class="navbar category">
+    <abp-breadcrumb style="display: none;">
+    </abp-breadcrumb>
     <div class="dropdown">
-        <a class="btn dropdown-toggle" id="Menu_" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="btn dropdown-toggle" id="Category" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             选择类别
         </a>
-        <div class="dropdown-menu border-0 shadow-sm " aria-labelledby="Menu_">
+        <div class="dropdown-menu border-0 shadow-sm " aria-labelledby="Category">
 
             @foreach (var cate in Model)
             {
@@ -15,4 +17,5 @@
             }
         </div>
     </div>
+    <input type="text" name="CategoryId" id="CategoryId"></input>
 </div>

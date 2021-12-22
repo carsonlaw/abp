@@ -8,7 +8,9 @@ using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 
 namespace FreeERP.Web.Components
 {
-    [Widget]
+    [Widget(
+         ScriptFiles = new string[] { "/Pages/Components/CategoryWidget/Default.js" }
+    )]
     public class CategoryWidgetViewComponent : AbpViewComponent
     {
         private ICategoryAppService _categoryAPPService;

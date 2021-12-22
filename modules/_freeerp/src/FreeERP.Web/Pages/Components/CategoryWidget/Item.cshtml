@@ -3,7 +3,8 @@
 @model CategoryDto;
 
 <div class="dropdown-submenu">
-    <a role="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <a role="button" class="btn categoryitem dropdown-toggle" categoryid="@Model.Id" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
         <span>
             @Model.Name
         </span>
