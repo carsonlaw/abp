@@ -3,9 +3,11 @@
 @model CategoryWidgetModel;
 
 <div class="navbar category">
-    <abp-breadcrumb style="display: none;">
-    </abp-breadcrumb>
-    <div class="dropdown">
+    <div class="divbread" style="display: none;">
+        <abp-breadcrumb>
+        </abp-breadcrumb>
+    </div>
+    <div class="dropdown divselect">
         <a class="btn dropdown-toggle" id="Sel_@Model.Id" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false">
             @Model.SelectText
@@ -18,5 +20,5 @@
             }
         </div>
     </div>
-    <input type="text" class="categoryinput" name="@Model.InputName" id="@Model.InputName"></input>
+    <input type="hidden" class="categoryinput" name="@Model.InputName" id="@Model.InputName"></input>
 </div>

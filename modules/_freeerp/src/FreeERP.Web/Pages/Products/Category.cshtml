@@ -12,7 +12,7 @@
 @model CategoryModel
 
 @{
-    PageLayout.Content.Title = "分类管理";
+    PageLayout.Content.Title = L["Menu:Category"].Value;
     PageLayout.Content.BreadCrumb.Add(L["Menu:FreeERP"].Value);
     PageLayout.Content.MenuItemName = FreeERPMenus.Category;
 }
@@ -30,19 +30,18 @@
     <abp-card-body>
         <form id="CategoryFilterForm" method="post">
             <abp-row>
-                <abp-column size-lg="_3" size-md="_6">
+                <abp-column size-lg="_5" size-md="_4">
                     @await Component.InvokeAsync(typeof(CategoryWidgetViewComponent),new CategoryWidgetModel(){
                     Id="CategoryCate", InputName="CategoryId", SelectText=L["CategorySelect"].Value })
                 </abp-column>
-                <abp-column size-lg="_3" size-md="_6">
-                    <abp-input asp-for="@Model.Filter" label="@L["CategoryName"].Value" type="text" />
+                <abp-column size-lg="_5" size-md="_4">
+                    <abp-input asp-for="@Model.Filter" suppress-label="true" type="text" />
                 </abp-column>
 
-                <abp-column size-lg="_2" size-md="_6">
+                <abp-column size-lg="_2" size-md="_4">
                     <div class="d-grid gap-2">
-                        <abp-button class="mt-md-4" button-type="Primary" type="submit"
-                            style="margin-top: 1.75rem !important;">
-                            <i class="fa fa-search" aria-hidden="true"></i>
+                        <abp-button class="mt-md-4" button-type="Primary" type="submit">
+                            <i class="fa fa-search" aria-hidden="true"></i>@L["Search"].Value
                         </abp-button>
                     </div>
                 </abp-column>
