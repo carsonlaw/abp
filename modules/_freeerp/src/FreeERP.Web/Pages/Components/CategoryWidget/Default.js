@@ -3,7 +3,7 @@ $(function () {
 
     $(".category .categoryitem").on('click',
         function () {
-            $('#CategoryId').val($(this).attr('categoryid'));
+            $('.categoryinput').val($(this).attr('categoryid'));
             $('.category nav ol').empty();
 
             var item = '<li class="breadcrumb-item " aria-current="page">' + $(this).text() + '</li>'
@@ -15,7 +15,7 @@ $(function () {
 
     $('.category').on('click', '.categoryReset',
         function () {
-            $('#CategoryId').val('');
+            $('.categoryinput').val('');
             $('.category nav').hide();
             $('.category .dropdown').show();
         });

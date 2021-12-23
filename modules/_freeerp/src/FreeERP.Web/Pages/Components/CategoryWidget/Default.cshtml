@@ -1,21 +1,22 @@
 @using FreeERP.Products;
 @using FreeERP.Web.Components;
-@model List<CategoryDto>;
+@model CategoryWidgetModel;
 
 <div class="navbar category">
     <abp-breadcrumb style="display: none;">
     </abp-breadcrumb>
     <div class="dropdown">
-        <a class="btn dropdown-toggle" id="Category" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            选择类别
+        <a class="btn dropdown-toggle" id="Sel_@Model.Id" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            @Model.SelectText
         </a>
-        <div class="dropdown-menu border-0 shadow-sm " aria-labelledby="Category">
+        <div class="dropdown-menu border-0 shadow-sm" aria-labelledby=" Sel_@Model.Id">
 
-            @foreach (var cate in Model)
+            @foreach (var cate in Model.Items)
             {
                 @await Component.InvokeAsync(typeof(CategoryItemWidgetViewComponent),cate)
             }
         </div>
     </div>
-    <input type="text" name="CategoryId" id="CategoryId"></input>
+    <input type="text" class="categoryinput" name="@Model.InputName" id="@Model.InputName"></input>
 </div>

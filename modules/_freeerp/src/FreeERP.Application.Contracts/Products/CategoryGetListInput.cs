@@ -9,5 +9,6 @@ namespace FreeERP.Products
     {
         public string Filter { get; set; }
         public Guid? Pid { get; set; }
+        public bool PidNullIsAll { get; set; } = false;
     }
 }

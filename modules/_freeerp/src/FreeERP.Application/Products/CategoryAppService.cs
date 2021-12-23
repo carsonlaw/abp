@@ -23,6 +23,7 @@ namespace FreeERP.Products
 
         public async Task<IList<CategoryDto>> GetCategoryTree(CategoryGetListInput input)
         {
+            input.PidNullIsAll = true;
             var query = await CreateFilteredQueryAsync(input);
             return await buildTree(query, input.Pid);
 
@@ -46,7 +47,7 @@ namespace FreeERP.Products
         {
             var ret = await base.CreateFilteredQueryAsync(input);
             ret = ret.WhereIf(!string.IsNullOrWhiteSpace(input.Filter), f => f.Name.Contains(input.Filter));
-            ret = ret.WhereIf(input.Pid != null, f => f.Pid == input.Pid);
+            ret = ret.WhereIf(input.Pid != null || !input.PidNullIsAll, f => f.Pid == input.Pid);
             return ret;
         }
     }

@@ -39,6 +39,7 @@ using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using FreeERP.Permissions;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
 
 namespace FreeERP.Web
 {
@@ -87,16 +88,31 @@ namespace FreeERP.Web
             ConfigureNavigationServices();
             ConfigureAutoApiControllers();
             ConfigureSwaggerServices(context.Services);
-            ConfigureUrlOption();
+            ConfigureFreeERPOption();
         }
 
-        private void ConfigureUrlOption()
+        private void ConfigureFreeERPOption()
         {
             Configure<RazorPagesOptions>(option =>
             {
                 //option.Conventions.AuthorizeFolder("/Products/Product", FreeERPPermissions.Products.Default);
                 option.Conventions.AuthorizePage("/Products/Product", FreeERPPermissions.Products.Default);
             });
+            Configure<AbpPageToolbarOptions>(options =>
+            {
+                options.Configure<FreeERP.Web.Pages.CategoryModel>(
+                    toolbar =>
+                    {
+                        toolbar.AddButton(
+                            LocalizableString.Create<FreeERPResource>("CategoryNew"),
+                            icon: "plus",
+                            name: "CreateCategory",
+                            id: "CreateCategory",
+                            requiredPolicyName: FreeERPPermissions.Categories.Create
+                            );
+                    });
+            });
+
         }
 
         private void ConfigureUrls(IConfiguration configuration)

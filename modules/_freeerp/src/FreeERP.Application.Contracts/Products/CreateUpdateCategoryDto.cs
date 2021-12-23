@@ -6,7 +6,7 @@ namespace FreeERP.Products
 {
     public class CreateUpdateCategoryDto
     {
-        public Guid Pid { get; set; }
+        public Guid? Pid { get; set; }
         [Required]
         [DynamicMaxLength(typeof(CategoryConsts), nameof(CategoryConsts.MaxNameLength))]
         public string Name { get; set; }

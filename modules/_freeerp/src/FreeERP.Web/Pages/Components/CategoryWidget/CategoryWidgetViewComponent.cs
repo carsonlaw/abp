@@ -13,6 +13,7 @@ namespace FreeERP.Web.Components
     )]
     public class CategoryWidgetViewComponent : AbpViewComponent
     {
+        public bool IsSubMenuOpen { get; set; }
         private ICategoryAppService _categoryAPPService;
         public CategoryWidgetViewComponent(ICategoryAppService categoryAPPService)
         {
@@ -20,11 +21,23 @@ namespace FreeERP.Web.Components
         }
 
         public async Task<IViewComponentResult> InvokeAsync(
+            CategoryWidgetModel model
             )
         {
-
             var categories = await _categoryAPPService.GetCategoryTree(new CategoryGetListInput());
-            return View(categories);
+            model.Items = categories;
+            return View(model);
         }
+        private void ToggleSubMenu()
+        {
+            IsSubMenuOpen = !IsSubMenuOpen;
+        }
+    }
+    public class CategoryWidgetModel
+    {
+        public string Id { get; set; }
+        public string InputName { get; set; }
+        public string SelectText { get; set; }
+        public IList<CategoryDto> Items { get; set; }
     }
 }
