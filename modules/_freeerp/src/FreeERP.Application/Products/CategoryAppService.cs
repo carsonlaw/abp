@@ -50,8 +50,15 @@ namespace FreeERP.Products
         {
             input.PidNullIsAll = true;
             var query = await CreateFilteredQueryAsync(input);
+            query = ApplyDefaultSorting(query);
             return await buildTree(query, input.Pid);
 
+        }
+
+        [Authorize(FreeERPPermissions.Categories.Create)]
+        public async Task<int> GetNextSortByPid(Guid? Pid)
+        {
+            return await _repository.GetNextSortByPid(Pid);
         }
 
         private async Task<IList<CategoryDto>> buildTree(IQueryable<Category> query, Guid? pid)
@@ -66,7 +73,10 @@ namespace FreeERP.Products
 
             return list.ToList();
         }
-
+        protected override IQueryable<Category> ApplyDefaultSorting(IQueryable<Category> query)
+        {
+            return query.OrderBy(f => f.Sort);
+        }
         protected override async Task<IQueryable<Category>> CreateFilteredQueryAsync(CategoryGetListInput input)
         {
             var ret = await base.CreateFilteredQueryAsync(input);

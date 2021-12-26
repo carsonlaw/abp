@@ -281,6 +281,7 @@ namespace FreeERP.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
                     Slug = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
+                    Sort = table.Column<int>(type: "integer", nullable: false),
                     Pid = table.Column<Guid>(type: "uuid", nullable: true),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: true),
                     ExtraProperties = table.Column<string>(type: "text", nullable: true),

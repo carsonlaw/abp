@@ -18,5 +18,7 @@ namespace FreeERP.Products
         Task<bool> SlugExistsAsync(string slug, CancellationToken cancellationToken = default);
 
         Task<IList<Guid>> GetAllChildById(Guid? Pid);
+
+        Task<int> GetNextSortByPid(Guid? Pid);
     }
 }

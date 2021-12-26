@@ -44,5 +44,7 @@ public class CagetoryCreateModalModel : FreeERPPageModel
         [DynamicMaxLength(typeof(CategoryConsts), nameof(CategoryConsts.MaxSlugLength))]
         [Required]
         public string Slug { get; set; }
+        [Required]
+        public int Sort { get; set; }
     }
 }

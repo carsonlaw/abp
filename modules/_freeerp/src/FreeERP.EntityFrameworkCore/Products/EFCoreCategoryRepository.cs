@@ -44,6 +44,13 @@ namespace FreeERP.Products
                           .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public virtual async Task<int> GetNextSortByPid(Guid? Pid)
+        {
+            var query = await GetQueryableAsync();
+            var max = await query.Where(f => f.Pid == Pid).MaxAsync(f => f.Sort);
+            return (max + 1);
+        }
+
         public virtual async Task<bool> SlugExistsAsync(string slug, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync()).AnyAsync(x => x.Slug == slug, GetCancellationToken(cancellationToken));

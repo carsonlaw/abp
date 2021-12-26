@@ -9,6 +9,7 @@ namespace FreeERP.Products
     {
         public Guid? Pid { get; set; }
         public string Name { get; set; }
+        public string Sort { get; set; }
         public string Slug { get; set; }
         public string ConcurrencyStamp { get; set; }
         public IList<CategoryDto> Items { get; set; } = new List<CategoryDto>();

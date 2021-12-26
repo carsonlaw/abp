@@ -58,6 +58,9 @@ public class CategoryUpdateModalModel : FreeERPPageModel
         [Required]
         public string Slug { get; set; }
 
+        [Required]
+        public int Sort { get; set; }
+
         [HiddenInput]
         public string ConcurrencyStamp { get; set; }
     }

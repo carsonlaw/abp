@@ -9,5 +9,6 @@ namespace FreeERP.Products
     public interface ICategoryAppService : ICrudAppService<CategoryDto, Guid, CategoryGetListInput, CategoryCreateUpdateDto, CategoryCreateUpdateDto>
     {
         Task<IList<CategoryDto>> GetCategoryTree(CategoryGetListInput input);
+        Task<int> GetNextSortByPid(Guid? Pid);
     }
 }

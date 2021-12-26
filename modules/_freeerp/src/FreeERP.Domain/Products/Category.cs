@@ -17,7 +17,7 @@ public class Category : FullAuditedAggregateRoot<Guid>, IMultiTenant
     public virtual string Name { get; protected set; }
     [NotNull]
     public virtual string Slug { get; protected set; }
-
+    public virtual int Sort { get; protected set; }
     public virtual Guid? Pid { get; protected set; }
     public virtual Guid? TenantId { get; protected set; }
 

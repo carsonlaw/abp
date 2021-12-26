@@ -30,7 +30,7 @@ $(function () {
         scrollCollapse: true,
         scrollX: true,
         ordering: true,
-        order: [[1, "desc"]],
+        order: [[1, "asc"]],
         ajax: abp.libs.datatables.createAjax(categoryService.getList, getFilter),
         columnDefs: [
             {
@@ -62,6 +62,11 @@ $(function () {
                         }
                     ]
                 }
+            },
+            {
+                title: l("Sort"),
+                orderable: true,
+                data: "sort"
             },
             {
                 title: l("Name"),

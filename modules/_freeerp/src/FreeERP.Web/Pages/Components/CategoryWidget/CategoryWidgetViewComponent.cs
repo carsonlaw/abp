@@ -28,10 +28,29 @@ namespace FreeERP.Web.Components
             model.Items = categories;
             if (!string.IsNullOrEmpty(model.Value))
             {
-                model.Breadcrumbs.Add("分类1");
+                findAddFormTree(model.Items, model.Breadcrumbs, model.Value);
             }
             return View(model);
         }
+
+        private bool findAddFormTree(IList<CategoryDto> items, IList<string> breadcrumbs, string value)
+        {
+            var ret = false;
+            foreach (var item in items)
+            {
+                if (item.Id == Guid.Parse(value))
+                {
+                    breadcrumbs.AddFirst(item.Name);
+                    ret = true;
+                }
+                else if (findAddFormTree(item.Items, breadcrumbs, value))
+                {
+                    breadcrumbs.AddFirst(item.Name);
+                }
+            }
+            return ret;
+        }
+
         private void ToggleSubMenu()
         {
             IsSubMenuOpen = !IsSubMenuOpen;

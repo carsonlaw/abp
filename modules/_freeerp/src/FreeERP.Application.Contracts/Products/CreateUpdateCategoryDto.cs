@@ -14,6 +14,9 @@ namespace FreeERP.Products
         [Required]
         [DynamicMaxLength(typeof(CategoryConsts), nameof(CategoryConsts.MaxSlugLength))]
         public string Slug { get; set; }
+
+        [Required]
+        public int Sort { get; set; }
         public string ConcurrencyStamp { get; set; }
     }
 }
