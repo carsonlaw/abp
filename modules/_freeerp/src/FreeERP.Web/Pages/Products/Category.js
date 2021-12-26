@@ -4,10 +4,14 @@ $(function () {
 
     var createModal = new abp.ModalManager({
         viewUrl: abp.appPath + "Products/CategoryCreateModal",
-        scriptUrl: abp.appPath + 'Pages/Components/CategoryWidget/Default.js',
+        //scriptUrl: abp.appPath + 'Pages/Components/CategoryWidget/Default.js',
         modalClass: 'CategoryCreateModal'
     });
-    var updateModal = new abp.ModalManager({ viewUrl: abp.appPath + "Products/CategoryUpdateModal", modalClass: 'updateBlog' });
+    var updateModal = new abp.ModalManager({
+        viewUrl: abp.appPath + "Products/CategoryUpdateModal",
+        //scriptUrl: abp.appPath + 'Pages/Components/CategoryWidget/Default.js',
+        modalClass: 'CategoryUpdateModal'
+    });
 
     var categoryService = freeERP.products.category;
 

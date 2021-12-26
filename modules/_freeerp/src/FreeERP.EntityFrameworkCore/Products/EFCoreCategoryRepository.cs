@@ -13,12 +13,26 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace FreeERP.Products
 {
-    public class EFCoreCategoryRepository 
-    : EfCoreRepository<FreeERPDbContext, Category, Guid>, 
+    public class EFCoreCategoryRepository
+    : EfCoreRepository<FreeERPDbContext, Category, Guid>,
     ICategoryRepository
     {
         public EFCoreCategoryRepository(IDbContextProvider<FreeERPDbContext> dbContextProvider) : base(dbContextProvider)
         {
+        }
+
+        public virtual async Task<IList<Guid>> GetAllChildById(Guid? Pid)
+        {
+            var ret = new List<Guid>();
+            var query = await GetQueryableAsync();
+            query = query.Where(f => f.Pid == Pid);
+            var ids = query.Select(f => f.Id).ToList();
+            ret.AddRange(ids);
+            foreach (var id in ids)
+            {
+                ret.AddRange(await GetAllChildById(id));
+            }
+            return ret;
         }
 
         public virtual async Task<List<Category>> GetListAsync(string filter = null, string sorting = null, int maxResultCount = int.MaxValue, int skipCount = 0, CancellationToken cancellationToken = default)

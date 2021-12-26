@@ -1,0 +1,28 @@
+﻿@page
+@using FreeERP.Web.Pages
+@using FreeERP.Web.Components
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+
+@inherits FreeERPPageBase
+
+@model CategoryUpdateModalModel
+
+@{
+    Layout = null;
+}
+
+<abp-dynamic-form abp-model="ViewModel" asp-page="/Products/CategoryUpdateModal">
+    <abp-modal>
+        <abp-modal-header title="@L["Edit"].Value"></abp-modal-header>
+        <abp-modal-body>
+            @await Component.InvokeAsync(typeof(CategoryWidgetViewComponent),new CategoryWidgetModel(){
+            Id="CateCreateCate", InputName="Pid", SelectText=L["CategoryParentSelect"].Value,
+            Value=Model.ViewModel.Pid.ToString()
+            })
+
+            <abp-input asp-for="Id" />
+            <abp-form-content />
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</abp-dynamic-form>

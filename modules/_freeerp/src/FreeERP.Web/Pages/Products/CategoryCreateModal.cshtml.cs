@@ -25,14 +25,14 @@ public class CagetoryCreateModalModel : FreeERPPageModel
     {
         Guid.TryParse(Request.Form["Pid"], out var pid);
         ViewModel.Pid = pid.Equals(Guid.Empty) ? null : pid;
-        var dto = ObjectMapper.Map<CreateCategoryViewModel, CreateUpdateCategoryDto>(ViewModel);
+        var dto = ObjectMapper.Map<CreateCategoryViewModel, CategoryCreateUpdateDto>(ViewModel);
 
         await CategoryAppService.CreateAsync(dto);
 
         return NoContent();
     }
 
-    [AutoMap(typeof(CreateUpdateCategoryDto), ReverseMap = true)]
+    [AutoMap(typeof(CategoryCreateUpdateDto), ReverseMap = true)]
     public class CreateCategoryViewModel
     {
         [HiddenInput]

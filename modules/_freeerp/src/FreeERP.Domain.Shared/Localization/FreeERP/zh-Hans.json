@@ -20,6 +20,7 @@
     "GenericDeletionConfirmationMessage": "你确定删除 '{0}' 吗?",
     "LastModification": "最后一次修改",
     "LastModificationTime": "最后修改时间",
+    "FreeERP:Category:0002": "上级分类不能设置成当前分类及其子分类",
     "CategoryNew": "新增类别",
     "CategoryName": "类别名称",
     "CategorySelect": "选择类别",

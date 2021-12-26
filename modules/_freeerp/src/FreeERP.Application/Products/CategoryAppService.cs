@@ -11,15 +11,40 @@ using System.Linq;
 
 namespace FreeERP.Products
 {
-
-
     [Authorize(FreeERPPermissions.Categories.Default)]
-    public class CategoryAppService : CrudAppService<Category, CategoryDto, Guid, CategoryGetListInput, CreateUpdateCategoryDto, CreateUpdateCategoryDto>
+    public class CategoryAppService : CrudAppService<Category, CategoryDto, Guid, CategoryGetListInput, CategoryCreateUpdateDto, CategoryCreateUpdateDto>
     , ICategoryAppService
     {
-        public CategoryAppService(IRepository<Category, Guid> repository) : base(repository)
+        ICategoryRepository _repository;
+        CategroyManager _manager;
+
+        public CategoryAppService(ICategoryRepository repository, CategroyManager manager)
+        : base(repository)
         {
+            _repository = repository;
+            _manager = manager;
         }
+
+        [Authorize(FreeERPPermissions.Categories.Create)]
+        public override Task<CategoryDto> CreateAsync(CategoryCreateUpdateDto input)
+        {
+            var entity = _manager.CreateAsync(input.Name, input.Slug, input.Pid);
+            return base.CreateAsync(input);
+        }
+        [Authorize(FreeERPPermissions.Categories.Update)]
+        public override async Task<CategoryDto> UpdateAsync(Guid id, CategoryCreateUpdateDto input)
+        {
+            var cate = await _repository.GetAsync(id);
+            cate = await _manager.UpdateAsync(cate, input.Name, input.Slug, input.Pid);
+            await _repository.UpdateAsync(cate);
+            return await MapToGetOutputDtoAsync(cate);
+        }
+        [Authorize(FreeERPPermissions.Categories.Delete)]
+        public override async Task DeleteAsync(Guid id)
+        {
+            await base.DeleteAsync(id);
+        }
+
 
         public async Task<IList<CategoryDto>> GetCategoryTree(CategoryGetListInput input)
         {
@@ -31,10 +56,9 @@ namespace FreeERP.Products
 
         private async Task<IList<CategoryDto>> buildTree(IQueryable<Category> query, Guid? pid)
         {
-            var list = query.Where(f => f.Pid == pid)
-            .ToList()
-            .Select(f => MapToGetOutputDto(f))
-            .ToList();
+            var list = await MapToGetListOutputDtosAsync(query.Where(f => f.Pid == pid)
+                .ToList()
+            );
             for (int i = 0; i < list.Count(); i++)
             {
                 list[i].Items = await buildTree(query, list[i].Id);
