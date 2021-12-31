@@ -24,7 +24,7 @@ namespace FreeERP.Web.Components
             CategoryWidgetModel model
             )
         {
-            var categories = await _categoryAPPService.GetCategoryTree(new CategoryGetListInput());
+            var categories = await _categoryAPPService.GetCategoryTree();
             model.Items = categories;
             if (!string.IsNullOrEmpty(model.Value))
             {

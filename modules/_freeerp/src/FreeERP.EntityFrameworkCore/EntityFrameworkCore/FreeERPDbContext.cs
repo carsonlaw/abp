@@ -15,6 +15,10 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using FreeERP.Products;
 using FreeERP.Purchase;
 using FreeERP.MediaDescriptors;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+using System;
 
 namespace FreeERP.EntityFrameworkCore
 {
@@ -30,6 +34,8 @@ namespace FreeERP.EntityFrameworkCore
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductUnit> ProductUnits { get; set; }
+        public DbSet<ProductProperty> ProductProperties { get; set; }
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         //public DbSet<PurchaseOrderLine> PurchaseOrderLines {get;set;}
         public DbSet<MediaDescriptor> MediaDescriptors { get; set; }
@@ -98,22 +104,43 @@ namespace FreeERP.EntityFrameworkCore
             builder.Entity<Product>(b =>
             {
                 b.ToTable(FreeERPConsts.DbTablePrefix + "Products", FreeERPConsts.DbSchema);
-                //b.ConfigureByConvention();
                 b.Property(p => p.Name).IsRequired().HasMaxLength(ProductConsts.MaxNameLength);
                 b.Property(p => p.Code).IsRequired().HasMaxLength(ProductConsts.MaxCodeLength);
                 b.Property(p => p.MediaId);
                 b.Property(p => p.Description).HasMaxLength(ProductConsts.MaxDescriptionLength);
-
+                //b.HasMany(p => p.SKUs);
                 b.HasOne(p => p.Stock);
 
                 b.HasIndex(p => new { p.CategoryId, p.Code });
-                //b.ApplyObjectExtensionMappings();
+            });
+
+            builder.Entity<ProductSKU>(b =>
+            {
+                b.ToTable(FreeERPConsts.DbTablePrefix + "ProductSKUs", FreeERPConsts.DbSchema);
+                b.Property(p => p.Name).IsRequired().HasMaxLength(ProductSKUConsts.MaxNameLength);
+                b.Property(p => p.PropertyIds).HasConversion(new ValueConverter<IList<Guid>, string>(
+                    v => JsonConvert.SerializeObject(v), // Convert to string for persistence
+                    v => JsonConvert.DeserializeObject<IList<Guid>>(v)));
+                b.HasOne(p => p.Stock);
+            });
+            builder.Entity<ProductUnit>(b =>
+            {
+                b.ToTable(FreeERPConsts.DbTablePrefix + "ProductUnits", FreeERPConsts.DbSchema);
+                b.Property(p => p.Name).IsRequired().HasMaxLength(ProductUnitConsts.MaxNameLength);
+                b.HasOne(p => p.SmallerUnit)
+                    .WithMany(p => p.BiggerUnits);
+            });
+            builder.Entity<ProductProperty>(b =>
+            {
+                b.ToTable(FreeERPConsts.DbTablePrefix + "ProductProperties", FreeERPConsts.DbSchema);
+                b.Property(p => p.Name).IsRequired().HasMaxLength(ProductPropertyConsts.MaxNameLength);
+                b.HasOne(p => p.Parent)
+                    .WithMany(p => p.Items);
             });
 
             builder.Entity<ProductStock>(b =>
             {
                 b.ToTable(FreeERPConsts.DbTablePrefix + "ProductStocks", FreeERPConsts.DbSchema);
-                b.HasKey(p => p.ProductID);
             });
 
             builder.Entity<PurchaseOrder>(b =>

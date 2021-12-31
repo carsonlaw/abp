@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using FreeERP.Products;
@@ -16,15 +18,21 @@ namespace FreeERP.Domain.Data
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly IProductRepository _productRepository;
+        private readonly IProductUnitRepository _productUnitRepository;
+        private readonly IProductPropertyRepository _productPropertyRepository;
         private readonly IRepository<PurchaseOrder> _purchaseOrderRepository;
         private readonly ICurrentTenant _currentTenant;
         private readonly IGuidGenerator _guidGenerator;
 
         private Category category;
         private Product product;
+        private ProductUnit productUnit;
+        private ProductProperty productProperty;
 
         public FreeERPDataSeedContributor(
             ICategoryRepository categoryRepository,
+            IProductUnitRepository productUnitRepository,
+            IProductPropertyRepository productPropertyRepository,
             IProductRepository productRepository,
             IRepository<PurchaseOrder> purchaseOrderRepository,
             ICurrentTenant currentTenant,
@@ -32,6 +40,8 @@ namespace FreeERP.Domain.Data
         )
         {
             _categoryRepository = categoryRepository;
+            _productUnitRepository = productUnitRepository;
+            _productPropertyRepository = productPropertyRepository;
             _productRepository = productRepository;
             _purchaseOrderRepository = purchaseOrderRepository;
             _currentTenant = currentTenant;
@@ -44,9 +54,54 @@ namespace FreeERP.Domain.Data
             using (_currentTenant.Change(context?.TenantId))
             {
                 await CreateCategoryAsync();
+                await CreateProductUnitAsync();
+                await CreateProductPropertyAsync();
                 await CreateProductAsync();
                 await CreatePurchaseOrderAsync();
             }
+        }
+
+        private async Task CreateProductPropertyAsync()
+        {
+            if (await _productPropertyRepository.GetCountAsync() > 0)
+                return;
+            productProperty = await _productPropertyRepository.InsertAsync(
+                new ProductProperty(
+                    _guidGenerator.Create(),
+                    "颜色",
+                    "颜色属性",
+                    "Color",
+                    new Collection<ProductProperty>()
+                    {
+                        new ProductProperty(
+                            _guidGenerator.Create(),
+                            "红",
+                            "",
+                            "Red"
+                        )
+                    }
+                )
+            );
+        }
+
+        private async Task CreateProductUnitAsync()
+        {
+            if (await _productUnitRepository.GetCountAsync() > 0)
+                return;
+            productUnit = await _productUnitRepository.InsertAsync(
+                new ProductUnit(_guidGenerator.Create(),
+                "瓶",
+                "(12瓶=1箱)",
+                1,
+                new Collection<ProductUnit>(){
+                    new ProductUnit(_guidGenerator.Create(),
+                        "箱",
+                        "(12瓶=1箱)",
+                        12
+                    )
+                }
+                )
+            );
         }
 
         private async Task CreatePurchaseOrderAsync()
@@ -69,7 +124,7 @@ namespace FreeERP.Domain.Data
             product = await _productRepository.InsertAsync(
                 new Product(_guidGenerator.Create(),
                     category.Id,
-                    "test", "test", null, "test"
+                    "test", "test", productUnit.Id, null, "test"
                 ),
                 autoSave: true
             );

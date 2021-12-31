@@ -8,6 +8,8 @@ using Volo.Abp.Data;
 using FreeERP.Permissions;
 using Volo.Abp.Domain.Repositories;
 using System.Linq;
+using Microsoft.Extensions.Caching.Distributed;
+using Volo.Abp.Caching;
 
 namespace FreeERP.Products
 {
@@ -15,22 +17,29 @@ namespace FreeERP.Products
     public class CategoryAppService : CrudAppService<Category, CategoryDto, Guid, CategoryGetListInput, CategoryCreateUpdateDto, CategoryCreateUpdateDto>
     , ICategoryAppService
     {
+        private readonly IDistributedCache<IList<CategoryDto>> _cache;
         ICategoryRepository _repository;
-        CategroyManager _manager;
+        CategoryManager _manager;
 
-        public CategoryAppService(ICategoryRepository repository, CategroyManager manager)
+        public CategoryAppService(
+            ICategoryRepository repository,
+            CategoryManager manager,
+            IDistributedCache<IList<CategoryDto>> cache)
         : base(repository)
         {
             _repository = repository;
             _manager = manager;
+            _cache = cache;
         }
 
         [Authorize(FreeERPPermissions.Categories.Create)]
-        public override Task<CategoryDto> CreateAsync(CategoryCreateUpdateDto input)
+        public override async Task<CategoryDto> CreateAsync(CategoryCreateUpdateDto input)
         {
-            var entity = _manager.CreateAsync(input.Name, input.Slug, input.Pid);
-            return base.CreateAsync(input);
+            var entity = await _manager.CreateAsync(input.Name, input.Slug, input.Pid);
+            await _repository.InsertAsync(entity);
+            return await MapToGetOutputDtoAsync(entity);
         }
+
         [Authorize(FreeERPPermissions.Categories.Update)]
         public override async Task<CategoryDto> UpdateAsync(Guid id, CategoryCreateUpdateDto input)
         {
@@ -39,6 +48,7 @@ namespace FreeERP.Products
             await _repository.UpdateAsync(cate);
             return await MapToGetOutputDtoAsync(cate);
         }
+
         [Authorize(FreeERPPermissions.Categories.Delete)]
         public override async Task DeleteAsync(Guid id)
         {
@@ -46,13 +56,24 @@ namespace FreeERP.Products
         }
 
 
-        public async Task<IList<CategoryDto>> GetCategoryTree(CategoryGetListInput input)
+        public async Task<IList<CategoryDto>> GetCategoryTree()
         {
-            input.PidNullIsAll = true;
-            var query = await CreateFilteredQueryAsync(input);
-            query = ApplyDefaultSorting(query);
-            return await buildTree(query, input.Pid);
-
+            return await _cache.GetOrAddAsync(FreeERPDomainCacheKeys.Category.AllTree,
+            async () =>
+            {
+                var input = new CategoryGetListInput()
+                {
+                    PidNullIsAll = true,
+                };
+                var query = await CreateFilteredQueryAsync(input);
+                query = ApplyDefaultSorting(query);
+                return await buildTree(query, input.Pid);
+            },
+            () => new DistributedCacheEntryOptions
+            {
+                SlidingExpiration = TimeSpan.FromDays(30)
+            }
+            );
         }
 
         [Authorize(FreeERPPermissions.Categories.Create)]

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
@@ -27,6 +28,7 @@ namespace FreeERP.Products
             Guid categoryid,
             [NotNull] string name,
             [NotNull] string code,
+            [NotNull] Guid unitId,
             [CanBeNull] Guid? mediaId,
             [CanBeNull] string description
         ) : base(id)
@@ -36,25 +38,30 @@ namespace FreeERP.Products
             SetCode(code);
             SetMediaId(mediaId);
             SetDescription(description);
-            Stock = new ProductStock(id, 0);
+            Stock = new ProductStock(id, unitId, 0);
         }
+
 
         public virtual void SetCategory(Guid categoryid)
         {
             CategoryId = categoryid;
         }
+
         public virtual void SetName(string name)
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name), ProductConsts.MaxNameLength);
         }
+
         public virtual void SetCode(string code)
         {
             Code = Check.NotNullOrWhiteSpace(code, nameof(code), ProductConsts.MaxCodeLength);
         }
+
         public virtual void SetMediaId(Guid? mediaId)
         {
             MediaId = mediaId;
         }
+
         public virtual void SetDescription(string description)
         {
             Description = Check.Length(description, nameof(description), ProductConsts.MaxDescriptionLength);
@@ -71,5 +78,6 @@ namespace FreeERP.Products
                 }
             );
         }
+
     }
 }

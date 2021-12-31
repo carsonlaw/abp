@@ -1,4 +1,5 @@
 using Volo.Abp.EventBus;
+using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using System.Threading.Tasks;
 

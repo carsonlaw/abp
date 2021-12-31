@@ -11,9 +11,9 @@ namespace FreeERP.Products
         {
             _repository = productRepository;
         }
-        public virtual async Task ChangedStock(Guid pid, long changednum)
+        public virtual async Task ChangedStock(Guid productId, long changednum)
         {
-            var product = await _repository.GetAsync(pid,true);
+            var product = await _repository.GetAsync(productId, true);
             product.AddStock(changednum);
         }
     }

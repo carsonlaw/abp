@@ -16,6 +16,7 @@ using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
 using FreeERP.MediaDescriptors;
+using Volo.Abp.AutoMapper;
 
 namespace FreeERP
 {
@@ -41,6 +42,10 @@ namespace FreeERP
             Configure<AbpMultiTenancyOptions>(options =>
             {
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
+            });
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddMaps<FreeERPDomainModule>();
             });
             Configure<AbpBlobStoringOptions>(options =>
             {

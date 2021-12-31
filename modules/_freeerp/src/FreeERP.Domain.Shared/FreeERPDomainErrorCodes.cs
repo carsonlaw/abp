@@ -17,8 +17,13 @@
         public static class Product
         {
             public const string CodeAlreadyExist = "FreeERP:Product:0001";
-            public const string Stockltzero = "FreeERP:Product:0002";
+            public const string StockLtZero = "FreeERP:Product:0002";
 
+        }
+
+        public static class ProductUnit
+        {
+            public const string RatioCoutLeZero = "FreeERP:Product:0002";
         }
     }
 }

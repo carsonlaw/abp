@@ -5,11 +5,11 @@ using Volo.Abp.Domain.Services;
 using Volo.Abp.Domain.Repositories;
 namespace FreeERP.Products
 {
-    public class CategroyManager : DomainService
+    public class CategoryManager : DomainService
     {
         protected ICategoryRepository CategroyRepository;
 
-        public CategroyManager(ICategoryRepository repository)
+        public CategoryManager(ICategoryRepository repository)
         {
             CategroyRepository = repository;
         }
