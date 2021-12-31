@@ -44,7 +44,8 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/src/FreeERP.Web/FreeERP.Web.csproj",
+                "--project",
+                "src/FreeERP.Web/FreeERP.Web.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],

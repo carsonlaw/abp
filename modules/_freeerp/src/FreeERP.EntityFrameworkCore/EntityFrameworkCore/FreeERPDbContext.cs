@@ -19,6 +19,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using System;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Linq;
 
 namespace FreeERP.EntityFrameworkCore
 {
@@ -34,6 +36,7 @@ namespace FreeERP.EntityFrameworkCore
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductSKU> ProductSKUs { get; set; }
         public DbSet<ProductUnit> ProductUnits { get; set; }
         public DbSet<ProductProperty> ProductProperties { get; set; }
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
@@ -120,7 +123,14 @@ namespace FreeERP.EntityFrameworkCore
                 b.Property(p => p.Name).IsRequired().HasMaxLength(ProductSKUConsts.MaxNameLength);
                 b.Property(p => p.PropertyIds).HasConversion(new ValueConverter<IList<Guid>, string>(
                     v => JsonConvert.SerializeObject(v), // Convert to string for persistence
-                    v => JsonConvert.DeserializeObject<IList<Guid>>(v)));
+                    v => JsonConvert.DeserializeObject<IList<Guid>>(v)))
+                    .Metadata.SetValueComparer(
+                        new ValueComparer<IList<Guid>>(
+                            (c1, c2) => c1.SequenceEqual(c2),
+                            c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                            c => (IList<Guid>)c.ToHashSet()
+                        )
+                    );
                 b.HasOne(p => p.Stock);
             });
             builder.Entity<ProductUnit>(b =>

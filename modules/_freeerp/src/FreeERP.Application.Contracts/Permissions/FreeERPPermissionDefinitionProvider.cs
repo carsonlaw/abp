@@ -21,6 +21,13 @@ namespace FreeERP.Permissions
             productManagement.AddChild(FreeERPPermissions.Products.Create, L("Permission:ProductManagement.Create"));
             productManagement.AddChild(FreeERPPermissions.Products.Update, L("Permission:ProductManagement.Update"));
             productManagement.AddChild(FreeERPPermissions.Products.Delete, L("Permission:ProductManagement.Delete"));
+
+            var productUnitManagement = productsGroup.AddPermission(FreeERPPermissions.ProductUnits.Default, L("Permission:ProductUnitManagement"));
+            productUnitManagement.AddChild(FreeERPPermissions.ProductUnits.Create, L("Permission:ProductManagement.Create"));
+            productUnitManagement.AddChild(FreeERPPermissions.ProductUnits.Update, L("Permission:ProductManagement.Update"));
+            productUnitManagement.AddChild(FreeERPPermissions.ProductUnits.Delete, L("Permission:ProductManagement.Delete"));
+
+
             var purchaseOrderManagement = purchaseGroup.AddPermission(FreeERPPermissions.PurchaseOrder.Default, L("Permission:PurchaseOrderManagement"));
             purchaseOrderManagement.AddChild(FreeERPPermissions.PurchaseOrder.Create, L("Permission:PurchaseOrderManagement.Create"));
             purchaseOrderManagement.AddChild(FreeERPPermissions.PurchaseOrder.Update, L("Permission:PurchaseOrderManagement.Update"));

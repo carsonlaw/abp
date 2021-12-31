@@ -13,7 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace FreeERP.Migrations
 {
     [DbContext(typeof(FreeERPDbContext))]
-    [Migration("20211230083040_Init")]
+    [Migration("20211231125352_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -315,6 +315,15 @@ namespace FreeERP.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Code")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("CreationTime");
@@ -334,6 +343,10 @@ namespace FreeERP.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
@@ -348,12 +361,15 @@ namespace FreeERP.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("LastModifierId");
 
+                    b.Property<Guid?>("MediaId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(16)
                         .HasColumnType("character varying(16)");
 
-                    b.Property<Guid?>("ProductId")
+                    b.Property<Guid>("ProductId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("PropertyIds")
@@ -363,8 +379,6 @@ namespace FreeERP.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
 
                     b.HasIndex("StockId");
 
@@ -448,8 +462,7 @@ namespace FreeERP.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SmallerUnitId")
-                        .IsUnique();
+                    b.HasIndex("SmallerUnitId");
 
                     b.ToTable("ERPProductUnits", (string)null);
                 });
@@ -2461,15 +2474,9 @@ namespace FreeERP.Migrations
 
             modelBuilder.Entity("FreeERP.Products.ProductSKU", b =>
                 {
-                    b.HasOne("FreeERP.Products.Product", "Product")
-                        .WithMany("SKUs")
-                        .HasForeignKey("ProductId");
-
                     b.HasOne("FreeERP.Products.ProductStock", "Stock")
                         .WithMany()
                         .HasForeignKey("StockId");
-
-                    b.Navigation("Product");
 
                     b.Navigation("Stock");
                 });
@@ -2477,8 +2484,8 @@ namespace FreeERP.Migrations
             modelBuilder.Entity("FreeERP.Products.ProductUnit", b =>
                 {
                     b.HasOne("FreeERP.Products.ProductUnit", "SmallerUnit")
-                        .WithOne("BiggerUnit")
-                        .HasForeignKey("FreeERP.Products.ProductUnit", "SmallerUnitId");
+                        .WithMany("BiggerUnits")
+                        .HasForeignKey("SmallerUnitId");
 
                     b.Navigation("SmallerUnit");
                 });
@@ -2767,11 +2774,6 @@ namespace FreeERP.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FreeERP.Products.Product", b =>
-                {
-                    b.Navigation("SKUs");
-                });
-
             modelBuilder.Entity("FreeERP.Products.ProductProperty", b =>
                 {
                     b.Navigation("Items");
@@ -2779,7 +2781,7 @@ namespace FreeERP.Migrations
 
             modelBuilder.Entity("FreeERP.Products.ProductUnit", b =>
                 {
-                    b.Navigation("BiggerUnit");
+                    b.Navigation("BiggerUnits");
                 });
 
             modelBuilder.Entity("FreeERP.Purchase.PurchaseOrder", b =>

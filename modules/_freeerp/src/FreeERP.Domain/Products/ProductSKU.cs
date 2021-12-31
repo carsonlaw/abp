@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using JetBrains.Annotations;
 using Volo.Abp;
@@ -20,7 +21,7 @@ namespace FreeERP.Products
         public virtual string Description { get; protected set; }
         [NotNull]
         public ProductStock Stock { get; protected set; }
-        public Collection<Guid> PropertyIds { get; protected set; }
+        public IList<Guid> PropertyIds { get; protected set; }
 
 
         private ProductSKU()

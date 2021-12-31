@@ -19,33 +19,36 @@ namespace FreeERP.Products
     {
         private readonly IDistributedCache<IList<ProductUnitDto>> _cache;
         IProductUnitRepository _repository;
-        //ProductUnitManager _manager;
+        ProductUnitManager _manager;
 
         public ProductUnitAppService(
             IProductUnitRepository repository,
-            //ProductUnitManager manager,
+            ProductUnitManager manager,
             IDistributedCache<IList<ProductUnitDto>> cache)
         : base(repository)
         {
             _repository = repository;
-            //_manager = manager;
+            _manager = manager;
             _cache = cache;
         }
 
         [Authorize(FreeERPPermissions.Categories.Create)]
-        public override Task<ProductUnitDto> CreateAsync(ProductUnitCreateUpdateDto input)
+        public override async Task<ProductUnitDto> CreateAsync(ProductUnitCreateUpdateDto input)
         {
-            var entity = new ProductUnit();
-            return base.CreateAsync(input);
+            var entity = await _manager.CreateAsync(input.Name, input.Description, input.RatioCount);
+            await _repository.InsertAsync(entity);
+            return await MapToGetOutputDtoAsync(entity);
         }
+
         [Authorize(FreeERPPermissions.Categories.Update)]
         public override async Task<ProductUnitDto> UpdateAsync(Guid id, ProductUnitCreateUpdateDto input)
         {
-            var cate = await _repository.GetAsync(id);
-            cate = await _manager.UpdateAsync(cate, input.Name, input.Slug, input.Pid);
-            await _repository.UpdateAsync(cate);
-            return await MapToGetOutputDtoAsync(cate);
+            var entity = await _repository.GetAsync(id);
+            entity = await _manager.UpdateAsync(entity, input.Name, input.Description, input.RatioCount);
+            await _repository.UpdateAsync(entity);
+            return await MapToGetOutputDtoAsync(entity);
         }
+
         [Authorize(FreeERPPermissions.Categories.Delete)]
         public override async Task DeleteAsync(Guid id)
         {
@@ -58,14 +61,9 @@ namespace FreeERP.Products
             return await _cache.GetOrAddAsync(FreeERPDomainCacheKeys.ProductUnit.AllTree,
             async () =>
             {
-                var input = new ProductUnitGetListInput()
-                {
-                    PidNullIsAll = true,
-                };
-                var query = await CreateFilteredQueryAsync(input);
-                var query = cr
+                var query = await _repository.GetQueryableAsync();
                 query = ApplyDefaultSorting(query);
-                return await buildTree(query, input.Pid);
+                return await buildTree(query, null);
             },
             () => new DistributedCacheEntryOptions
             {
@@ -76,12 +74,12 @@ namespace FreeERP.Products
 
         private async Task<IList<ProductUnitDto>> buildTree(IQueryable<ProductUnit> query, Guid? pid)
         {
-            var list = await MapToGetListOutputDtosAsync(query.Where(f => f.Pid == pid)
+            var list = await MapToGetListOutputDtosAsync(query.Where(f => f.SmallerUnit.Id == pid)
                 .ToList()
             );
             for (int i = 0; i < list.Count(); i++)
             {
-                list[i].Items = await buildTree(query, list[i].Id);
+                list[i].BiggerUnits = await buildTree(query, list[i].Id);
             }
 
             return list.ToList();

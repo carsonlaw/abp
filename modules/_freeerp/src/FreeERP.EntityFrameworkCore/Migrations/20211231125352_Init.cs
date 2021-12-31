@@ -865,6 +865,38 @@ namespace FreeERP.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ERPProductSKUs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "text", nullable: true),
+                    MediaId = table.Column<Guid>(type: "uuid", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    StockId = table.Column<Guid>(type: "uuid", nullable: true),
+                    PropertyIds = table.Column<string>(type: "text", nullable: true),
+                    ExtraProperties = table.Column<string>(type: "text", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uuid", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uuid", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ERPProductSKUs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ERPProductSKUs_ERPProductStocks_StockId",
+                        column: x => x.StockId,
+                        principalTable: "ERPProductStocks",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ERPPurchaseOrderLines",
                 columns: table => new
                 {
@@ -1223,39 +1255,6 @@ namespace FreeERP.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "ERPProductSKUs",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
-                    ProductId = table.Column<Guid>(type: "uuid", nullable: true),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    StockId = table.Column<Guid>(type: "uuid", nullable: true),
-                    PropertyIds = table.Column<string>(type: "text", nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatorId = table.Column<Guid>(type: "uuid", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    LastModifierId = table.Column<Guid>(type: "uuid", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    DeleterId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ERPProductSKUs", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ERPProductSKUs_ERPProducts_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "ERPProducts",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_ERPProductSKUs_ERPProductStocks_StockId",
-                        column: x => x.StockId,
-                        principalTable: "ERPProductStocks",
-                        principalColumn: "Id");
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AbpAuditLogActions_AuditLogId",
                 table: "AbpAuditLogActions",
@@ -1431,11 +1430,6 @@ namespace FreeERP.Migrations
                 column: "StockId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ERPProductSKUs_ProductId",
-                table: "ERPProductSKUs",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ERPProductSKUs_StockId",
                 table: "ERPProductSKUs",
                 column: "StockId");
@@ -1443,8 +1437,7 @@ namespace FreeERP.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_ERPProductUnits_SmallerUnitId",
                 table: "ERPProductUnits",
-                column: "SmallerUnitId",
-                unique: true);
+                column: "SmallerUnitId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ERPPurchaseOrderLines_PurchaseOrderId",
@@ -1551,6 +1544,9 @@ namespace FreeERP.Migrations
                 name: "ERPProductProperties");
 
             migrationBuilder.DropTable(
+                name: "ERPProducts");
+
+            migrationBuilder.DropTable(
                 name: "ERPProductSKUs");
 
             migrationBuilder.DropTable(
@@ -1632,7 +1628,7 @@ namespace FreeERP.Migrations
                 name: "AbpUsers");
 
             migrationBuilder.DropTable(
-                name: "ERPProducts");
+                name: "ERPProductStocks");
 
             migrationBuilder.DropTable(
                 name: "ERPPurchaseOrders");
@@ -1651,9 +1647,6 @@ namespace FreeERP.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpAuditLogs");
-
-            migrationBuilder.DropTable(
-                name: "ERPProductStocks");
         }
     }
 }

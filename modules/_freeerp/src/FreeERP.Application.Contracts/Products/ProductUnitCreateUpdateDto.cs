@@ -11,9 +11,9 @@ namespace FreeERP.Products
         [Required]
         [DynamicMaxLength(typeof(ProductUnitConsts), nameof(ProductUnitConsts.MaxNameLength))]
         public string Name { get; set; }
-        public string Slug { get; set; }
+        public string Description { get; set; }
         [Required]
-        public int Sort { get; set; }
+        public int RatioCount { get; set; }
         public string ConcurrencyStamp { get; set; }
     }
 }

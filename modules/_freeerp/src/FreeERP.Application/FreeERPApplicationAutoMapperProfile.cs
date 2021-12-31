@@ -14,10 +14,9 @@ namespace FreeERP
 
             CreateMap<MediaDescriptor, MediaDescriptorDto>();
             CreateMap<Category, CategoryDto>();
-            CreateMap<CategoryCreateUpdateDto, Category>();
             CreateMap<Product, ProductDto>()
                 .ForMember(d => d.StockNum, o => o.MapFrom(s => s.Stock.StockNum));
-            CreateMap<CreateUpdateProductDto, Product>();
+            CreateMap<ProductUnit, ProductUnitDto>();
         }
     }
 }
