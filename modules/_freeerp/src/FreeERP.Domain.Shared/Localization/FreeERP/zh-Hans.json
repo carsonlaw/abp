@@ -23,6 +23,7 @@
     "LastModificationTime": "最后修改时间",
     "FreeERP:Category:0002": "上级分类不能设置成当前分类及其子分类",
     "HelpSettingGroup": "帮助设置",
+    "HelpSettingShow": "是否显示帮助",
     "CategoryNew": "新增类别",
     "CategoryName": "类别名称",
     "CategorySelect": "选择类别",
