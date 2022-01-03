@@ -42,6 +42,7 @@ using FreeERP.Permissions;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
 using Volo.Abp.Json;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
 
 namespace FreeERP.Web
 {
@@ -98,6 +99,10 @@ namespace FreeERP.Web
 
         private void ConfigureFreeERPOption()
         {
+            Configure<SettingManagementPageOptions>(option =>
+            {
+                option.Contributors.Add(new HelpSettingPageContributor());
+            });
             Configure<RazorPagesOptions>(option =>
             {
                 //option.Conventions.AuthorizeFolder("/Products/Product", FreeERPPermissions.Products.Default);

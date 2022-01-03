@@ -36,5 +36,10 @@
             public const string Update = Default + ".Update";
             public const string Delete = Default + ".Delete";
         }
+
+        public static class SettingManagement
+        {
+            public const string HelpSetting = "FreeERP.SettingManagement.HelpSetting";
+        }
     }
 }

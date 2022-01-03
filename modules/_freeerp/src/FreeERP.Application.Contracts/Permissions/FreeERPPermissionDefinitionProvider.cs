@@ -32,6 +32,11 @@ namespace FreeERP.Permissions
             purchaseOrderManagement.AddChild(FreeERPPermissions.PurchaseOrder.Create, L("Permission:PurchaseOrderManagement.Create"));
             purchaseOrderManagement.AddChild(FreeERPPermissions.PurchaseOrder.Update, L("Permission:PurchaseOrderManagement.Update"));
             purchaseOrderManagement.AddChild(FreeERPPermissions.PurchaseOrder.Delete, L("Permission:PurchaseOrderManagement.Delete"));
+
+            var SettingManagement = context.GetGroupOrNull("SettingManagement");
+            SettingManagement.AddPermission(FreeERPPermissions.SettingManagement.HelpSetting, L("Permission:HelpSetting"));
+
+
         }
 
         private static LocalizableString L(string name)

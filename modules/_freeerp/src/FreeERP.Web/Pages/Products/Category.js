@@ -1,6 +1,7 @@
 
 $(function () {
     var l = abp.localization.getResource("FreeERP");
+    var help = abp.setting.getBoolean("FreeERP.HelpSetting");
 
     var createModal = new abp.ModalManager({
         viewUrl: abp.appPath + "Products/CategoryCreateModal",

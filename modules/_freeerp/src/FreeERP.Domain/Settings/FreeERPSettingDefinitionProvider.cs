@@ -8,6 +8,11 @@ namespace FreeERP.Settings
         {
             //Define your own settings here. Example:
             //context.Add(new SettingDefinition(FreeERPSettings.MySetting1));
+
+            context.Add(new SettingDefinition(FreeERPSettings.HelpSetting,
+                "true",
+                isVisibleToClients: true)
+            );
         }
     }
 }
