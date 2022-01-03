@@ -5,6 +5,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace FreeERP.Products
 {
+    [Serializable]
     public class CategoryDto : EntityDto<Guid>, IHasConcurrencyStamp
     {
         public Guid? Pid { get; set; }

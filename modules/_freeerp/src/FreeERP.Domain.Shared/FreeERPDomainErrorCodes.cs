@@ -23,7 +23,8 @@
 
         public static class ProductUnit
         {
-            public const string RatioCoutLeZero = "FreeERP:Product:0002";
+            public const string PidReferenceLoop = "FreeERP:ProductUnit:0001";
+            public const string RatioCoutLeZero = "FreeERP:ProductUnit:0002";
         }
     }
 }

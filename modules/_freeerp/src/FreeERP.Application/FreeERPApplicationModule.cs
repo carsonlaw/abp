@@ -6,6 +6,8 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
+using Volo.Abp.Caching;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace FreeERP
 {
@@ -26,6 +28,15 @@ namespace FreeERP
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddMaps<FreeERPApplicationModule>();
+            });
+            Configure<AbpDistributedCacheOptions>(options =>
+            {
+                options.KeyPrefix = "FreeERP";
+                options.HideErrors = false;
+                options.GlobalCacheEntryOptions = new DistributedCacheEntryOptions()
+                {
+                    SlidingExpiration = System.TimeSpan.FromMinutes(30)
+                };
             });
         }
     }

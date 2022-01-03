@@ -9,5 +9,8 @@ namespace FreeERP.Products
     public interface IProductUnitRepository : IRepository<ProductUnit, Guid>
     {
 
+        Task<IList<Guid>> GetAllChildById(Guid? Pid);
+
+        Task<int> GetNextSortByPid(Guid? Pid);
     }
 }

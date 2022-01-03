@@ -14,6 +14,8 @@ namespace FreeERP.Products
         public string Description { get; set; }
         [Required]
         public int RatioCount { get; set; }
+        [Required]
+        public int Sort { get; set; }
         public string ConcurrencyStamp { get; set; }
     }
 }

@@ -1,0 +1,23 @@
+@using FreeERP.Web.Components;
+@using FreeERP.Products;
+@model ProductUnitDto;
+
+<div class="dropdown-submenu btn-group">
+    <a role="button" class="btn productUnititem " productUnitid="@Model.Id">
+        <span>
+            @Model.Name (@Model.Description)
+        </span>
+    </a>
+    @if (Model.BiggerUnits.Count > 0)
+    {
+        <a role="button" class="btn dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true"
+        aria-expanded="false">
+        </a>
+    }
+    <div class="dropdown-menu border-0 shadow-sm">
+        @foreach (var item in Model.BiggerUnits)
+        {
+            @await Component.InvokeAsync(typeof(ProductUnitItemWidgetViewComponent),item)
+        }
+    </div>
+</div>

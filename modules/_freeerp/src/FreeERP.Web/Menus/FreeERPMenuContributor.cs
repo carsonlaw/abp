@@ -53,25 +53,35 @@ namespace FreeERP.Web.Menus
                 );
                 var products = context.Menu.GetMenuItem(FreeERPMenus.Products);
                 products.AddItem(
-                                    new ApplicationMenuItem(
-                                        FreeERPMenus.Category,
-                                        l["Menu:Category"],
-                                        "~/Products/Category",
-                                        icon: "fas fa-align-justify",
-                                        order: 0
-                                    )
-                                    .RequirePermissions(FreeERPPermissions.Categories.Default)
-                                );
+                    new ApplicationMenuItem(
+                        FreeERPMenus.Category,
+                        l["Menu:Category"],
+                        "~/Products/Category",
+                        icon: "fas fa-align-justify",
+                        order: 0
+                    )
+                    .RequirePermissions(FreeERPPermissions.Categories.Default)
+                );
                 products.AddItem(
-                                    new ApplicationMenuItem(
-                                        FreeERPMenus.Product,
-                                        l["Menu:Product"],
-                                        "~/Products/Product",
-                                        icon: "fas fa-archive",
-                                        order: 1
-                                    )
-                                    .RequirePermissions(FreeERPPermissions.Products.Default)
-                                );
+                    new ApplicationMenuItem(
+                        FreeERPMenus.ProductUnit,
+                        l["Menu:ProductUnit"],
+                        "~/products/ProductUnit",
+                        icon: "fas fa-cube",
+                        order: 1
+                    )
+                    .RequirePermissions(FreeERPPermissions.ProductUnits.Default)
+                );
+                products.AddItem(
+                    new ApplicationMenuItem(
+                        FreeERPMenus.Product,
+                        l["Menu:Product"],
+                        "~/Products/Product",
+                        icon: "fas fa-archive",
+                        order: 2
+                    )
+                    .RequirePermissions(FreeERPPermissions.Products.Default)
+                );
 
                 if (MultiTenancyConsts.IsEnabled)
                 {

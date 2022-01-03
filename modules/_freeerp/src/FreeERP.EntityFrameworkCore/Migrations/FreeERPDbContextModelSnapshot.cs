@@ -458,6 +458,9 @@ namespace FreeERP.Migrations
                     b.Property<Guid?>("SmallerUnitId")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("Sort")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SmallerUnitId");

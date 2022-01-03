@@ -1,0 +1,57 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using FreeERP.Localization
+@using FreeERP.Web.Components;
+@using FreeERP.Web.Pages;
+@using FreeERP.Web.Menus;
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Slugify
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPageToolbar
+@inherits FreeERPPageBase
+@inject IHtmlLocalizer<FreeERPResource> L
+
+@model ProductUnitModel
+
+@{
+    PageLayout.Content.Title = L["Menu:ProductUnit"].Value;
+    PageLayout.Content.BreadCrumb.Add(L["Menu:FreeERP"].Value);
+    PageLayout.Content.MenuItemName = FreeERPMenus.ProductUnit;
+}
+
+@section scripts {
+<abp-script-bundle>
+    <abp-script src="/Pages/Products/ProductUnit.js" />
+</abp-script-bundle>
+}
+@section content_toolbar {
+@await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new { pageName = typeof(ProductUnitModel).FullName })
+}
+
+<abp-card class="mb-4">
+    <abp-card-body>
+        <form id="ProductUnitFilterForm" method="post">
+            <abp-row>
+                <abp-column size-lg="_10" size-md="_8">
+                    <div class="mb-2">
+                        @await Component.InvokeAsync(typeof(ProductUnitWidgetViewComponent),new
+                        ProductUnitWidgetModel(){
+                        Id="ProductUnitId", InputName="ProductUnitId", SelectText=L["ProductUnitSelect"].Value })
+                    </div>
+                </abp-column>
+
+                <abp-column size-lg="_2" size-md="_4">
+                    <div class="d-grid gap-2">
+                        <abp-button button-type="Primary" type="submit">
+                            <i class="fa fa-search" aria-hidden="true"></i>@L["Search"].Value
+                        </abp-button>
+                    </div>
+                </abp-column>
+            </abp-row>
+        </form>
+    </abp-card-body>
+</abp-card>
+
+<abp-card>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="ProductUnitTable" class="nowrap"></abp-table>
+    </abp-card-body>
+</abp-card>

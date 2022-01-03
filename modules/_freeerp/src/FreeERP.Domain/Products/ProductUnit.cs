@@ -13,6 +13,7 @@ namespace FreeERP.Products
         public string Name { get; protected set; }
         public string Description { get; protected set; }
         public int RatioCount { get; protected set; }
+        public int Sort { get; protected set; }
         public ProductUnit? SmallerUnit { get; protected set; }
         public Collection<ProductUnit> BiggerUnits { get; protected set; }
 
@@ -24,14 +25,27 @@ namespace FreeERP.Products
             string name,
             string description,
             int ratioCount,
+            int sort,
             Collection<ProductUnit> biggerUnits = null)
             : base(id)
         {
             SetName(name);
             SetDescription(description);
             SetRatioCount(ratioCount);
+            SetSort(sort);
             BiggerUnits = biggerUnits ?? new Collection<ProductUnit>();
         }
+
+        internal void SetSmallerUnit(ProductUnit productUnit)
+        {
+            SmallerUnit = productUnit;
+        }
+
+        public virtual void SetSort(int sort)
+        {
+            Sort = sort;
+        }
+
         public virtual void SetName(string name)
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name), ProductUnitConsts.MaxNameLength);

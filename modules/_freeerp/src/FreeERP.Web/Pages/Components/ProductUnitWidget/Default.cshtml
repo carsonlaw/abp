@@ -1,0 +1,77 @@
+@using FreeERP.Products;
+@using FreeERP.Web.Components;
+@model ProductUnitWidgetModel;
+
+<style>
+    .productUnit .dropdown-submenu {
+        position: relative;
+    }
+
+    .productUnit .dropdown-menu {
+        margin: 0;
+        padding: 0;
+    }
+
+    .productUnit .dropdown-menu a.productUnititem {
+        font-size: .9em;
+        padding: 10px 15px;
+        display: block;
+        min-width: 120px;
+        text-align: left;
+        border-radius: 0.25rem;
+        min-height: 44px;
+    }
+
+    .productUnit .dropdown-submenu a::after {
+        transform: rotate(-90deg);
+        position: absolute;
+        right: 16px;
+        top: 18px;
+    }
+
+    .productUnit .dropdown-submenu .dropdown-menu {
+        top: 0;
+        left: 100%;
+    }
+
+    .productUnit .dropdown:hover>.dropdown-menu {
+        display: block;
+    }
+
+    .productUnit .dropdown-submenu:hover>.dropdown-menu {
+        display: block;
+    }
+</style>
+
+
+
+<div class="productUnit">
+    <div class="divbread" style="@Html.Raw(string.IsNullOrEmpty(Model.Value)?"display: none":"")">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                @foreach (var b in Model.Breadcrumbs)
+                {
+                    <li class="breadcrumb-item " aria-current="page">
+                        @b
+                    </li>
+                }
+                <button type="button" class="btn btn-close productUnitReset" aria-label="Close"></button>
+            </ol>
+        </nav>
+    </div>
+    <div class="dropdown divselect" style="@Html.Raw(!string.IsNullOrEmpty(Model.Value)?"display: none":"")">
+        <a class="btn btn-secondary dropdown-toggle" id="Sel_@Model.Id" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            @Model.SelectText
+        </a>
+        <div class="dropdown-menu border-0 shadow-sm" aria-labelledby=" Sel_@Model.Id">
+
+            @foreach (var cate in Model.Items)
+            {
+                @await Component.InvokeAsync(typeof(ProductUnitItemWidgetViewComponent),cate)
+            }
+        </div>
+    </div>
+    <input type="hidden" class="productUnitinput" name="@Model.InputName" id="@Model.InputName"
+        value="@Model.Value"></input>
+</div>

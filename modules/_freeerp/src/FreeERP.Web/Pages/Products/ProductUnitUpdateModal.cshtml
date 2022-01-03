@@ -1,0 +1,28 @@
+﻿@page
+@using FreeERP.Web.Pages
+@using FreeERP.Web.Components
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+
+@inherits FreeERPPageBase
+
+@model ProductUnitUpdateModalModel
+
+@{
+    Layout = null;
+}
+
+<abp-dynamic-form abp-model="ViewModel" asp-page="/Products/ProductUnitUpdateModal">
+    <abp-modal>
+        <abp-modal-header title="@L["Edit"].Value"></abp-modal-header>
+        <abp-modal-body>
+            @await Component.InvokeAsync(typeof(ProductUnitWidgetViewComponent),new ProductUnitWidgetModel(){
+            Id="ProductUnitUpdate", InputName="Pid", SelectText=L["ProductUnitParentSelect"].Value,
+            Value=Model.ViewModel.Pid.ToString()
+            })
+
+            <abp-input asp-for="Id" />
+            <abp-form-content />
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</abp-dynamic-form>

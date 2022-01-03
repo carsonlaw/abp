@@ -40,6 +40,8 @@ using Volo.Abp.VirtualFileSystem;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using FreeERP.Permissions;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
+using Volo.Abp.Json;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FreeERP.Web
 {
@@ -71,6 +73,9 @@ namespace FreeERP.Web
                     typeof(FreeERPApplicationContractsModule).Assembly,
                     typeof(FreeERPWebModule).Assembly
                 );
+            });
+            context.Services.PostConfigure<AbpJsonOptions>(option =>
+            {
             });
         }
 
@@ -109,8 +114,22 @@ namespace FreeERP.Web
                             name: "CreateCategory",
                             id: "CreateCategory",
                             requiredPolicyName: FreeERPPermissions.Categories.Create
-                            );
-                    });
+                        );
+                    }
+                );
+
+                options.Configure<FreeERP.Web.Pages.ProductUnitModel>(
+                    toolbar =>
+                    {
+                        toolbar.AddButton(
+                            LocalizableString.Create<FreeERPResource>("ProductUnitNew"),
+                            icon: "plus",
+                            name: "CreateProductUnit",
+                            id: "CreateProductUnit",
+                            requiredPolicyName: FreeERPPermissions.ProductUnits.Create
+                        );
+                    }
+                );
             });
 
         }

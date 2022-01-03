@@ -10,11 +10,12 @@ using Volo.Abp.Domain.Repositories;
 using System.Linq;
 using Microsoft.Extensions.Caching.Distributed;
 using Volo.Abp.Caching;
+using Microsoft.Extensions.Logging;
 
 namespace FreeERP.Products
 {
     [Authorize(FreeERPPermissions.Categories.Default)]
-    public class ProductUnitAppService : CrudAppService<ProductUnit, ProductUnitDto, Guid, PagedAndSortedResultRequestDto, ProductUnitCreateUpdateDto, ProductUnitCreateUpdateDto>
+    public class ProductUnitAppService : CrudAppService<ProductUnit, ProductUnitDto, Guid, ProductUnitGetListInput, ProductUnitCreateUpdateDto, ProductUnitCreateUpdateDto>
     , IProductUnitAppService
     {
         private readonly IDistributedCache<IList<ProductUnitDto>> _cache;
@@ -35,7 +36,7 @@ namespace FreeERP.Products
         [Authorize(FreeERPPermissions.Categories.Create)]
         public override async Task<ProductUnitDto> CreateAsync(ProductUnitCreateUpdateDto input)
         {
-            var entity = await _manager.CreateAsync(input.Name, input.Description, input.RatioCount);
+            var entity = await _manager.CreateAsync(input.Pid, input.Name, input.Description, input.RatioCount, input.Sort);
             await _repository.InsertAsync(entity);
             return await MapToGetOutputDtoAsync(entity);
         }
@@ -44,7 +45,7 @@ namespace FreeERP.Products
         public override async Task<ProductUnitDto> UpdateAsync(Guid id, ProductUnitCreateUpdateDto input)
         {
             var entity = await _repository.GetAsync(id);
-            entity = await _manager.UpdateAsync(entity, input.Name, input.Description, input.RatioCount);
+            entity = await _manager.UpdateAsync(entity, input.Pid, input.Name, input.Description, input.RatioCount, input.Sort);
             await _repository.UpdateAsync(entity);
             return await MapToGetOutputDtoAsync(entity);
         }
@@ -55,26 +56,47 @@ namespace FreeERP.Products
             await base.DeleteAsync(id);
         }
 
-
-        public async Task<IList<ProductUnitDto>> GetProductUnitTree()
+        protected override async Task<ProductUnit> GetEntityByIdAsync(Guid id)
         {
-            return await _cache.GetOrAddAsync(FreeERPDomainCacheKeys.ProductUnit.AllTree,
-            async () =>
-            {
-                var query = await _repository.GetQueryableAsync();
-                query = ApplyDefaultSorting(query);
-                return await buildTree(query, null);
-            },
-            () => new DistributedCacheEntryOptions
-            {
-                SlidingExpiration = TimeSpan.FromDays(30)
-            }
+            return await _repository.GetAsync(f => f.Id == id, true);
+        }
+
+
+        protected override async Task<IQueryable<ProductUnit>> CreateFilteredQueryAsync(ProductUnitGetListInput input)
+        {
+            var ret = await base.CreateFilteredQueryAsync(input);
+            ret = ret.WhereIf(!string.IsNullOrWhiteSpace(input.Filter), f => f.Name.Contains(input.Filter));
+            ret = ret.WhereIf(input.Pid != null || !input.PidNullIsAll, f => f.SmallerUnit.Id == input.Pid);
+
+            return ret;
+        }
+
+        public async Task<IList<ProductUnitDto>> GetAllUnit()
+        {
+            return await _cache.GetOrAddAsync(
+                FreeERPDomainCacheKeys.ProductUnit.AllTree,
+                async () =>
+                {
+                    Logger.Log(LogLevel.Debug, $"no cache key '{FreeERPDomainCacheKeys.ProductUnit.AllTree}'");
+                    var input = new ProductUnitGetListInput()
+                    {
+                        PidNullIsAll = true,
+                    };
+                    var query = await CreateFilteredQueryAsync(input);
+                    query = ApplyDefaultSorting(query);
+                    return await buildTree(query, input.Pid);
+                },
+                () => new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpiration = DateTimeOffset.Now.AddDays(20)
+                }
             );
+
         }
 
         private async Task<IList<ProductUnitDto>> buildTree(IQueryable<ProductUnit> query, Guid? pid)
         {
-            var list = await MapToGetListOutputDtosAsync(query.Where(f => f.SmallerUnit.Id == pid)
+            var list = await MapToGetListOutputDtosAsync(query.Where(f => (pid == null && f.SmallerUnit == null) || (f.SmallerUnit.Id == pid))
                 .ToList()
             );
             for (int i = 0; i < list.Count(); i++)
@@ -85,10 +107,5 @@ namespace FreeERP.Products
             return list.ToList();
         }
 
-
-        public Task<IList<ProductUnitDto>> GetAllUnit()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

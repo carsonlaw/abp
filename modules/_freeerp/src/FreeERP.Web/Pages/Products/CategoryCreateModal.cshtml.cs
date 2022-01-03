@@ -9,14 +9,14 @@ using System;
 
 namespace FreeERP.Web.Pages;
 
-public class CagetoryCreateModalModel : FreeERPPageModel
+public class CategoryCreateModalModel : FreeERPPageModel
 {
     protected ICategoryAppService CategoryAppService { get; }
 
     [BindProperty]
     public CreateCategoryViewModel ViewModel { get; set; }
 
-    public CagetoryCreateModalModel(ICategoryAppService categoryAppService)
+    public CategoryCreateModalModel(ICategoryAppService categoryAppService)
     {
         CategoryAppService = categoryAppService;
     }

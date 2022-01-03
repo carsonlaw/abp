@@ -93,11 +93,13 @@ namespace FreeERP.Domain.Data
                 "瓶",
                 "(12瓶=1箱)",
                 1,
+                0,
                 new Collection<ProductUnit>(){
                     new ProductUnit(_guidGenerator.Create(),
                         "箱",
                         "(12瓶=1箱)",
-                        12
+                        12,
+                        0
                     )
                 }
                 )

@@ -1,0 +1,14 @@
+using System;
+using Volo.Abp.Application.Dtos;
+
+
+namespace FreeERP.Products
+{
+    [Serializable]
+    public class ProductUnitGetListInput : PagedAndSortedResultRequestDto
+    {
+        public string Filter { get; set; }
+        public Guid? Pid { get; set; }
+        public bool PidNullIsAll { get; set; } = false;
+    }
+}

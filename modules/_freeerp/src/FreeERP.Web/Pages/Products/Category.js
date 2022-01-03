@@ -34,7 +34,7 @@ $(function () {
         ajax: abp.libs.datatables.createAjax(categoryService.getList, getFilter),
         columnDefs: [
             {
-                title: l("Details"),
+                title: l("Actions"),
                 targets: 0,
                 rowAction: {
                     items: [

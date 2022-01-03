@@ -10,6 +10,7 @@ using Volo.Abp.Domain.Repositories;
 using System.Linq;
 using Microsoft.Extensions.Caching.Distributed;
 using Volo.Abp.Caching;
+using Microsoft.Extensions.Logging;
 
 namespace FreeERP.Products
 {
@@ -61,6 +62,7 @@ namespace FreeERP.Products
             return await _cache.GetOrAddAsync(FreeERPDomainCacheKeys.Category.AllTree,
             async () =>
             {
+                Logger.Log(LogLevel.Debug, $"no cache key '{FreeERPDomainCacheKeys.Category.AllTree}'");
                 var input = new CategoryGetListInput()
                 {
                     PidNullIsAll = true,

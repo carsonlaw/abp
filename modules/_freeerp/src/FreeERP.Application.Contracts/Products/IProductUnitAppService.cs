@@ -7,7 +7,7 @@ using Volo.Abp.Content;
 
 namespace FreeERP.Products
 {
-    public interface IProductUnitAppService : ICrudAppService<ProductUnitDto, Guid, PagedAndSortedResultRequestDto, ProductUnitCreateUpdateDto, ProductUnitCreateUpdateDto>
+    public interface IProductUnitAppService : ICrudAppService<ProductUnitDto, Guid, ProductUnitGetListInput, ProductUnitCreateUpdateDto, ProductUnitCreateUpdateDto>
     {
         Task<IList<ProductUnitDto>> GetAllUnit();
     }

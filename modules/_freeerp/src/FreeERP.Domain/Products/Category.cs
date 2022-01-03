@@ -52,4 +52,8 @@ public class Category : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
         Pid = pid;
     }
+    public virtual void SetSort(int sort)
+    {
+        Sort = sort;
+    }
 }

@@ -40,7 +40,7 @@
         {
             "name": ".NET Core Attach",
             "type": "coreclr",
-            "preLaunchTask": "watch"
+            "request": "attach"
         }
     ]
 }
