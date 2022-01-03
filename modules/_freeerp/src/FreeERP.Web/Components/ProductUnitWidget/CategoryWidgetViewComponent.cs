@@ -9,7 +9,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 namespace FreeERP.Web.Components
 {
     [Widget(
-        ScriptFiles = new string[] { "/Pages/Components/ProductUnitWidget/Default.js" }
+        ScriptFiles = new string[] { "/Components/ProductUnitWidget/Default.js" }
     )]
     public class ProductUnitWidgetViewComponent : AbpViewComponent
     {
@@ -30,7 +30,7 @@ namespace FreeERP.Web.Components
             {
                 findAddFormTree(model.Items, model.Breadcrumbs, model.Value);
             }
-            return View(model);
+            return View("~/Components/ProductUnitWidget/Default.cshtml", model);
         }
 
         private bool findAddFormTree(IList<ProductUnitDto> items, IList<string> breadcrumbs, string value)

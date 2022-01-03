@@ -20,7 +20,7 @@ namespace FreeERP.Web.Components
         public async Task<IViewComponentResult> InvokeAsync(ProductUnitDto productUnitDto
             )
         {
-            return View("~/Pages/Components/ProductUnitWidget/Item.cshtml", productUnitDto);
+            return View("~/Components/ProductUnitWidget/Item.cshtml", productUnitDto);
         }
     }
 }
