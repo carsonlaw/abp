@@ -21,6 +21,13 @@
             public const string Update = Default + ".Update";
             public const string Delete = Default + ".Delete";
         }
+        public static class ProductProperties
+        {
+            public const string Default = ProductsGroupName + ".ProductProperties";
+            public const string Create = Default + ".Create";
+            public const string Update = Default + ".Update";
+            public const string Delete = Default + ".Delete";
+        }
         public static class Products
         {
             public const string Default = ProductsGroupName + ".Products";

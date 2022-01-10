@@ -19,5 +19,12 @@ namespace FreeERP.Products
         {
         }
 
+        public override async Task<IQueryable<ProductProperty>> WithDetailsAsync()
+        {
+            var query = await base.WithDetailsAsync();
+            query = query.Include(f => f.Items);
+            return query;
+        }
+
     }
 }

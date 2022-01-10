@@ -17,6 +17,10 @@ namespace FreeERP
             CreateMap<Product, ProductDto>()
                 .ForMember(d => d.StockNum, o => o.MapFrom(s => s.Stock.StockNum));
             CreateMap<ProductUnit, ProductUnitDto>();
+            CreateMap<ProductProperty, ProductPropertyDto>();
+            //.ForMember(d => d.TypeName, o => o.MapFrom(s => s.Parent.Name));
+            CreateMap<ProductProperty, ProductPropertyItemDto>()
+                .ForMember(d => d.TypeName, o => o.MapFrom(s => s.Parent.Name));
         }
     }
 }

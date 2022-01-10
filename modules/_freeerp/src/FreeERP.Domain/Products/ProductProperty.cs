@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using JetBrains.Annotations;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
@@ -13,7 +15,7 @@ namespace FreeERP.Products
         public string Description { get; protected set; }
         public string Value { get; protected set; }
         public ProductProperty Parent { get; protected set; }
-        public Collection<ProductProperty> Items { get; protected set; }
+        public IList<ProductProperty> Items { get; protected set; }
 
 
         private ProductProperty()
@@ -23,13 +25,13 @@ namespace FreeERP.Products
             string name,
             string description,
             string value,
-            Collection<ProductProperty> items = null)
+            List<ProductProperty> items = null)
         : base(id)
         {
             SetName(name);
             SetDescription(description);
             SetValue(value);
-            Items = items ?? new Collection<ProductProperty>();
+            Items = items ?? new List<ProductProperty>();
         }
         public virtual void SetName(string name)
         {
@@ -42,6 +44,11 @@ namespace FreeERP.Products
         public virtual void SetValue(string value)
         {
             Name = Check.NotNullOrWhiteSpace(value, nameof(value), ProductUnitConsts.MaxValueLength);
+        }
+
+        public virtual void SetItems(List<ProductProperty> items)
+        {
+            items = items;
         }
     }
 }

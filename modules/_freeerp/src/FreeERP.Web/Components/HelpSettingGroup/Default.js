@@ -6,12 +6,12 @@
         $("#HelpSettingsForm").on('submit', function (event) {
 
             event.preventDefault();
-            $('#HelpSettingsForm button').setBusy();
+            //$('#HelpSettingsForm button').setBusy();
             var form = $(this).serializeFormToObject();
             console.log(form);
-            // volo.abp.settingManagement.emailSettings.update(form).then(function (result) {
-            //     $(document).trigger("AbpSettingSaved");
-            // });
+            freeERP.settings.helpSetting.update(form).then(function (result) {
+                $(document).trigger("AbpSettingSaved");
+            });
 
         });
 

@@ -9,7 +9,7 @@ namespace FreeERP.Settings
             //Define your own settings here. Example:
             //context.Add(new SettingDefinition(FreeERPSettings.MySetting1));
 
-            context.Add(new SettingDefinition(FreeERPSettings.HelpSetting,
+            context.Add(new SettingDefinition(FreeERPSettings.HelpSettingIsShow,
                 "true",
                 isVisibleToClients: true)
             );
