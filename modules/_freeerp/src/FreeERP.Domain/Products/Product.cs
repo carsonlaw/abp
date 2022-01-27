@@ -57,6 +57,11 @@ namespace FreeERP.Products
             Code = Check.NotNullOrWhiteSpace(code, nameof(code), ProductConsts.MaxCodeLength);
         }
 
+        public virtual void SetUnitId(Guid unitId)
+        {
+            throw new Exception("暂不支持");
+        }
+
         public virtual void SetMediaId(Guid? mediaId)
         {
             MediaId = mediaId;

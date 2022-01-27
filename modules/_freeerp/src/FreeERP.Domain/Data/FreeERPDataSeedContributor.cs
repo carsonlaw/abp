@@ -71,7 +71,7 @@ namespace FreeERP.Domain.Data
                     "颜色",
                     "颜色属性",
                     "Color",
-                    new Collection<ProductProperty>()
+                    new List<ProductProperty>()
                     {
                         new ProductProperty(
                             _guidGenerator.Create(),
