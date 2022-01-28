@@ -5,10 +5,11 @@
         private const string Prefix = "FreeERP";
         public const string Home = Prefix + ".Home";
 
-        public const string Products = Prefix + ".Products";
-        public const string Category = Products + ".Category";
-        public const string Product = Products + ".Product";
-        public const string ProductUnit = Products + ".ProductUnit";
+        public const string ProductsGroup = Prefix + ".Products";
+        public const string Category = ProductsGroup + ".Category";
+        public const string Product = ProductsGroup + ".Product";
+        public const string ProductUnit = ProductsGroup + ".ProductUnit";
+
         public const string Purchase = Prefix + ".Purchase";
 
         //Add your menu items here...

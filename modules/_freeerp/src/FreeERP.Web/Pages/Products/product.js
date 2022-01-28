@@ -1,14 +1,19 @@
 
 $(function () {
-    var l = abp.localization.getResource("CmsKit");
+    var l = abp.localization.getResource("FreeERP");
 
-    var createModal = new abp.ModalManager({ viewUrl: abp.appPath + "CmsKit/Blogs/CreateModal", modalClass: 'createBlog' });
-    var updateModal = new abp.ModalManager({ viewUrl: abp.appPath + "CmsKit/Blogs/UpdateModal", modalClass: 'updateBlog' });
-    var featuresModal = new abp.ModalManager(abp.appPath + "CmsKit/Blogs/FeaturesModal");
+    var createModal = new abp.ModalManager({ viewUrl: abp.appPath + "Products/ProductCreateModal", modalClass: 'ProductCreateModal' });
+    var updateModal = new abp.ModalManager({ viewUrl: abp.appPath + "Products/ProductUpdateModal", modalClass: 'ProductUpdateModal' });
 
-    var blogsService = volo.cmsKit.admin.blogs.blogAdmin;
+    var productService = freeERP.products.product;
 
-    var dataTable = $("#BlogsTable").DataTable(abp.libs.datatables.normalizeConfiguration({
+    var filterForm = $('#ProductFilterForm');
+    var getFilter = function () {
+        var filterObj = filterForm.serializeFormToObject();
+        return filterObj;
+    };
+
+    var dataTable = $("#ProductTable").DataTable(abp.libs.datatables.normalizeConfiguration({
         processing: true,
         serverSide: true,
         paging: true,
@@ -17,20 +22,13 @@ $(function () {
         scrollX: true,
         ordering: true,
         order: [[1, "desc"]],
-        ajax: abp.libs.datatables.createAjax(blogsService.getList),
+        ajax: abp.libs.datatables.createAjax(productService.getList, getFilter),
         columnDefs: [
             {
                 title: l("Details"),
                 targets: 0,
                 rowAction: {
                     items: [
-                        {
-                            text: l('Features'),
-                            visible: abp.auth.isGranted('CmsKit.Blogs.Features'),
-                            action: function (data) {
-                                featuresModal.open({ blogId: data.record.id });
-                            }
-                        },
                         {
                             text: l('Edit'),
                             visible: abp.auth.isGranted('CmsKit.Blogs.Update'),
@@ -45,7 +43,7 @@ $(function () {
                                 return l("BlogDeletionConfirmationMessage", data.record.name)
                             },
                             action: function (data) {
-                                blogsService
+                                productService
                                     .delete(data.record.id)
                                     .then(function () {
                                         dataTable.ajax.reload();
@@ -60,16 +58,11 @@ $(function () {
                 title: l("Name"),
                 orderable: true,
                 data: "name"
-            },
-            {
-                title: l("Slug"),
-                orderable: true,
-                data: "slug"
             }
         ]
     }));
 
-    $('#AbpContentToolbar button[name=CreateBlog]').on('click', function (e) {
+    $('#AbpContentToolbar button[name=CreateProduct]').on('click', function (e) {
         e.preventDefault();
         createModal.open();
     });

@@ -40,7 +40,7 @@ namespace FreeERP.Web.Menus
                 context.Menu.Items.Insert(
                     1,
                     new ApplicationMenuItem(
-                        FreeERPMenus.Products,
+                        FreeERPMenus.ProductsGroup,
                         l["Menu:ProductsGroupName"],
                         "~/",
                         icon: "fas fa-briefcase",
@@ -51,7 +51,7 @@ namespace FreeERP.Web.Menus
                         FreeERPPermissions.Categories.Default
                     })
                 );
-                var products = context.Menu.GetMenuItem(FreeERPMenus.Products);
+                var products = context.Menu.GetMenuItem(FreeERPMenus.ProductsGroup);
                 products.AddItem(
                     new ApplicationMenuItem(
                         FreeERPMenus.Category,

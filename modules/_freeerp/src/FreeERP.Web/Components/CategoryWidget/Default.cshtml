@@ -46,7 +46,7 @@
 
 
 <div class="category">
-    <div class="divbread" style="@Html.Raw(string.IsNullOrEmpty(Model.Value)?"display: none":"")">
+    <div class="divbread" style='@Html.Raw(string.IsNullOrEmpty(Model.Value)?"display: none":"")'>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 @foreach (var b in Model.Breadcrumbs)
