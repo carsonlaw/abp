@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.MultiTenancy;
 
 namespace FreeERP.Products
 {
-    public class Product : FullAuditedAggregateRoot<Guid>
+    public class Product : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
         [NotNull]
         public virtual Guid CategoryId { get; protected set; }
@@ -20,6 +21,7 @@ namespace FreeERP.Products
         public virtual string Description { get; protected set; }
         [NotNull]
         public ProductStock Stock { get; protected set; }
+        public virtual Guid? TenantId { get; protected set; }
 
         private Product()
         { }
@@ -30,7 +32,8 @@ namespace FreeERP.Products
             [NotNull] string code,
             [NotNull] Guid unitId,
             [CanBeNull] Guid? mediaId,
-            [CanBeNull] string description
+            [CanBeNull] string description,
+            [CanBeNull] Guid? tenantId = null
         ) : base(id)
         {
             SetCategory(categoryid);
@@ -39,6 +42,7 @@ namespace FreeERP.Products
             SetMediaId(mediaId);
             SetDescription(description);
             Stock = new ProductStock(id, unitId, 0);
+            TenantId = tenantId;
         }
 
 

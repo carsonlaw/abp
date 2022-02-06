@@ -13,8 +13,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace FreeERP.Migrations
 {
     [DbContext(typeof(FreeERPDbContext))]
-    [Migration("20211231125352_Init")]
-    partial class Init
+    [Migration("20220206104132_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -235,6 +235,10 @@ namespace FreeERP.Migrations
                     b.Property<Guid?>("StockId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("StockId");
@@ -299,6 +303,10 @@ namespace FreeERP.Migrations
 
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uuid");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
 
                     b.Property<string>("Value")
                         .HasColumnType("text");
@@ -377,6 +385,10 @@ namespace FreeERP.Migrations
 
                     b.Property<Guid?>("StockId")
                         .HasColumnType("uuid");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
 
                     b.HasKey("Id");
 
@@ -459,6 +471,13 @@ namespace FreeERP.Migrations
 
                     b.Property<Guid?>("SmallerUnitId")
                         .HasColumnType("uuid");
+
+                    b.Property<int>("Sort")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
 
                     b.HasKey("Id");
 

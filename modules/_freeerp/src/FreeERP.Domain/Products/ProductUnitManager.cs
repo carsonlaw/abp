@@ -15,7 +15,8 @@ namespace FreeERP.Products
 
         public virtual async Task<ProductUnit> CreateAsync([CanBeNull] Guid? pid, [NotNull] string name, [NotNull] string description, [NotNull] int ratioCount, [NotNull] int sort)
         {
-            var entity = new ProductUnit(GuidGenerator.Create(), name, description, ratioCount, sort);
+            var entity = new ProductUnit(GuidGenerator.Create(), name, description, ratioCount, sort, null,
+            CurrentTenant.Id);
             entity.SetSmallerUnit(await CheckPid(entity, pid));
             return entity;
         }

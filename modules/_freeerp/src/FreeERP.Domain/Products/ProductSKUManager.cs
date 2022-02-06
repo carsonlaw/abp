@@ -30,7 +30,8 @@ namespace FreeERP.Products
                 code,
                 unitId,
                 mediaId,
-                description
+                description,
+                CurrentTenant.Id
             );
             return sku;
         }

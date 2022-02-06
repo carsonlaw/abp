@@ -4,10 +4,11 @@ using System.Collections.ObjectModel;
 using JetBrains.Annotations;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.MultiTenancy;
 
 namespace FreeERP.Products
 {
-    public class ProductUnit : FullAuditedAggregateRoot<Guid>
+    public class ProductUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
         [NotNull]
         public string Name { get; protected set; }
@@ -16,6 +17,7 @@ namespace FreeERP.Products
         public int Sort { get; protected set; }
         public ProductUnit? SmallerUnit { get; protected set; }
         public Collection<ProductUnit> BiggerUnits { get; protected set; }
+        public virtual Guid? TenantId { get; protected set; }
 
 
         private ProductUnit()
@@ -26,7 +28,8 @@ namespace FreeERP.Products
             string description,
             int ratioCount,
             int sort,
-            Collection<ProductUnit> biggerUnits = null)
+            Collection<ProductUnit> biggerUnits = null,
+            [CanBeNull] Guid? tenantId = null)
             : base(id)
         {
             SetName(name);
@@ -34,6 +37,7 @@ namespace FreeERP.Products
             SetRatioCount(ratioCount);
             SetSort(sort);
             BiggerUnits = biggerUnits ?? new Collection<ProductUnit>();
+            TenantId = tenantId;
         }
 
         internal void SetSmallerUnit(ProductUnit productUnit)

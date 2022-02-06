@@ -27,7 +27,9 @@ namespace FreeERP.Products
             return new ProductProperty(GuidGenerator.Create(),
              name,
              description,
-             name, items);
+             name,
+             items,
+             CurrentTenant.Id);
         }
 
         public virtual async Task<ProductProperty> UpdateAsync([NotNull] ProductProperty entity,

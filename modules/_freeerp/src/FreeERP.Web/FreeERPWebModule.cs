@@ -43,6 +43,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
 using Volo.Abp.Json;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
+using Volo.Abp.MultiTenancy;
 
 namespace FreeERP.Web
 {
@@ -137,6 +138,10 @@ namespace FreeERP.Web
                 );
             });
 
+            Configure<AbpTenantResolveOptions>(options =>
+            {
+                //options.AddDomainTenantResolver("{0}.com");
+            });
         }
 
         private void ConfigureUrls(IConfiguration configuration)
