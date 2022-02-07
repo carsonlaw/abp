@@ -24,7 +24,7 @@ namespace FreeERP.Web.Components
             ProductUnitWidgetModel model
             )
         {
-            var items = await _productUnitAPPService.GetAllUnit();
+            var items = await _productUnitAPPService.GetUnitTree();
             model.Items = items;
             if (!string.IsNullOrEmpty(model.Value))
             {

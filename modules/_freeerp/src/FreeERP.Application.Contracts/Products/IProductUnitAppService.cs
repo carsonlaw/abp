@@ -9,6 +9,8 @@ namespace FreeERP.Products
 {
     public interface IProductUnitAppService : ICrudAppService<ProductUnitDto, Guid, ProductUnitGetListInput, ProductUnitCreateUpdateDto, ProductUnitCreateUpdateDto>
     {
-        Task<IList<ProductUnitDto>> GetAllUnit();
+
+        Task<IList<ProductUnitDto>> GetAllListFromCache();
+        Task<IList<ProductUnitDto>> GetUnitTree();
     }
 }

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using FreeERP.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace FreeERP.Products
@@ -16,13 +18,21 @@ namespace FreeERP.Products
         readonly IProductSKURepository _skuRepository;
         readonly ProductManager _manager;
         readonly ProductSKUManager _skuManager;
+        readonly ICategoryAppService _categoryService;
+        readonly IProductUnitAppService _productUnitService;
         public ProductAppService(IProductRepository repository,
             IProductSKURepository skuRepository,
-            ProductManager manager)
+            ProductManager manager,
+            ProductSKUManager skuManager,
+            ICategoryAppService CategoryAppService,
+            IProductUnitAppService ProductUnitAppService)
         {
             _repository = repository;
             _skuRepository = skuRepository;
             _manager = manager;
+            _skuManager = skuManager;
+            _categoryService = CategoryAppService;
+            _productUnitService = ProductUnitAppService;
         }
 
 
@@ -63,12 +73,47 @@ namespace FreeERP.Products
             await _skuRepository.DeleteByProductIdAsync(id);
         }
 
-        public async Task<IList<ProductDto>> GetListAsync()
+        public async Task<ProductDto> GetAsync(Guid id)
         {
-            var ret = await _repository.GetListAsync(false);
-            var items = await _skuRepository.GetListByProductIdsAsync(ret.Select(f => f.Id));
+            var query = await _repository.WithDetailsAsync();
+            query = query.Where(f => f.Id == id);
+            var entity = await AsyncExecuter.SingleOrDefaultAsync(query);
+            return ObjectMapper.Map<Product, ProductDto>(entity);
+        }
 
-            return ObjectMapper.Map<List<Product>, IList<ProductDto>>(ret);
+        public async Task<PagedResultDto<ProductDto>> GetListAsync(ProductGetListInput input)
+        {
+            var query = await _repository.WithDetailsAsync();
+
+            query = query.WhereIf(!string.IsNullOrEmpty(input.Filter),
+                f => f.Name.Contains(input.Filter) || f.Code.Contains(input.Filter));
+            query = query.WhereIf(input.CategoryId != null,
+                f => f.CategoryId == input.CategoryId);
+
+            var totalCount = await AsyncExecuter.CountAsync(query);
+
+            query = query.OrderBy(input.Sorting);
+            query = query.PageBy(input);
+            var entities = await AsyncExecuter.ToListAsync(query);
+
+            var categories = await _categoryService.GetAllListFromCache();
+            var units = await _productUnitService.GetAllListFromCache();
+            var items = await _skuRepository.GetListByProductIdsAsync(entities.Select(f => f.Id));
+
+            var entityDtos = new List<ProductDto>();
+
+            foreach (var entity in entities)
+            {
+                var dto = ObjectMapper.Map<Product, ProductDto>(entity);
+                dto.CategoryName = categories.FirstOrDefault(f => f.Id == dto.CategoryId)?.Name;
+                dto.UnitName = units.FirstOrDefault(f => f.Id == dto.UnitId)?.Name;
+                entityDtos.Add(dto);
+            }
+
+            return new PagedResultDto<ProductDto>(
+                totalCount,
+                entityDtos
+            );
         }
 
 
@@ -107,7 +152,7 @@ namespace FreeERP.Products
                 }
 
             }
-            foreach (var sku in input.Items.Where(f => f.Id == null || f.Id == Guid.Empty))
+            foreach (var sku in input.Items.Where(f => f.Id == Guid.Empty))
             {
                 var productSKU = await _skuManager.CreateSKUAsync(
                     product.Id,

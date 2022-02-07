@@ -1,9 +1,9 @@
 @page
-@using FreeERP.Web.Menus
 @using Microsoft.AspNetCore.Mvc.Localization
 @using FreeERP.Localization
 @using FreeERP.Web.Components;
 @using FreeERP.Web.Pages;
+@using FreeERP.Web.Menus;
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Slugify
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPageToolbar
 @inherits FreeERPPageBase
@@ -28,7 +28,7 @@
 <div id="ProductWrapper">
     <abp-card class="mb-4">
         <abp-card-body>
-            <form id="CategoryFilterForm" method="post">
+            <form id="ProductFilterForm" method="post">
                 <abp-row>
                     <abp-column size-lg="_5" size-md="_4">
                         <div class="mb-2">

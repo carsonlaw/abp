@@ -18,20 +18,26 @@ namespace FreeERP.Products
         public EFCoreProductRepository(IDbContextProvider<FreeERPDbContext> dbContextProvider) : base(dbContextProvider)
         {
         }
-
-        public virtual async Task<List<Product>> GetListAsync(string filter = null, string sorting = null, int maxResultCount = int.MaxValue, int skipCount = 0, CancellationToken cancellationToken = default)
+        public override async Task<IQueryable<Product>> WithDetailsAsync()
         {
-            var query = await GetListQueryAsync(filter);
-
-            return await query.OrderBy(sorting.IsNullOrEmpty() ? $"{nameof(Product.CreationTime)} desc" : sorting)
-                          .PageBy(skipCount, maxResultCount)
-                          .ToListAsync(GetCancellationToken(cancellationToken));
+            var query = await base.WithDetailsAsync();
+            query = query.Include(f => f.Stock);
+            return query;
         }
 
-        protected virtual async Task<IQueryable<Product>> GetListQueryAsync(string filter = null)
-        {
-            return (await GetDbSetAsync())
-                .WhereIf(!filter.IsNullOrWhiteSpace(), b => (b.Name.Contains(filter) || b.Code.Contains(filter)));
-        }
+        // public virtual async Task<List<Product>> GetListAsync(string filter = null, string sorting = null, int maxResultCount = int.MaxValue, int skipCount = 0, CancellationToken cancellationToken = default)
+        // {
+        //     var query = await GetListQueryAsync(filter);
+
+        //     return await query.OrderBy(sorting.IsNullOrEmpty() ? $"{nameof(Product.CreationTime)} desc" : sorting)
+        //                   .PageBy(skipCount, maxResultCount)
+        //                   .ToListAsync(GetCancellationToken(cancellationToken));
+        // }
+
+        // protected virtual async Task<IQueryable<Product>> GetListQueryAsync(string filter = null)
+        // {
+        //     return (await GetDbSetAsync())
+        //         .WhereIf(!filter.IsNullOrWhiteSpace(), b => (b.Name.Contains(filter) || b.Code.Contains(filter)));
+        // }
     }
 }

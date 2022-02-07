@@ -136,6 +136,20 @@ namespace FreeERP.Web
                         );
                     }
                 );
+
+                options.Configure<FreeERP.Web.Pages.ProductModel>(
+                    toolbar =>
+                    {
+                        toolbar.AddButton(
+                            LocalizableString.Create<FreeERPResource>("ProductNew"),
+                            icon: "plus",
+                            name: "CreateProduct",
+                            id: "CreateProduct",
+                            requiredPolicyName: FreeERPPermissions.Products.Create
+                        );
+                    }
+                );
+
             });
 
             Configure<AbpTenantResolveOptions>(options =>

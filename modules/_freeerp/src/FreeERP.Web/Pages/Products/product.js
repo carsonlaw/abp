@@ -21,26 +21,26 @@ $(function () {
         scrollCollapse: true,
         scrollX: true,
         ordering: true,
-        order: [[1, "desc"]],
+        order: [[2, "desc"]],
         ajax: abp.libs.datatables.createAjax(productService.getList, getFilter),
         columnDefs: [
             {
-                title: l("Details"),
+                title: l("Actions"),
                 targets: 0,
                 rowAction: {
                     items: [
                         {
                             text: l('Edit'),
-                            visible: abp.auth.isGranted('CmsKit.Blogs.Update'),
+                            visible: abp.auth.isGranted('FreeERP.Products.Products.Update'),
                             action: function (data) {
                                 updateModal.open({ id: data.record.id });
                             }
                         },
                         {
                             text: l('Delete'),
-                            visible: abp.auth.isGranted('CmsKit.Blogs.Delete'),
+                            visible: abp.auth.isGranted('FreeERP.Products.Products.Delete'),
                             confirmMessage: function (data) {
-                                return l("BlogDeletionConfirmationMessage", data.record.name)
+                                return l("ProductDeletionConfirmationMessage", data.record.name)
                             },
                             action: function (data) {
                                 productService
@@ -55,9 +55,34 @@ $(function () {
                 }
             },
             {
+                title: l("Category"),
+                orderable: true,
+                data: "categoryName"
+            },
+            {
                 title: l("Name"),
                 orderable: true,
                 data: "name"
+            },
+            {
+                title: l("Code"),
+                orderable: true,
+                data: "code"
+            },
+            {
+                title: l("stockNum"),
+                orderable: true,
+                data: "stockNum"
+            },
+            {
+                title: l("unitName"),
+                orderable: true,
+                data: "unitName"
+            },
+            {
+                title: l("Description"),
+                orderable: true,
+                data: "description"
             }
         ]
     }));
@@ -72,6 +97,10 @@ $(function () {
     });
 
     updateModal.onResult(function () {
+        dataTable.ajax.reload();
+    });
+    filterForm.submit(function (e) {
+        e.preventDefault();
         dataTable.ajax.reload();
     });
 });

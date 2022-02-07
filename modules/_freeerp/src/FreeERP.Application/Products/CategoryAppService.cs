@@ -56,26 +56,30 @@ namespace FreeERP.Products
             await base.DeleteAsync(id);
         }
 
-
-        public async Task<IList<CategoryDto>> GetCategoryTree()
+        public async Task<IList<CategoryDto>> GetAllListFromCache()
         {
             return await _cache.GetOrAddAsync(FreeERPDomainCacheKeys.Category.AllTree,
-            async () =>
-            {
-                Logger.Log(LogLevel.Debug, $"no cache key '{FreeERPDomainCacheKeys.Category.AllTree}'");
-                var input = new CategoryGetListInput()
-                {
-                    PidNullIsAll = true,
-                };
-                var query = await CreateFilteredQueryAsync(input);
-                query = ApplyDefaultSorting(query);
-                return await buildTree(query, input.Pid);
-            },
-            () => new DistributedCacheEntryOptions
-            {
-                SlidingExpiration = TimeSpan.FromDays(30)
-            }
-            );
+                        async () =>
+                        {
+                            Logger.Log(LogLevel.Debug, $"no cache key '{FreeERPDomainCacheKeys.Category.AllTree}'");
+                            var input = new CategoryGetListInput()
+                            {
+                                PidNullIsAll = true,
+                            };
+                            var query = await CreateFilteredQueryAsync(input);
+                            query = ApplyDefaultSorting(query);
+                            return await MapToGetListOutputDtosAsync(query.ToList());
+                        },
+                        () => new DistributedCacheEntryOptions
+                        {
+                            SlidingExpiration = TimeSpan.FromDays(30)
+                        }
+                        );
+        }
+        public async Task<IList<CategoryDto>> GetCategoryTree()
+        {
+            var list = await GetAllListFromCache();
+            return await buildTree(list, null);
         }
 
         [Authorize(FreeERPPermissions.Categories.Create)]
@@ -84,9 +88,9 @@ namespace FreeERP.Products
             return await _repository.GetNextSortByPid(Pid);
         }
 
-        private async Task<IList<CategoryDto>> buildTree(IQueryable<Category> query, Guid? pid)
+        private async Task<IList<CategoryDto>> buildTree(IList<CategoryDto> query, Guid? pid)
         {
-            var list = await MapToGetListOutputDtosAsync(query.Where(f => f.Pid == pid)
+            var list = (query.Where(f => f.Pid == pid)
                 .ToList()
             );
             for (int i = 0; i < list.Count(); i++)

@@ -6,7 +6,7 @@ namespace FreeERP.Web.Pages;
 
 public class CategoryModel : FreeERPPageModel
 {
-    [Placeholder("分类名称")]
+    [Placeholder("Name")]
     public string Filter { get; set; }
 
 }

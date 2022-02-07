@@ -27,12 +27,12 @@
 
 <abp-card class="mb-4">
     <abp-card-body>
-        <form id="ProductFilterForm" method="post">
+        <form id="CategoryFilterForm" method="post">
             <abp-row>
                 <abp-column size-lg="_5" size-md="_4">
                     <div class="mb-2">
                         @await Component.InvokeAsync(typeof(CategoryWidgetViewComponent),new CategoryWidgetModel(){
-                        Id="CategoryCate", InputName="CategoryId", SelectText=L["CategorySelect"].Value })
+                        Id="CategoryCate", InputName="Pid", SelectText=L["CategorySelect"].Value })
                     </div>
                 </abp-column>
                 <abp-column size-lg="_5" size-md="_4">

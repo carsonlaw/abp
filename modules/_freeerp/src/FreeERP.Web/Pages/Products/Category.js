@@ -17,7 +17,6 @@ $(function () {
     var filterForm = $('#CategoryFilterForm');
     var getFilter = function () {
         var filterObj = filterForm.serializeFormToObject();
-        filterObj.pid = filterObj.categoryId;
         return filterObj;
     };
 

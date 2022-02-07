@@ -71,7 +71,7 @@ namespace FreeERP.Products
             return ret;
         }
 
-        public async Task<IList<ProductUnitDto>> GetAllUnit()
+        public async Task<IList<ProductUnitDto>> GetAllListFromCache()
         {
             return await _cache.GetOrAddAsync(
                 FreeERPDomainCacheKeys.ProductUnit.AllTree,
@@ -82,9 +82,10 @@ namespace FreeERP.Products
                     {
                         PidNullIsAll = true,
                     };
+
                     var query = await CreateFilteredQueryAsync(input);
                     query = ApplyDefaultSorting(query);
-                    return await buildTree(query, input.Pid);
+                    return await MapToGetListOutputDtosAsync(query.ToList());
                 },
                 () => new DistributedCacheEntryOptions
                 {
@@ -94,11 +95,19 @@ namespace FreeERP.Products
 
         }
 
-        private async Task<IList<ProductUnitDto>> buildTree(IQueryable<ProductUnit> query, Guid? pid)
+        public async Task<IList<ProductUnitDto>> GetUnitTree()
         {
-            var list = await MapToGetListOutputDtosAsync(query.Where(f => (pid == null && f.SmallerUnit == null) || (f.SmallerUnit.Id == pid))
+            var list = await GetAllListFromCache();
+            return await buildTree(list, null);
+
+        }
+
+        private async Task<IList<ProductUnitDto>> buildTree(IList<ProductUnitDto> query, Guid? pid)
+        {
+            var list = (query.Where(f => (pid == null && f.SmallerUnit == null) || (f.SmallerUnit != null && f.SmallerUnit.Id == pid))
                 .ToList()
             );
+
             for (int i = 0; i < list.Count(); i++)
             {
                 list[i].BiggerUnits = await buildTree(query, list[i].Id);
