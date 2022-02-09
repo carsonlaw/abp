@@ -76,6 +76,7 @@ namespace FreeERP.Products
                         }
                         );
         }
+
         public async Task<IList<CategoryDto>> GetCategoryTree()
         {
             var list = await GetAllListFromCache();
