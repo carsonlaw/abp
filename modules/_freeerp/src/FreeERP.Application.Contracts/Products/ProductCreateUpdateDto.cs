@@ -18,7 +18,7 @@ namespace FreeERP.Products
         [DynamicMaxLength(typeof(ProductConsts), nameof(ProductConsts.MaxCodeLength))]
         public string Code { get; set; }
         public Guid? MediaId { get; set; }
-        [Required]
+
         [DynamicMaxLength(typeof(ProductConsts), nameof(ProductConsts.MaxDescriptionLength))]
         public string Description { get; set; }
         [Required]

@@ -56,6 +56,16 @@ $(function () {
         e.preventDefault();
 
         if ($formCreate.valid()) {
+            if (!$('#ProductCreateCate').val()) {
+                abp.notify.error(l('NotBeNull', l('CategoryName')));
+                abp.ui.clearBusy();
+                return false;
+            }
+            if (!$('#ProductCreateUnit').val()) {
+                abp.notify.error(l('NotBeNull', l('ProductUnit')));
+                abp.ui.clearBusy();
+                return false;
+            }
 
             $formCreate.ajaxSubmit({
                 success: function (result) {

@@ -104,10 +104,13 @@ namespace FreeERP.Web
             {
                 option.Contributors.Add(new HelpSettingPageContributor());
             });
-            Configure<RazorPagesOptions>(option =>
+            Configure<RazorPagesOptions>(options =>
             {
-                //option.Conventions.AuthorizeFolder("/Products/Product", FreeERPPermissions.Products.Default);
-                option.Conventions.AuthorizePage("/Products/Product", FreeERPPermissions.Products.Default);
+                //options.Conventions.AuthorizeFolder("/Products/Product", FreeERPPermissions.Products.Default);
+                options.Conventions.AuthorizePage("/Products/Product", FreeERPPermissions.Products.Default);
+
+
+                options.Conventions.AddPageRoute("/Products/ProductUpdate", "/Products/ProductUpdate/{Id}");
             });
             Configure<AbpPageToolbarOptions>(options =>
             {

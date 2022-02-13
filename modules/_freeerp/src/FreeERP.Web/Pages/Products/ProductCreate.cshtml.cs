@@ -6,6 +6,7 @@ using Volo.Abp.Validation;
 using FreeERP.Products;
 using FreeERP.Web.Pages;
 using System;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 
 namespace FreeERP.Web.Pages;
 
@@ -23,22 +24,23 @@ public class ProductCreateModel : FreeERPPageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        Guid.TryParse(Request.Form["CategoryId"], out var CategoryId);
-        Guid.TryParse(Request.Form["UnitId"], out var UnitId);
-        ModelState.AddModelError("CategoryId", "CategoryId");
-        //return NoContent();
+        ValidateModel();
+
         var dto = ObjectMapper.Map<CreateProductViewModel, ProductCreateUpdateDto>(ViewModel);
-        dto.CategoryId = CategoryId;
-        dto.UnitId = UnitId;
-
         await ProductAppService.CreateAsync(dto);
-
         return NoContent();
     }
 
     [AutoMap(typeof(ProductCreateUpdateDto), ReverseMap = true)]
     public class CreateProductViewModel
     {
+        [Required]
+        [DynamicFormIgnore]
+        public Guid CategoryId { get; set; }
+
+        [Required]
+        [DynamicFormIgnore]
+        public Guid UnitId { get; set; }
 
         [Required]
         [DynamicMaxLength(typeof(ProductConsts), nameof(ProductConsts.MaxNameLength))]

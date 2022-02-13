@@ -39,9 +39,9 @@
 
         <abp-dynamic-form abp-model="ViewModel" asp-page="/Products/ProductCreate">
             @await Component.InvokeAsync(typeof(CategoryWidgetViewComponent),new CategoryWidgetModel(){
-            Id="ProductCreateCate", InputName="CategoryId", SelectText=L["CategorySelect"].Value })
+            Id="ProductCreateCate", InputName="ViewModel.CategoryId", SelectText=L["CategorySelect"].Value })
             @await Component.InvokeAsync(typeof(ProductUnitWidgetViewComponent),new ProductUnitWidgetModel(){
-            Id="ProductCreateUnit", InputName="UnitId", SelectText=L["ProductUnitParentSelect"].Value })
+            Id="ProductCreateUnit", InputName="ViewModel.UnitId", SelectText=L["ProductUnitParentSelect"].Value })
             <abp-form-content />
         </abp-dynamic-form>
 

@@ -56,7 +56,7 @@ $(function () {
                 }
             },
             {
-                title: l("Category"),
+                title: l("CategoryName"),
                 orderable: true,
                 data: "categoryName"
             },
@@ -71,12 +71,12 @@ $(function () {
                 data: "code"
             },
             {
-                title: l("stockNum"),
+                title: l("StockNum"),
                 orderable: true,
                 data: "stockNum"
             },
             {
-                title: l("unitName"),
+                title: l("ProductUnit"),
                 orderable: true,
                 data: "unitName"
             },
