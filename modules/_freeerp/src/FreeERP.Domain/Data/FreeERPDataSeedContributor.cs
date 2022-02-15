@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FreeERP.Products;
 using FreeERP.Purchase;
+using FreeERP.Stories;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
@@ -16,6 +17,7 @@ namespace FreeERP.Domain.Data
 {
     public class FreeERPDataSeedContributor : IDataSeedContributor, ITransientDependency
     {
+        private readonly IStoreRepository _storeRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IProductRepository _productRepository;
         private readonly IProductUnitRepository _productUnitRepository;
@@ -24,12 +26,14 @@ namespace FreeERP.Domain.Data
         private readonly ICurrentTenant _currentTenant;
         private readonly IGuidGenerator _guidGenerator;
 
+        private Store store;
         private Category category;
         private Product product;
         private ProductUnit productUnit;
         private ProductProperty productProperty;
 
         public FreeERPDataSeedContributor(
+            IStoreRepository storeRepository,
             ICategoryRepository categoryRepository,
             IProductUnitRepository productUnitRepository,
             IProductPropertyRepository productPropertyRepository,
@@ -39,6 +43,7 @@ namespace FreeERP.Domain.Data
             IGuidGenerator guidGenerator
         )
         {
+            _storeRepository = storeRepository;
             _categoryRepository = categoryRepository;
             _productUnitRepository = productUnitRepository;
             _productPropertyRepository = productPropertyRepository;
@@ -53,6 +58,7 @@ namespace FreeERP.Domain.Data
         {
             using (_currentTenant.Change(context?.TenantId))
             {
+                await CreateStoreAsync();
                 await CreateCategoryAsync();
                 await CreateProductUnitAsync();
                 await CreateProductPropertyAsync();
@@ -139,6 +145,17 @@ namespace FreeERP.Domain.Data
 
             category = await _categoryRepository.InsertAsync(
                 new Category(_guidGenerator.Create(), "test", "test", null, _currentTenant.Id),
+                autoSave: true
+            );
+        }
+
+        private async Task CreateStoreAsync()
+        {
+            if (await _storeRepository.GetCountAsync() > 0)
+                return;
+
+            store = await _storeRepository.InsertAsync(
+                new Store(_guidGenerator.Create(), "test", "test", 0, _currentTenant.Id),
                 autoSave: true
             );
         }

@@ -21,6 +21,9 @@ using Newtonsoft.Json;
 using System;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Linq;
+using FreeERP.Stories;
+using FreeERP.Suppliers;
+using FreeERP.Customers;
 
 namespace FreeERP.EntityFrameworkCore
 {
@@ -40,6 +43,9 @@ namespace FreeERP.EntityFrameworkCore
         public DbSet<ProductUnit> ProductUnits { get; set; }
         public DbSet<ProductProperty> ProductProperties { get; set; }
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+        public DbSet<Store> Stories { get; set; }
+        public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<Customer> Customers { get; set; }
         //public DbSet<PurchaseOrderLine> PurchaseOrderLines {get;set;}
         public DbSet<MediaDescriptor> MediaDescriptors { get; set; }
 
@@ -170,6 +176,30 @@ namespace FreeERP.EntityFrameworkCore
                 b.Property(p => p.Name).HasMaxLength(MediaDescriptorConsts.MaxNameLength);
                 b.Property(p => p.MimeType).HasMaxLength(MediaDescriptorConsts.MaxMimeTypeLength);
                 b.Property(p => p.EntityType).HasMaxLength(MediaDescriptorConsts.MaxEntityTypeLength);
+            });
+
+
+            builder.Entity<Store>(b =>
+            {
+                b.ToTable(FreeERPConsts.DbTablePrefix + "Stories", FreeERPConsts.DbSchema);
+                b.Property(p => p.Name).IsRequired().HasMaxLength(StoreConsts.MaxNameLength);
+                b.Property(p => p.Description).HasMaxLength(StoreConsts.MaxDescriptionLength);
+            });
+
+
+            builder.Entity<Supplier>(b =>
+            {
+                b.ToTable(FreeERPConsts.DbTablePrefix + "Suppliers", FreeERPConsts.DbSchema);
+                b.Property(p => p.Name).IsRequired().HasMaxLength(StoreConsts.MaxNameLength);
+                b.Property(p => p.Description).HasMaxLength(StoreConsts.MaxDescriptionLength);
+            });
+
+
+            builder.Entity<Customer>(b =>
+            {
+                b.ToTable(FreeERPConsts.DbTablePrefix + "Customers", FreeERPConsts.DbSchema);
+                b.Property(p => p.Name).IsRequired().HasMaxLength(StoreConsts.MaxNameLength);
+                b.Property(p => p.Description).HasMaxLength(StoreConsts.MaxDescriptionLength);
             });
 
             #endregion
