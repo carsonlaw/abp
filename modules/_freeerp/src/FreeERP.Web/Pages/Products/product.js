@@ -2,8 +2,8 @@
 $(function () {
     var l = abp.localization.getResource("FreeERP");
 
-    var createModal = new abp.ModalManager({ viewUrl: abp.appPath + "Products/ProductCreateModal", modalClass: 'ProductCreateModal' });
-    var updateModal = new abp.ModalManager({ viewUrl: abp.appPath + "Products/ProductUpdateModal", modalClass: 'ProductUpdateModal' });
+    //var createModal = new abp.ModalManager({ viewUrl: abp.appPath + "Products/ProductCreateModal", modalClass: 'ProductCreateModal', scriptUrl: abp.appPath + "Components/ProductUnitWidget/Default.js" });
+    //var updateModal = new abp.ModalManager({ viewUrl: abp.appPath + "Products/ProductUpdateModal", modalClass: 'ProductUpdateModal' });
 
     var productService = freeERP.products.product;
 
@@ -33,7 +33,8 @@ $(function () {
                             text: l('Edit'),
                             visible: abp.auth.isGranted('FreeERP.Products.Products.Update'),
                             action: function (data) {
-                                updateModal.open({ id: data.record.id });
+                                //updateModal.open({ id: data.record.id });
+                                location.href = "/Products/ProductUpdate/" + data.record.id
                             }
                         },
                         {
@@ -55,7 +56,7 @@ $(function () {
                 }
             },
             {
-                title: l("Category"),
+                title: l("CategoryName"),
                 orderable: true,
                 data: "categoryName"
             },
@@ -70,12 +71,12 @@ $(function () {
                 data: "code"
             },
             {
-                title: l("stockNum"),
+                title: l("StockNum"),
                 orderable: true,
                 data: "stockNum"
             },
             {
-                title: l("unitName"),
+                title: l("ProductUnit"),
                 orderable: true,
                 data: "unitName"
             },
@@ -89,16 +90,10 @@ $(function () {
 
     $('#AbpContentToolbar button[name=CreateProduct]').on('click', function (e) {
         e.preventDefault();
-        createModal.open();
+        window.location.href = "/Products/ProductCreate"
     });
 
-    createModal.onResult(function () {
-        dataTable.ajax.reload();
-    });
 
-    updateModal.onResult(function () {
-        dataTable.ajax.reload();
-    });
     filterForm.submit(function (e) {
         e.preventDefault();
         dataTable.ajax.reload();

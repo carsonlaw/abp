@@ -1,0 +1,52 @@
+﻿@page
+@using FreeERP.Web.Components
+@using FreeERP.Web.Menus
+@using FreeERP.Web.Pages;
+
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Uppy
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPageToolbar
+
+@inherits FreeERPPageBase
+
+@model ProductCreateModel
+
+@{
+    PageLayout.Content.Title = L["Menu:Product"].Value;
+    PageLayout.Content.BreadCrumb.Add(L["Menu:FreeERP"].Value);
+    PageLayout.Content.MenuItemName = FreeERPMenus.Product;
+}
+@section scripts {
+<abp-script-bundle>
+    <abp-script type="typeof(UppyScriptContributor)" />
+    <abp-script src="/Pages/Products/productCreate.js" />
+</abp-script-bundle>
+}
+
+@section content_toolbar {
+@await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new { pageName = typeof(ProductCreateModel).FullName
+})
+}
+
+
+
+<abp-card>
+    <abp-card-header title="@L["New"].Value"></abp-card-header>
+    <abp-card-body>
+        <div class="mb-3">
+            <label class="form-label">@L["CoverImage"]</label>
+            <input type="file" id="ProductImage" class="form-control" />
+        </div>
+
+        <abp-dynamic-form abp-model="ViewModel" asp-page="/Products/ProductCreate">
+            @await Component.InvokeAsync(typeof(CategoryWidgetViewComponent),new CategoryWidgetModel(){
+            Id="ProductCreateCate", InputName="ViewModel.CategoryId", SelectText=L["CategorySelect"].Value })
+            @await Component.InvokeAsync(typeof(ProductUnitWidgetViewComponent),new ProductUnitWidgetModel(){
+            Id="ProductCreateUnit", InputName="ViewModel.UnitId", SelectText=L["ProductUnitParentSelect"].Value })
+            <abp-form-content />
+        </abp-dynamic-form>
+
+    </abp-card-body>
+    <abp-card-footer>
+        <abp-button button-type="Primary" type="submit" text="@L["Submit"].Value" />
+    </abp-card-footer>
+</abp-card>

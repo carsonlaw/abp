@@ -48,18 +48,20 @@ namespace FreeERP.Products
                 input.Description
             );
             await _repository.InsertAsync(product);
-
-            foreach (var sku in input.Items)
+            if (input.Items != null)
             {
-                var productSKU = await _skuManager.CreateSKUAsync(
-                    product.Id,
-                    sku.Name,
-                    sku.Code,
-                    sku.UnitId,
-                    sku.MediaId,
-                    sku.Description
-                );
-                await _skuRepository.InsertAsync(productSKU);
+                foreach (var sku in input.Items)
+                {
+                    var productSKU = await _skuManager.CreateSKUAsync(
+                        product.Id,
+                        sku.Name,
+                        sku.Code,
+                        sku.UnitId,
+                        sku.MediaId,
+                        sku.Description
+                    );
+                    await _skuRepository.InsertAsync(productSKU);
+                }
             }
 
             return ObjectMapper.Map<Product, ProductDto>(product);
@@ -152,17 +154,20 @@ namespace FreeERP.Products
                 }
 
             }
-            foreach (var sku in input.Items.Where(f => f.Id == Guid.Empty))
+            if (input.Items != null)
             {
-                var productSKU = await _skuManager.CreateSKUAsync(
-                    product.Id,
-                    sku.Name,
-                    sku.Code,
-                    sku.UnitId,
-                    sku.MediaId,
-                    sku.Description
-                );
-                await _skuRepository.InsertAsync(productSKU);
+                foreach (var sku in input.Items.Where(f => f.Id == Guid.Empty))
+                {
+                    var productSKU = await _skuManager.CreateSKUAsync(
+                        product.Id,
+                        sku.Name,
+                        sku.Code,
+                        sku.UnitId,
+                        sku.MediaId,
+                        sku.Description
+                    );
+                    await _skuRepository.InsertAsync(productSKU);
+                }
             }
 
             return ObjectMapper.Map<Product, ProductDto>(product);
