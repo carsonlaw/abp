@@ -118,7 +118,7 @@ namespace FreeERP.EntityFrameworkCore
                 b.Property(p => p.MediaId);
                 b.Property(p => p.Description).HasMaxLength(ProductConsts.MaxDescriptionLength);
                 //b.HasMany(p => p.SKUs);
-                b.HasOne(p => p.Stock);
+                b.HasMany(p => p.Stocks);
 
                 b.HasIndex(p => new { p.CategoryId, p.Code });
             });
@@ -137,7 +137,7 @@ namespace FreeERP.EntityFrameworkCore
                             c => (IList<Guid>)c.ToHashSet()
                         )
                     );
-                b.HasOne(p => p.Stock);
+                b.HasMany(p => p.Stocks);
             });
             builder.Entity<ProductUnit>(b =>
             {

@@ -13,7 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace FreeERP.Migrations
 {
     [DbContext(typeof(FreeERPDbContext))]
-    [Migration("20220206104132_init")]
+    [Migration("20220216065057_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,72 @@ namespace FreeERP.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("FreeERP.Customers.Customer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("DeleterId");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("DeletionTime");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsDeleted");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.Property<int>("Sort")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ERPCustomers", (string)null);
+                });
 
             modelBuilder.Entity("FreeERP.MediaDescriptors.MediaDescriptor", b =>
                 {
@@ -232,16 +298,14 @@ namespace FreeERP.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
 
-                    b.Property<Guid?>("StockId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("uuid")
                         .HasColumnName("TenantId");
 
-                    b.HasKey("Id");
+                    b.Property<Guid>("UnitId")
+                        .HasColumnType("uuid");
 
-                    b.HasIndex("StockId");
+                    b.HasKey("Id");
 
                     b.HasIndex("CategoryId", "Code");
 
@@ -383,16 +447,14 @@ namespace FreeERP.Migrations
                     b.Property<string>("PropertyIds")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("StockId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("uuid")
                         .HasColumnName("TenantId");
 
-                    b.HasKey("Id");
+                    b.Property<Guid>("UnitId")
+                        .HasColumnType("uuid");
 
-                    b.HasIndex("StockId");
+                    b.HasKey("Id");
 
                     b.ToTable("ERPProductSKUs", (string)null);
                 });
@@ -402,13 +464,23 @@ namespace FreeERP.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ProductSKUId")
+                        .HasColumnType("uuid");
+
                     b.Property<long>("StockNum")
                         .HasColumnType("bigint");
 
-                    b.Property<Guid>("UnitId")
+                    b.Property<Guid>("StoreId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ProductSKUId");
 
                     b.ToTable("ERPProductStocks", (string)null);
                 });
@@ -559,6 +631,138 @@ namespace FreeERP.Migrations
                     b.HasIndex("PurchaseOrderId");
 
                     b.ToTable("ERPPurchaseOrderLines", (string)null);
+                });
+
+            modelBuilder.Entity("FreeERP.Stories.Store", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("DeleterId");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("DeletionTime");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsDeleted");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.Property<int>("Sort")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ERPStories", (string)null);
+                });
+
+            modelBuilder.Entity("FreeERP.Suppliers.Supplier", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("DeleterId");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("DeletionTime");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsDeleted");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.Property<int>("Sort")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ERPSuppliers", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
@@ -2473,15 +2677,6 @@ namespace FreeERP.Migrations
                     b.ToTable("AbpTenantConnectionStrings", (string)null);
                 });
 
-            modelBuilder.Entity("FreeERP.Products.Product", b =>
-                {
-                    b.HasOne("FreeERP.Products.ProductStock", "Stock")
-                        .WithMany()
-                        .HasForeignKey("StockId");
-
-                    b.Navigation("Stock");
-                });
-
             modelBuilder.Entity("FreeERP.Products.ProductProperty", b =>
                 {
                     b.HasOne("FreeERP.Products.ProductProperty", "Parent")
@@ -2491,13 +2686,15 @@ namespace FreeERP.Migrations
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("FreeERP.Products.ProductSKU", b =>
+            modelBuilder.Entity("FreeERP.Products.ProductStock", b =>
                 {
-                    b.HasOne("FreeERP.Products.ProductStock", "Stock")
-                        .WithMany()
-                        .HasForeignKey("StockId");
+                    b.HasOne("FreeERP.Products.Product", null)
+                        .WithMany("Stocks")
+                        .HasForeignKey("ProductId");
 
-                    b.Navigation("Stock");
+                    b.HasOne("FreeERP.Products.ProductSKU", null)
+                        .WithMany("Stocks")
+                        .HasForeignKey("ProductSKUId");
                 });
 
             modelBuilder.Entity("FreeERP.Products.ProductUnit", b =>
@@ -2793,9 +2990,19 @@ namespace FreeERP.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("FreeERP.Products.Product", b =>
+                {
+                    b.Navigation("Stocks");
+                });
+
             modelBuilder.Entity("FreeERP.Products.ProductProperty", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("FreeERP.Products.ProductSKU", b =>
+                {
+                    b.Navigation("Stocks");
                 });
 
             modelBuilder.Entity("FreeERP.Products.ProductUnit", b =>

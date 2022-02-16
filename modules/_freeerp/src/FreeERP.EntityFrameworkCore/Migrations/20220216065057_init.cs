@@ -300,6 +300,30 @@ namespace FreeERP.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ERPCustomers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
+                    Description = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Sort = table.Column<int>(type: "integer", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ExtraProperties = table.Column<string>(type: "text", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uuid", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uuid", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ERPCustomers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ERPMediaDescriptors",
                 columns: table => new
                 {
@@ -355,16 +379,58 @@ namespace FreeERP.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ERPProductStocks",
+                name: "ERPProducts",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
+                    Code = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
+                    MediaId = table.Column<Guid>(type: "uuid", nullable: true),
+                    Description = table.Column<string>(type: "character varying(4094)", maxLength: 4094, nullable: true),
                     UnitId = table.Column<Guid>(type: "uuid", nullable: false),
-                    StockNum = table.Column<long>(type: "bigint", nullable: false)
+                    TenantId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ExtraProperties = table.Column<string>(type: "text", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uuid", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uuid", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ERPProductStocks", x => x.Id);
+                    table.PrimaryKey("PK_ERPProducts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ERPProductSKUs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UnitId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "text", nullable: true),
+                    MediaId = table.Column<Guid>(type: "uuid", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    PropertyIds = table.Column<string>(type: "text", nullable: true),
+                    TenantId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ExtraProperties = table.Column<string>(type: "text", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uuid", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uuid", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ERPProductSKUs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -417,6 +483,54 @@ namespace FreeERP.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ERPPurchaseOrders", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ERPStories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
+                    Description = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Sort = table.Column<int>(type: "integer", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ExtraProperties = table.Column<string>(type: "text", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uuid", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uuid", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ERPStories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ERPSuppliers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
+                    Description = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Sort = table.Column<int>(type: "integer", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ExtraProperties = table.Column<string>(type: "text", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uuid", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uuid", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ERPSuppliers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -837,67 +951,27 @@ namespace FreeERP.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ERPProducts",
+                name: "ERPProductStocks",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
-                    Code = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
-                    MediaId = table.Column<Guid>(type: "uuid", nullable: true),
-                    Description = table.Column<string>(type: "character varying(4094)", maxLength: 4094, nullable: true),
-                    StockId = table.Column<Guid>(type: "uuid", nullable: true),
-                    TenantId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ExtraProperties = table.Column<string>(type: "text", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatorId = table.Column<Guid>(type: "uuid", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    LastModifierId = table.Column<Guid>(type: "uuid", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    DeleterId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    StoreId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StockNum = table.Column<long>(type: "bigint", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ProductSKUId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ERPProducts", x => x.Id);
+                    table.PrimaryKey("PK_ERPProductStocks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ERPProducts_ERPProductStocks_StockId",
-                        column: x => x.StockId,
-                        principalTable: "ERPProductStocks",
+                        name: "FK_ERPProductStocks_ERPProducts_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "ERPProducts",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ERPProductSKUs",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
-                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Code = table.Column<string>(type: "text", nullable: true),
-                    MediaId = table.Column<Guid>(type: "uuid", nullable: true),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    StockId = table.Column<Guid>(type: "uuid", nullable: true),
-                    PropertyIds = table.Column<string>(type: "text", nullable: true),
-                    TenantId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ExtraProperties = table.Column<string>(type: "text", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatorId = table.Column<Guid>(type: "uuid", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    LastModifierId = table.Column<Guid>(type: "uuid", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    DeleterId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ERPProductSKUs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ERPProductSKUs_ERPProductStocks_StockId",
-                        column: x => x.StockId,
-                        principalTable: "ERPProductStocks",
+                        name: "FK_ERPProductStocks_ERPProductSKUs_ProductSKUId",
+                        column: x => x.ProductSKUId,
+                        principalTable: "ERPProductSKUs",
                         principalColumn: "Id");
                 });
 
@@ -1430,14 +1504,14 @@ namespace FreeERP.Migrations
                 columns: new[] { "CategoryId", "Code" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ERPProducts_StockId",
-                table: "ERPProducts",
-                column: "StockId");
+                name: "IX_ERPProductStocks_ProductId",
+                table: "ERPProductStocks",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ERPProductSKUs_StockId",
-                table: "ERPProductSKUs",
-                column: "StockId");
+                name: "IX_ERPProductStocks_ProductSKUId",
+                table: "ERPProductStocks",
+                column: "ProductSKUId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ERPProductUnits_SmallerUnitId",
@@ -1543,22 +1617,28 @@ namespace FreeERP.Migrations
                 name: "ERPCategories");
 
             migrationBuilder.DropTable(
+                name: "ERPCustomers");
+
+            migrationBuilder.DropTable(
                 name: "ERPMediaDescriptors");
 
             migrationBuilder.DropTable(
                 name: "ERPProductProperties");
 
             migrationBuilder.DropTable(
-                name: "ERPProducts");
-
-            migrationBuilder.DropTable(
-                name: "ERPProductSKUs");
+                name: "ERPProductStocks");
 
             migrationBuilder.DropTable(
                 name: "ERPProductUnits");
 
             migrationBuilder.DropTable(
                 name: "ERPPurchaseOrderLines");
+
+            migrationBuilder.DropTable(
+                name: "ERPStories");
+
+            migrationBuilder.DropTable(
+                name: "ERPSuppliers");
 
             migrationBuilder.DropTable(
                 name: "IdentityServerApiResourceClaims");
@@ -1633,7 +1713,10 @@ namespace FreeERP.Migrations
                 name: "AbpUsers");
 
             migrationBuilder.DropTable(
-                name: "ERPProductStocks");
+                name: "ERPProducts");
+
+            migrationBuilder.DropTable(
+                name: "ERPProductSKUs");
 
             migrationBuilder.DropTable(
                 name: "ERPPurchaseOrders");
