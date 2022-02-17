@@ -4,14 +4,18 @@ namespace FreeERP.Purchase
 {
     public class PurchaseOrderLineChangedEvent
     {
-        public virtual Guid ProductID { get; protected set;}
-        public virtual long Number {get; protected set;}
+        public virtual Guid ProductId { get; protected set; }
+        public virtual Guid? ProductSkuId { get; protected set; }
+        public virtual Guid StoreID { get; protected set; }
+        public virtual long Number { get; protected set; }
 
         private PurchaseOrderLineChangedEvent()
-        {}
-        public PurchaseOrderLineChangedEvent(Guid productID, long number)
+        { }
+        public PurchaseOrderLineChangedEvent(Guid productId, Guid? productSkuId, Guid storeId, long number)
         {
-            ProductID = productID;
+            ProductId = productId;
+            ProductSkuId = productSkuId;
+            StoreID = storeId;
             Number = number;
         }
     }

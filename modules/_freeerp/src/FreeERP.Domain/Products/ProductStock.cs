@@ -7,16 +7,16 @@ namespace FreeERP.Products
     public class ProductStock : Entity<Guid>
     {
         [NotNull]
-        public Guid UnitId { get; protected set; }
+        public Guid StoreId { get; protected set; }
         [NotNull]
         public long StockNum { get; protected set; }
 
         private ProductStock()
         { }
-        protected internal ProductStock(Guid id, Guid unitId, long stocknum)
+        protected internal ProductStock(Guid id, Guid storeId, long stocknum)
         : base(id)
         {
-            UnitId = unitId;
+            StoreId = storeId;
             AddStock(stocknum);
         }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
@@ -20,7 +21,9 @@ namespace FreeERP.Products
         [CanBeNull]
         public virtual string Description { get; protected set; }
         [NotNull]
-        public ProductStock Stock { get; protected set; }
+        public virtual Guid UnitId { get; protected set; }
+        [NotNull]
+        public List<ProductStock> Stocks { get; protected set; }
         public virtual Guid? TenantId { get; protected set; }
 
         private Product()
@@ -41,7 +44,8 @@ namespace FreeERP.Products
             SetCode(code);
             SetMediaId(mediaId);
             SetDescription(description);
-            Stock = new ProductStock(id, unitId, 0);
+            UnitId = unitId;
+            Stocks = new List<ProductStock>();
             TenantId = tenantId;
         }
 
@@ -76,13 +80,27 @@ namespace FreeERP.Products
             Description = Check.Length(description, nameof(description), ProductConsts.MaxDescriptionLength);
         }
 
-        public virtual void AddStock(long num)
+        public virtual void AddStock(Guid stockId, Guid storeId, long num)
         {
-            Stock.AddStock(num);
+            var old = Stocks?.FirstOrDefault(f => f.StoreId == storeId
+            );
+            if (old != null)
+            {
+                old.AddStock(num);
+                if (old.StockNum == 0)
+                    Stocks.Remove(old);
+            }
+            else
+            {
+                old = new ProductStock(stockId, storeId, num);
+                if (Stocks == null) Stocks = new List<ProductStock>();
+                Stocks.Add(old);
+            }
             AddLocalEvent(
                 new ProductStockChangedEvent
                 {
                     ProductId = Id,
+                    StoreId = storeId,
                     ChangedNum = num
                 }
             );

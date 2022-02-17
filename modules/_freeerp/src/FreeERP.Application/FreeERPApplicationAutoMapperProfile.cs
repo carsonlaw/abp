@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FreeERP.MediaDescriptors;
 using FreeERP.Products;
+using System.Linq;
 
 namespace FreeERP
 {
@@ -15,8 +16,7 @@ namespace FreeERP
             CreateMap<MediaDescriptor, MediaDescriptorDto>();
             CreateMap<Category, CategoryDto>();
             CreateMap<Product, ProductDto>()
-                .ForMember(d => d.UnitId, o => o.MapFrom(s => s.Stock.UnitId))
-                .ForMember(d => d.StockNum, o => o.MapFrom(s => s.Stock.StockNum));
+                .ForMember(d => d.StockNum, o => o.MapFrom(s => s.Stocks.Sum(st => st.StockNum)));
             CreateMap<ProductUnit, ProductUnitDto>();
             CreateMap<ProductProperty, ProductPropertyDto>();
             //.ForMember(d => d.TypeName, o => o.MapFrom(s => s.Parent.Name));

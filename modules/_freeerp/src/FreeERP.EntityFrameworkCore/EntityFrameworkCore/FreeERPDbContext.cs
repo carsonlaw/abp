@@ -157,6 +157,7 @@ namespace FreeERP.EntityFrameworkCore
             builder.Entity<ProductStock>(b =>
             {
                 b.ToTable(FreeERPConsts.DbTablePrefix + "ProductStocks", FreeERPConsts.DbSchema);
+                //b.HasKey(f => new { f.ProductOrSkuId, f.StoreId });
             });
 
             builder.Entity<PurchaseOrder>(b =>
@@ -168,6 +169,7 @@ namespace FreeERP.EntityFrameworkCore
             builder.Entity<PurchaseOrderLine>(b =>
             {
                 b.ToTable(FreeERPConsts.DbTablePrefix + "PurchaseOrderLines", FreeERPConsts.DbSchema);
+                //b.HasKey(f => new { f.OrderId, f.ProductId, f.ProductSkuId, f.StoreId });
             });
 
             builder.Entity<MediaDescriptor>(b =>

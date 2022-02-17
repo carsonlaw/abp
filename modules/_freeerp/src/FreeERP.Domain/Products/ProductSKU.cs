@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using JetBrains.Annotations;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
@@ -15,13 +16,15 @@ namespace FreeERP.Products
         [NotNull]
         public Guid ProductId { get; protected set; }
         [NotNull]
+        public Guid UnitId { get; protected set; }
+        [NotNull]
         public virtual string Code { get; protected set; }
         [CanBeNull]
         public virtual Guid? MediaId { get; protected set; }
         [CanBeNull]
         public virtual string Description { get; protected set; }
         [NotNull]
-        public ProductStock Stock { get; protected set; }
+        public List<ProductStock> Stocks { get; protected set; }
         public IList<Guid> PropertyIds { get; protected set; }
         public virtual Guid? TenantId { get; protected set; }
 
@@ -40,11 +43,12 @@ namespace FreeERP.Products
         : base(id)
         {
             ProductId = productId;
+            UnitId = unitId;
             SetName(name);
             SetCode(code);
             SetMediaId(mediaId);
             SetDescription(description);
-            Stock = new ProductStock(id, unitId, 0);
+            Stocks = new List<ProductStock>();
             TenantId = tenantId;
         }
 
@@ -66,6 +70,32 @@ namespace FreeERP.Products
         public virtual void SetDescription(string description)
         {
             Description = Check.Length(description, nameof(description), ProductSKUConsts.MaxDescriptionLength);
+        }
+
+        public virtual void AddStock(Guid stockId, Guid storeId, long num)
+        {
+            var old = Stocks?.FirstOrDefault(f => f.StoreId == storeId
+            );
+            if (old != null)
+            {
+                old.AddStock(num);
+                if (old.StockNum == 0)
+                    Stocks.Remove(old);
+            }
+            else
+            {
+                old = new ProductStock(stockId, storeId, num);
+                if (Stocks == null) Stocks = new List<ProductStock>();
+                Stocks.Add(old);
+            }
+            AddLocalEvent(
+                new ProductStockChangedEvent
+                {
+                    ProductId = Id,
+                    StoreId = storeId,
+                    ChangedNum = num
+                }
+            );
         }
 
 

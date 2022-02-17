@@ -8,14 +8,24 @@ namespace FreeERP.Products
     public class ProductManager : DomainService
     {
         protected IProductRepository _repository;
-        public ProductManager(IProductRepository productRepository)
+        protected IProductSKURepository _skuRepository;
+        public ProductManager(
+            IProductRepository productRepository,
+            IProductSKURepository skuRepository
+            )
         {
             _repository = productRepository;
+            _skuRepository = skuRepository;
         }
-        public virtual async Task ChangedStock(Guid productId, long changednum)
+        public virtual async Task ChangedStock(Guid productId, Guid? productSkuId, Guid storeId, long changednum)
         {
             var product = await _repository.GetAsync(productId, true);
-            product.AddStock(changednum);
+            product.AddStock(GuidGenerator.Create(), storeId, changednum);
+            if (productSkuId.HasValue && productSkuId.Value != Guid.Empty)
+            {
+                var sku = await _skuRepository.GetAsync(productSkuId.Value, true);
+                sku.AddStock(GuidGenerator.Create(), storeId, changednum);
+            }
         }
 
         public virtual async Task<Product> CreateAsync(

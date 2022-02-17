@@ -9,7 +9,7 @@ namespace FreeERP.Purchase
         public PurchaseOrderLineltZeroException(Guid productid, long num)
             : base(code: FreeERPDomainErrorCodes.Product.StockLtZero)
         {
-            WithData(nameof(PurchaseOrderLine.ProductID), productid);
+            WithData(nameof(PurchaseOrderLine.ProductId), productid);
             WithData(nameof(PurchaseOrderLine.Number), num);
         }
         public PurchaseOrderLineltZeroException(SerializationInfo serializationInfo, StreamingContext context)

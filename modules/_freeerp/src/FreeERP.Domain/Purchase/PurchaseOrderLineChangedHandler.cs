@@ -16,7 +16,7 @@ namespace FreeERP.Purchase
         }
         public async Task HandleEventAsync(PurchaseOrderLineChangedEvent eventData)
         {
-            await _productManager.ChangedStock(eventData.ProductID,eventData.Number);
+            await _productManager.ChangedStock(eventData.ProductId, eventData.ProductSkuId, eventData.StoreID, eventData.Number);
         }
     }
 }

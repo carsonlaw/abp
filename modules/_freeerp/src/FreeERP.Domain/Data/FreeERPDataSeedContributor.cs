@@ -116,11 +116,12 @@ namespace FreeERP.Domain.Data
         {
             if (await _purchaseOrderRepository.GetCountAsync() > 0)
                 return;
+            var order = new PurchaseOrder(_guidGenerator.Create()
+                    , _currentTenant.Id
+                );
+            order.AddLine(_guidGenerator.Create(), product.Id, null, store.Id, 10);
             await _purchaseOrderRepository.InsertAsync(
-                new PurchaseOrder(
-                    product.Id,
-                    10, _currentTenant.Id
-                ),
+                order,
                 autoSave: true
             );
         }
