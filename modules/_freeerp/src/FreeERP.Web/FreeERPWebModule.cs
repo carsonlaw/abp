@@ -44,6 +44,7 @@ using Volo.Abp.Json;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Timing;
 
 namespace FreeERP.Web
 {
@@ -219,6 +220,11 @@ namespace FreeERP.Web
 
         private void ConfigureLocalizationServices()
         {
+            Configure<AbpClockOptions>(options =>
+            {
+                options.Kind = DateTimeKind.Utc;
+            });
+
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Languages.Add(new LanguageInfo("ar", "ar", "العربية"));

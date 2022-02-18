@@ -1,7 +1,9 @@
-﻿using FreeERP.EntityFrameworkCore;
+﻿using System;
+using FreeERP.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Modularity;
+using Volo.Abp.Timing;
 
 namespace FreeERP.DbMigrator
 {
@@ -15,6 +17,10 @@ namespace FreeERP.DbMigrator
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpBackgroundJobOptions>(options => options.IsJobExecutionEnabled = false);
+            Configure<AbpClockOptions>(options =>
+            {
+                options.Kind = DateTimeKind.Utc;
+            });
         }
     }
 }
