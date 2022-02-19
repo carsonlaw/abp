@@ -2,6 +2,7 @@
 using FreeERP.Localization;
 using FreeERP.MultiTenancy;
 using FreeERP.Permissions;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Identity.Web.Navigation;
 using Volo.Abp.SettingManagement.Web.Navigation;
@@ -12,11 +13,15 @@ namespace FreeERP.Web.Menus
 {
     public class FreeERPMenuContributor : IMenuContributor
     {
+        IStringLocalizer l;
         public async Task ConfigureMenuAsync(MenuConfigurationContext context)
         {
+            l = context.GetLocalizer<FreeERPResource>();
             if (context.Menu.Name == StandardMenus.Main)
             {
                 await ConfigureMainMenuAsync(context);
+                await ConfigureProductMenuAsync(context);
+                await ConfigureStoriesMenuAsync(context);
             }
         }
 
@@ -25,7 +30,6 @@ namespace FreeERP.Web.Menus
             await Task.Run(() =>
             {
                 var administration = context.Menu.GetAdministration();
-                var l = context.GetLocalizer<FreeERPResource>();
                 context.Menu.Items.Insert(
                     0,
                     new ApplicationMenuItem(
@@ -37,6 +41,25 @@ namespace FreeERP.Web.Menus
                     )
                 );
 
+
+                if (MultiTenancyConsts.IsEnabled)
+                {
+                    administration.SetSubItemOrder(TenantManagementMenuNames.GroupName, 1);
+                }
+                else
+                {
+                    administration.TryRemoveMenuItem(TenantManagementMenuNames.GroupName);
+                }
+
+                administration.SetSubItemOrder(IdentityMenuNames.GroupName, 2);
+                administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 3);
+            });
+        }
+
+        private async Task ConfigureProductMenuAsync(MenuConfigurationContext context)
+        {
+            await Task.Run(() =>
+            {
                 context.Menu.Items.Insert(
                     1,
                     new ApplicationMenuItem(
@@ -82,19 +105,40 @@ namespace FreeERP.Web.Menus
                     )
                     .RequirePermissions(FreeERPPermissions.Products.Default)
                 );
-
-                if (MultiTenancyConsts.IsEnabled)
-                {
-                    administration.SetSubItemOrder(TenantManagementMenuNames.GroupName, 1);
-                }
-                else
-                {
-                    administration.TryRemoveMenuItem(TenantManagementMenuNames.GroupName);
-                }
-
-                administration.SetSubItemOrder(IdentityMenuNames.GroupName, 2);
-                administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 3);
             });
+
+        }
+
+        private async Task ConfigureStoriesMenuAsync(MenuConfigurationContext context)
+        {
+            await Task.Run(() =>
+            {
+                context.Menu.Items.Insert(
+                    2,
+                    new ApplicationMenuItem(
+                        FreeERPMenus.StoriesGroup,
+                        l["Menu:StoriesGroupName"],
+                        "~/",
+                        icon: "fas fa-briefcase",
+                        order: 2
+                    )
+                    .RequirePermissions(false, new string[]{
+                        FreeERPPermissions.Stories.Default
+                    })
+                );
+                var stories = context.Menu.GetMenuItem(FreeERPMenus.StoriesGroup);
+                stories.AddItem(
+                    new ApplicationMenuItem(
+                        FreeERPMenus.Store,
+                        l["Menu:Store"],
+                        "~/Stories/Store",
+                        icon: "fas fa-align-justify",
+                        order: 0
+                    )
+                    .RequirePermissions(FreeERPPermissions.Stories.Default)
+                );
+            });
+
         }
     }
 }

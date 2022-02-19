@@ -12,6 +12,9 @@
 
         public const string Purchase = Prefix + ".Purchase";
 
+        public const string StoriesGroup = Prefix + ".Stories";
+        public const string Store = StoriesGroup + ".Store";
+
         //Add your menu items here...
 
     }

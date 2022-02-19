@@ -19,7 +19,7 @@ namespace FreeERP.Products
 
         public Task HandleEventAsync(EntityChangedEventData<ProductUnit> eventData)
         {
-            return _cache.RemoveAsync(FreeERPDomainCacheKeys.ProductUnit.AllTree);
+            return _cache.RemoveAsync(FreeERPDomainCacheKeys.ProductUnit.AllList);
         }
     }
 }

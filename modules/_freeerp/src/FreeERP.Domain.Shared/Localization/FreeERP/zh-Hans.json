@@ -45,6 +45,8 @@
     "Menu:Category": "类别管理",
     "Menu:ProductUnit": "计量单位管理",
     "Menu:Product": "产品管理",
+    "Menu:StoriesGroupName": "仓库管理",
+    "Menu:Store": "仓库管理",
     "Permission:HelpSetting": "帮助文档",
     "Permission:ProductsGroupName": "产品管理",
     "Permission:CategoryManagement": "类别管理",
@@ -63,6 +65,11 @@
     "Permission:PurchaseOrderManagement": "订单管理",
     "Permission:PurchaseOrderManagement.Create": "新增",
     "Permission:PurchaseOrderManagement.Update": "更新",
-    "Permission:PurchaseOrderManagement.Delete": "删除"
+    "Permission:PurchaseOrderManagement.Delete": "删除",
+    "Permission:StoriesGroupName": "仓库管理",
+    "Permission:StoreManagement": "仓库管理",
+    "Permission:StoreManagement.Create": "新增",
+    "Permission:StoreManagement.Update": "更新",
+    "Permission:StoreManagement.Delete": "删除"
   }
 }

@@ -74,10 +74,10 @@ namespace FreeERP.Products
         public async Task<IList<ProductUnitDto>> GetAllListFromCache()
         {
             return await _cache.GetOrAddAsync(
-                FreeERPDomainCacheKeys.ProductUnit.AllTree,
+                FreeERPDomainCacheKeys.ProductUnit.AllList,
                 async () =>
                 {
-                    Logger.Log(LogLevel.Debug, $"no cache key '{FreeERPDomainCacheKeys.ProductUnit.AllTree}'");
+                    Logger.Log(LogLevel.Debug, $"no cache key '{FreeERPDomainCacheKeys.ProductUnit.AllList}'");
                     var input = new ProductUnitGetListInput()
                     {
                         PidNullIsAll = true,

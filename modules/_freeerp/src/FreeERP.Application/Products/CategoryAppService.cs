@@ -58,10 +58,10 @@ namespace FreeERP.Products
 
         public async Task<IList<CategoryDto>> GetAllListFromCache()
         {
-            return await _cache.GetOrAddAsync(FreeERPDomainCacheKeys.Category.AllTree,
+            return await _cache.GetOrAddAsync(FreeERPDomainCacheKeys.Category.AllList,
                         async () =>
                         {
-                            Logger.Log(LogLevel.Debug, $"no cache key '{FreeERPDomainCacheKeys.Category.AllTree}'");
+                            Logger.Log(LogLevel.Debug, $"no cache key '{FreeERPDomainCacheKeys.Category.AllList}'");
                             var input = new CategoryGetListInput()
                             {
                                 PidNullIsAll = true,

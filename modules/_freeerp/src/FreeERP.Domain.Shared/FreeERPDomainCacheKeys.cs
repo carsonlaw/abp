@@ -9,7 +9,7 @@
         /* You can add your business exception error codes here, as constants */
         public static class Category
         {
-            public const string AllTree = "Category:AllTree";
+            public const string AllList = "Category:AllList";
         }
         public static class Product
         {
@@ -19,7 +19,12 @@
         public static class ProductUnit
         {
 
-            public const string AllTree = "ProductUnit:AllTree";
+            public const string AllList = "ProductUnit:AllList";
+        }
+
+        public static class Store
+        {
+            public const string AllList = "Store:AllList";
         }
     }
 }
