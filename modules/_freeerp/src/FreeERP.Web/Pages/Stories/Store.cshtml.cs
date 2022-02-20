@@ -6,4 +6,6 @@ namespace FreeERP.Web.Pages;
 
 public class StoreModel : FreeERPPageModel
 {
+    [Placeholder("Name")]
+    public string Filter { get; set; }
 }

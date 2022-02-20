@@ -3,15 +3,15 @@ $(function () {
     var l = abp.localization.getResource("FreeERP");
 
     var createModal = new abp.ModalManager({
-        viewUrl: abp.appPath + "Products/StoreCreateModal",
+        viewUrl: abp.appPath + "Stories/StoreCreateModal",
         modalClass: 'StoreCreateModal'
     });
     var updateModal = new abp.ModalManager({
-        viewUrl: abp.appPath + "Products/StoreUpdateModal",
+        viewUrl: abp.appPath + "Stories/StoreUpdateModal",
         modalClass: 'StoreUpdateModal'
     });
 
-    var StoreService = freeERP.products.Store;
+    var StoreService = freeERP.stories.store;
 
     var filterForm = $('#StoreFilterForm');
     var getFilter = function () {
@@ -38,14 +38,14 @@ $(function () {
                     items: [
                         {
                             text: l('Edit'),
-                            visible: abp.auth.isGranted('FreeERP.Products.Stores.Update'),
+                            visible: abp.auth.isGranted('FreeERP.Stories.Stories.Update'),
                             action: function (data) {
                                 updateModal.open({ id: data.record.id });
                             }
                         },
                         {
                             text: l('Delete'),
-                            visible: abp.auth.isGranted('FreeERP.Products.Stores.Delete'),
+                            visible: abp.auth.isGranted('FreeERP.Stories.Stories.Delete'),
                             confirmMessage: function (data) {
                                 return l("StoreDeletionConfirmationMessage", data.record.name)
                             },
@@ -75,11 +75,6 @@ $(function () {
                 title: l("Description"),
                 orderable: true,
                 data: "description"
-            },
-            {
-                title: l("RatioCount"),
-                orderable: true,
-                data: "ratioCount"
             }
         ]
     }));

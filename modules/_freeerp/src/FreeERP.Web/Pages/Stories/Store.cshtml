@@ -18,7 +18,7 @@
 
 @section scripts {
 <abp-script-bundle>
-    <abp-script src="/Pages/Products/Store.js" />
+    <abp-script src="/Pages/Stories/Store.js" />
 </abp-script-bundle>
 }
 @section content_toolbar {
@@ -29,8 +29,11 @@
     <abp-card-body>
         <form id="StoreFilterForm" method="post">
             <abp-row>
-                <abp-column size-lg="_10" size-md="_8">
+                <abp-column size-lg="_8" size-md="_8">
 
+                </abp-column>
+                <abp-column size-lg="_2" size-md="_4">
+                    <abp-input asp-for="@Model.Filter" suppress-label="true" type="text" />
                 </abp-column>
 
                 <abp-column size-lg="_2" size-md="_4">

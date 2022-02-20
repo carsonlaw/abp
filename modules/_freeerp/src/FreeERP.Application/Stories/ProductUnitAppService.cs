@@ -8,6 +8,7 @@ using Volo.Abp.Data;
 using FreeERP.Permissions;
 using Volo.Abp.Domain.Repositories;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using Microsoft.Extensions.Caching.Distributed;
 using Volo.Abp.Caching;
 using Microsoft.Extensions.Logging;
@@ -59,6 +60,19 @@ namespace FreeERP.Stories
         protected override async Task<Store> GetEntityByIdAsync(Guid id)
         {
             return await _repository.GetAsync(f => f.Id == id, true);
+        }
+
+        public override async Task<PagedResultDto<StoreDto>> GetListAsync(StoreGetListInput input)
+        {
+            var list = (await GetAllListFromCache()).AsQueryable();
+            var length = list.Count();
+            list = list.WhereIf(!string.IsNullOrWhiteSpace(input.Filter), f => f.Name.Contains(input.Filter));
+            if (string.IsNullOrEmpty(input.Sorting))
+                list = list.OrderBy(f => f.Sort);
+            else
+                list = list.OrderBy(input.Sorting);
+            list = list.Skip(input.SkipCount).Take(input.MaxResultCount);
+            return new PagedResultDto<StoreDto>(length, list.ToList());
         }
 
 

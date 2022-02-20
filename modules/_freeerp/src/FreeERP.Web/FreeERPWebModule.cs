@@ -154,6 +154,19 @@ namespace FreeERP.Web
                     }
                 );
 
+                options.Configure<FreeERP.Web.Pages.StoreModel>(
+                    toolbar =>
+                    {
+                        toolbar.AddButton(
+                            LocalizableString.Create<FreeERPResource>("StoreNew"),
+                            icon: "plus",
+                            name: "CreateStore",
+                            id: "CreateStore",
+                            requiredPolicyName: FreeERPPermissions.Stories.Create
+                        );
+                    }
+                );
+
             });
 
             Configure<AbpTenantResolveOptions>(options =>

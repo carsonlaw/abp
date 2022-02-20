@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FreeERP.MediaDescriptors;
 using FreeERP.Products;
+using FreeERP.Stories;
 using System.Linq;
 
 namespace FreeERP
@@ -22,6 +23,7 @@ namespace FreeERP
             //.ForMember(d => d.TypeName, o => o.MapFrom(s => s.Parent.Name));
             CreateMap<ProductProperty, ProductPropertyItemDto>()
                 .ForMember(d => d.TypeName, o => o.MapFrom(s => s.Parent.Name));
+            CreateMap<Store, StoreDto>();
         }
     }
 }
