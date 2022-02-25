@@ -101,7 +101,7 @@ namespace FreeERP.Stories
                 },
                 () => new DistributedCacheEntryOptions
                 {
-                    AbsoluteExpiration = DateTimeOffset.Now.AddDays(20)
+                    AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(FreeERPDomainCacheKeys.Store.AllListMin)
                 }
             );
 

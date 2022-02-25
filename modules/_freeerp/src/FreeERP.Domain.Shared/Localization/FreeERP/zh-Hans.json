@@ -57,8 +57,12 @@
     "Permission:Delete": "删除",
     "Permission:ProductUnitManagement": "计量单位管理",
     "Permission:ProductManagement": "产品管理",
-    "Permission:PurchaseGroupName": "采购管理",
+    "Permission:PurchasesGroupName": "采购管理",
     "Permission:PurchaseOrderManagement": "订单管理",
+    "Permission:SupplierManagement": "供应商管理",
+    "Permission:SalesGroupName": "销售管理",
+    "Permission:SaleOrderManagement": "订单管理",
+    "Permission:CustomerManagement": "客户管理",
     "Permission:StoriesGroupName": "仓库管理",
     "Permission:StoreManagement": "仓库管理"
   }

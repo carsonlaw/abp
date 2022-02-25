@@ -20,7 +20,7 @@ namespace FreeERP.Web.Components
         public async Task<IViewComponentResult> InvokeAsync(CategoryDto categoryDto
             )
         {
-            return View("~/Components/CategoryWidget/Item.cshtml", categoryDto);
+            return await Task.Run(() => { return View("~/Components/CategoryWidget/Item.cshtml", categoryDto); });
         }
     }
 }

@@ -19,6 +19,7 @@ namespace FreeERP.Products
         [CanBeNull] string description,
         [NotNull] IList<string> names)
         {
+            await Task.CompletedTask;
             var items = names.Select(f => new ProductProperty(GuidGenerator.Create(),
                 f,
                 "",
@@ -38,6 +39,7 @@ namespace FreeERP.Products
         [NotNull] IList<(Guid Id, string Name)> names
         )
         {
+            await Task.CompletedTask;
             var items = names.Select(f => new ProductProperty(f.Id,
                 f.Name,
                 "",

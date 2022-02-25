@@ -23,6 +23,7 @@ namespace FreeERP.Products
             string description
         )
         {
+            await Task.CompletedTask;
             var sku = new ProductSKU(
                 GuidGenerator.Create(),
                 productId,
@@ -38,6 +39,7 @@ namespace FreeERP.Products
 
         public virtual async Task<ProductSKU> UpdateAsync(ProductSKU productSku, string name, string code, Guid unitId, Guid? mediaId, string description)
         {
+            await Task.CompletedTask;
             productSku.SetName(name);
             productSku.SetCode(code);
             //product.SetUnitId(unitId);

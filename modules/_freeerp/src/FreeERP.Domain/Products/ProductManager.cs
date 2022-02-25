@@ -37,6 +37,8 @@ namespace FreeERP.Products
             string description
         )
         {
+
+            await Task.CompletedTask;
             var product = new Product(
                 GuidGenerator.Create(),
                 categoryId,
@@ -52,6 +54,7 @@ namespace FreeERP.Products
 
         public virtual async Task<Product> UpdateAsync(Product product, Guid categoryId, string name, string code, Guid unitId, Guid? mediaId, string description)
         {
+            await Task.CompletedTask;
             product.SetCategory(categoryId);
             product.SetName(name);
             product.SetCode(code);

@@ -72,7 +72,7 @@ namespace FreeERP.Products
                         },
                         () => new DistributedCacheEntryOptions
                         {
-                            SlidingExpiration = TimeSpan.FromDays(30)
+                            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(FreeERPDomainCacheKeys.Category.AllListMin)
                         }
                         );
         }

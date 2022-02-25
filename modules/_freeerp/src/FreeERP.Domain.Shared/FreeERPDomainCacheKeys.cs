@@ -10,6 +10,7 @@
         public static class Category
         {
             public const string AllList = "Category:AllList";
+            public const int AllListMin = 1440 * 300;
         }
         public static class Product
         {
@@ -20,11 +21,13 @@
         {
 
             public const string AllList = "ProductUnit:AllList";
+            public const int AllListMin = 1440 * 301;
         }
 
         public static class Store
         {
             public const string AllList = "Store:AllList";
+            public const int AllListMin = 1440 * 302;
         }
     }
 }

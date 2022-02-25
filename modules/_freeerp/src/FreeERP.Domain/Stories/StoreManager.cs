@@ -16,6 +16,7 @@ namespace FreeERP.Stories
         }
         public virtual async Task<Store> CreateAsync([NotNull] string name, [NotNull] string desc, [CanBeNull] int? sort = null)
         {
+            await Task.CompletedTask;
             if (!sort.HasValue) sort = 0;
             return new Store(GuidGenerator.Create(), name, desc, sort.Value, CurrentTenant.Id);
         }
@@ -23,7 +24,7 @@ namespace FreeERP.Stories
         public virtual async Task<Store> UpdateAsync([NotNull] Store store, [NotNull] string name, [NotNull] string desc, [CanBeNull] int? sort = null)
         {
 
-
+            await Task.CompletedTask;
             store.SetName(name);
             store.SetDescription(desc);
             if (sort.HasValue)

@@ -1,11 +1,13 @@
 using System;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Content;
 using Volo.Abp.Domain.Repositories;
 
 namespace FreeERP.MediaDescriptors
 {
+    [RemoteService(false)]
     public class MediaDescriptorAppService : FreeERPAppService, IMediaDescriptorAppService
     {
         protected IBlobContainer<MediaContainer> MediaContainer { get; }
@@ -45,7 +47,7 @@ namespace FreeERP.MediaDescriptors
             await MediaDescriptorRepository.DeleteAsync(f => f.Id == id);
         }
 
-        public virtual async Task<RemoteStreamContent> DownloadAsync(Guid id)
+        public virtual async Task<RemoteStreamContent> GetAsync(Guid id)
         {
             var entity = await MediaDescriptorRepository.GetAsync(f => f.Id == id);
             var stream = await MediaContainer.GetAsync(id.ToString());

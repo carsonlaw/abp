@@ -12,11 +12,11 @@ namespace FreeERP.MediaDescriptors;
 
 
 [Route("api/app/media")]
-public class MediaDescriptorAdminController : IMediaDescriptorAppService
+public class MediaDescriptorController : IMediaDescriptorAppService
 {
     protected readonly IMediaDescriptorAppService MediaDescriptorAppService;
 
-    public MediaDescriptorAdminController(IMediaDescriptorAppService mediaDescriptorAppService)
+    public MediaDescriptorController(IMediaDescriptorAppService mediaDescriptorAppService)
     {
         MediaDescriptorAppService = mediaDescriptorAppService;
     }
@@ -37,8 +37,8 @@ public class MediaDescriptorAdminController : IMediaDescriptorAppService
 
     [HttpGet]
     [Route("{id}")]
-    public virtual Task<RemoteStreamContent> DownloadAsync(Guid id)
+    public virtual Task<RemoteStreamContent> GetAsync(Guid id)
     {
-        return MediaDescriptorAppService.DownloadAsync(id);
+        return MediaDescriptorAppService.GetAsync(id);
     }
 }

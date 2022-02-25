@@ -89,7 +89,7 @@ namespace FreeERP.Products
                 },
                 () => new DistributedCacheEntryOptions
                 {
-                    AbsoluteExpiration = DateTimeOffset.Now.AddDays(20)
+                    AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(FreeERPDomainCacheKeys.ProductUnit.AllListMin)
                 }
             );
 

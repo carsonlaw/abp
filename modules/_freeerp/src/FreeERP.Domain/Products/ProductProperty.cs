@@ -52,7 +52,7 @@ namespace FreeERP.Products
 
         public virtual void SetItems(List<ProductProperty> items)
         {
-            items = items;
+            Items = items;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace FreeERP.MediaDescriptors
 {
     public interface IMediaDescriptorAppService : IApplicationService
     {
-        Task<RemoteStreamContent> DownloadAsync(Guid id);
+        Task<RemoteStreamContent> GetAsync(Guid id);
         Task<MediaDescriptorDto> CreateAsync(string entityType, CreateMediaInputWithStream inputStream);
         Task DeleteAsync(Guid id);
     }

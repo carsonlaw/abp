@@ -9,7 +9,8 @@ namespace FreeERP.Permissions
         public override void Define(IPermissionDefinitionContext context)
         {
             var productsGroup = context.AddGroup(FreeERPPermissions.ProductsGroupName, L("Permission:ProductsGroupName"));
-            var purchaseGroup = context.AddGroup(FreeERPPermissions.PurchaseGroupName, L("Permission:PurchaseGroupName"));
+            var purchasesGroup = context.AddGroup(FreeERPPermissions.PurchasesGroupName, L("Permission:PurchasesGroupName"));
+            var SalesGroup = context.AddGroup(FreeERPPermissions.SalesGroupName, L("Permission:SalesGroupName"));
             var storiesGroup = context.AddGroup(FreeERPPermissions.StoriesGroupName, L("Permission:StoriesGroupName"));
 
             //Define your own permissions here. Example:
@@ -30,10 +31,15 @@ namespace FreeERP.Permissions
             productUnitManagement.AddChild(FreeERPPermissions.ProductUnits.Delete, L("Permission:Delete"));
 
 
-            var purchaseOrderManagement = purchaseGroup.AddPermission(FreeERPPermissions.PurchaseOrder.Default, L("Permission:PurchaseOrderManagement"));
+            var purchaseOrderManagement = purchasesGroup.AddPermission(FreeERPPermissions.PurchaseOrder.Default, L("Permission:PurchaseOrderManagement"));
             purchaseOrderManagement.AddChild(FreeERPPermissions.PurchaseOrder.Create, L("Permission:Create"));
             purchaseOrderManagement.AddChild(FreeERPPermissions.PurchaseOrder.Update, L("Permission:Update"));
             purchaseOrderManagement.AddChild(FreeERPPermissions.PurchaseOrder.Delete, L("Permission:Delete"));
+
+            var suppliersManagement = purchasesGroup.AddPermission(FreeERPPermissions.Suppliers.Default, L("Permission:SupplierManagement"));
+            suppliersManagement.AddChild(FreeERPPermissions.Suppliers.Create, L("Permission:Create"));
+            suppliersManagement.AddChild(FreeERPPermissions.Suppliers.Update, L("Permission:Update"));
+            suppliersManagement.AddChild(FreeERPPermissions.Suppliers.Delete, L("Permission:Delete"));
 
             var storeManagement = storiesGroup.AddPermission(FreeERPPermissions.Stories.Default, L("Permission:StoreManagement"));
             storeManagement.AddChild(FreeERPPermissions.Stories.Create, L("Permission:Create"));
@@ -43,6 +49,15 @@ namespace FreeERP.Permissions
             var SettingManagement = context.GetGroupOrNull("SettingManagement");
             SettingManagement.AddPermission(FreeERPPermissions.SettingManagement.HelpSetting, L("Permission:HelpSetting"));
 
+            var customerManagement = SalesGroup.AddPermission(FreeERPPermissions.Customers.Default, L("Permission:CustomerManagement"));
+            customerManagement.AddChild(FreeERPPermissions.Customers.Create, L("Permission:Create"));
+            customerManagement.AddChild(FreeERPPermissions.Customers.Update, L("Permission:Update"));
+            customerManagement.AddChild(FreeERPPermissions.Customers.Delete, L("Permission:Delete"));
+
+            var saleOrderManagement = SalesGroup.AddPermission(FreeERPPermissions.SaleOrder.Default, L("Permission:SaleOrderManagement"));
+            saleOrderManagement.AddChild(FreeERPPermissions.SaleOrder.Create, L("Permission:Create"));
+            saleOrderManagement.AddChild(FreeERPPermissions.SaleOrder.Update, L("Permission:Update"));
+            saleOrderManagement.AddChild(FreeERPPermissions.SaleOrder.Delete, L("Permission:Delete"));
 
         }
 

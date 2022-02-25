@@ -15,7 +15,7 @@ namespace FreeERP.Products
         public string Description { get; protected set; }
         public int RatioCount { get; protected set; }
         public int Sort { get; protected set; }
-        public ProductUnit? SmallerUnit { get; protected set; }
+        public ProductUnit SmallerUnit { get; protected set; }
         public Collection<ProductUnit> BiggerUnits { get; protected set; }
         public virtual Guid? TenantId { get; protected set; }
 

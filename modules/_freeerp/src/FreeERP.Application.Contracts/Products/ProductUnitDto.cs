@@ -15,7 +15,7 @@ namespace FreeERP.Products
         public string Description { get; set; }
         public int RatioCount { get; set; }
         [JsonIgnore]
-        public ProductUnitDto? SmallerUnit { get; set; }
+        public ProductUnitDto SmallerUnit { get; set; }
         public IList<ProductUnitDto> BiggerUnits { get; set; }
         public int Sort { get; set; }
         public string ConcurrencyStamp { get; set; }
