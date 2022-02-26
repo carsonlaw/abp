@@ -13,7 +13,7 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using FreeERP.Products;
-using FreeERP.Purchase;
+using FreeERP.Purchases;
 using FreeERP.MediaDescriptors;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Collections.Generic;

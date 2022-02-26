@@ -1,4 +1,4 @@
-namespace FreeERP.Purchase
+namespace FreeERP.Purchases
 {
     public class PurchaseOrderConsts
     {

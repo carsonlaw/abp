@@ -167,6 +167,32 @@ namespace FreeERP.Web
                     }
                 );
 
+                options.Configure<FreeERP.Web.Pages.CustomerModel>(
+                    toolbar =>
+                    {
+                        toolbar.AddButton(
+                            LocalizableString.Create<FreeERPResource>("CustomerNew"),
+                            icon: "plus",
+                            name: "CreateCustomer",
+                            id: "CreateCustomer",
+                            requiredPolicyName: FreeERPPermissions.Customers.Create
+                        );
+                    }
+                );
+
+                options.Configure<FreeERP.Web.Pages.SupplierModel>(
+                    toolbar =>
+                    {
+                        toolbar.AddButton(
+                            LocalizableString.Create<FreeERPResource>("SupplierNew"),
+                            icon: "plus",
+                            name: "CreateSupplier",
+                            id: "CreateSupplier",
+                            requiredPolicyName: FreeERPPermissions.Suppliers.Create
+                        );
+                    }
+                );
+
             });
 
             Configure<AbpTenantResolveOptions>(options =>

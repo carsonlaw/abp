@@ -31,10 +31,10 @@ namespace FreeERP.Permissions
             productUnitManagement.AddChild(FreeERPPermissions.ProductUnits.Delete, L("Permission:Delete"));
 
 
-            var purchaseOrderManagement = purchasesGroup.AddPermission(FreeERPPermissions.PurchaseOrder.Default, L("Permission:PurchaseOrderManagement"));
-            purchaseOrderManagement.AddChild(FreeERPPermissions.PurchaseOrder.Create, L("Permission:Create"));
-            purchaseOrderManagement.AddChild(FreeERPPermissions.PurchaseOrder.Update, L("Permission:Update"));
-            purchaseOrderManagement.AddChild(FreeERPPermissions.PurchaseOrder.Delete, L("Permission:Delete"));
+            var purchaseOrderManagement = purchasesGroup.AddPermission(FreeERPPermissions.PurchaseOrders.Default, L("Permission:PurchaseOrderManagement"));
+            purchaseOrderManagement.AddChild(FreeERPPermissions.PurchaseOrders.Create, L("Permission:Create"));
+            purchaseOrderManagement.AddChild(FreeERPPermissions.PurchaseOrders.Update, L("Permission:Update"));
+            purchaseOrderManagement.AddChild(FreeERPPermissions.PurchaseOrders.Delete, L("Permission:Delete"));
 
             var suppliersManagement = purchasesGroup.AddPermission(FreeERPPermissions.Suppliers.Default, L("Permission:SupplierManagement"));
             suppliersManagement.AddChild(FreeERPPermissions.Suppliers.Create, L("Permission:Create"));
@@ -54,10 +54,10 @@ namespace FreeERP.Permissions
             customerManagement.AddChild(FreeERPPermissions.Customers.Update, L("Permission:Update"));
             customerManagement.AddChild(FreeERPPermissions.Customers.Delete, L("Permission:Delete"));
 
-            var saleOrderManagement = SalesGroup.AddPermission(FreeERPPermissions.SaleOrder.Default, L("Permission:SaleOrderManagement"));
-            saleOrderManagement.AddChild(FreeERPPermissions.SaleOrder.Create, L("Permission:Create"));
-            saleOrderManagement.AddChild(FreeERPPermissions.SaleOrder.Update, L("Permission:Update"));
-            saleOrderManagement.AddChild(FreeERPPermissions.SaleOrder.Delete, L("Permission:Delete"));
+            var saleOrderManagement = SalesGroup.AddPermission(FreeERPPermissions.SaleOrders.Default, L("Permission:SaleOrderManagement"));
+            saleOrderManagement.AddChild(FreeERPPermissions.SaleOrders.Create, L("Permission:Create"));
+            saleOrderManagement.AddChild(FreeERPPermissions.SaleOrders.Update, L("Permission:Update"));
+            saleOrderManagement.AddChild(FreeERPPermissions.SaleOrders.Delete, L("Permission:Delete"));
 
         }
 

@@ -1,5 +1,5 @@
 using FreeERP.Products;
-using FreeERP.Purchase;
+using FreeERP.Purchases;
 using Xunit;
 
 namespace FreeERP.Domain.Tests.Purchase
@@ -19,9 +19,9 @@ namespace FreeERP.Domain.Tests.Purchase
         public void TestName()
         {
             // Given
-        
+
             // When
-        
+
             // Then
         }
     }

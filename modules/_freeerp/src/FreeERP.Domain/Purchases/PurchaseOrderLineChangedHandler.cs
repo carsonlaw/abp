@@ -3,7 +3,7 @@ using Volo.Abp.DependencyInjection;
 using System.Threading.Tasks;
 using FreeERP.Products;
 
-namespace FreeERP.Purchase
+namespace FreeERP.Purchases
 {
     public class PurchaseOrderLineChangedHandler
         : ILocalEventHandler<PurchaseOrderLineChangedEvent>

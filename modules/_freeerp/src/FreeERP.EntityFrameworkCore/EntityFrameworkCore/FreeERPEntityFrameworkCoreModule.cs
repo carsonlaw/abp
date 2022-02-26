@@ -39,11 +39,12 @@ namespace FreeERP.EntityFrameworkCore
             {
                 /* Remove "includeAllEntities: true" to create
                  * default repositories only for aggregate roots */
-                options.AddDefaultRepositories(includeAllEntities: true);
+                options.AddDefaultRepositories(includeAllEntities: false);
 
-                options.AddRepository<Category, EFCoreCategoryRepository>();
-                options.AddRepository<Product, EFCoreProductRepository>();
-                options.AddRepository<ProductSKU, EFCoreProductSKURepository>();
+                // options.AddRepository<Category, EFCoreCategoryRepository>();
+                // options.AddRepository<Product, EFCoreProductRepository>();
+                // options.AddRepository<ProductSKU, EFCoreProductSKURepository>();
+
             });
 
             Configure<AbpDbContextOptions>(options =>

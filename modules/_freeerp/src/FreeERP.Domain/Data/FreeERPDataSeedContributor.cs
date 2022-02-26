@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using FreeERP.Products;
-using FreeERP.Purchase;
+using FreeERP.Purchases;
 using FreeERP.Stories;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;

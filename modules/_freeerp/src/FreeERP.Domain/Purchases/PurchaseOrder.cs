@@ -5,7 +5,7 @@ using FreeERP.Products;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
-namespace FreeERP.Purchase
+namespace FreeERP.Purchases
 {
     public class PurchaseOrder : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {

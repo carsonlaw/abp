@@ -10,10 +10,17 @@
         public const string Product = ProductsGroup + ".Product";
         public const string ProductUnit = ProductsGroup + ".ProductUnit";
 
-        public const string Purchase = Prefix + ".Purchase";
+        public const string PurchasesGroup = Prefix + ".Purchases";
+        public const string Supplier = PurchasesGroup + ".Supplier";
+        public const string PurchaseOrder = PurchasesGroup + ".PurchaseOrder";
 
         public const string StoriesGroup = Prefix + ".Stories";
         public const string Store = StoriesGroup + ".Store";
+
+        public const string SalesGroup = Prefix + ".Sales";
+
+        public const string Customer = Prefix + ".Customer";
+        public const string SaleOrder = Prefix + ".SaleOrder";
 
         //Add your menu items here...
 

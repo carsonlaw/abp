@@ -22,6 +22,8 @@ namespace FreeERP.Web.Menus
                 await ConfigureMainMenuAsync(context);
                 await ConfigureProductMenuAsync(context);
                 await ConfigureStoriesMenuAsync(context);
+                await ConfigurePurchasesMenuAsync(context);
+                await ConfigureSalesMenuAsync(context);
             }
         }
 
@@ -119,7 +121,7 @@ namespace FreeERP.Web.Menus
                         FreeERPMenus.StoriesGroup,
                         l["Menu:StoriesGroupName"],
                         "~/",
-                        icon: "fas fa-briefcase",
+                        icon: "fas fa-laptop-house",
                         order: 2
                     )
                     .RequirePermissions(false, new string[]{
@@ -132,7 +134,7 @@ namespace FreeERP.Web.Menus
                         FreeERPMenus.Store,
                         l["Menu:Store"],
                         "~/Stories/Store",
-                        icon: "fas fa-align-justify",
+                        icon: "fas fa-store",
                         order: 0
                     )
                     .RequirePermissions(FreeERPPermissions.Stories.Default)
@@ -140,5 +142,92 @@ namespace FreeERP.Web.Menus
             });
 
         }
+
+        private async Task ConfigurePurchasesMenuAsync(MenuConfigurationContext context)
+        {
+            await Task.Run(() =>
+            {
+                context.Menu.Items.Insert(
+                    3,
+                    new ApplicationMenuItem(
+                        FreeERPMenus.PurchasesGroup,
+                        l["Menu:PurchasesGroupName"],
+                        "~/",
+                        icon: "fas fa-cart-arrow-down",
+                        order: 3
+                    )
+                    .RequirePermissions(false, new string[]{
+                        FreeERPPermissions.Suppliers.Default,
+                        FreeERPPermissions.PurchaseOrders.Default
+                    })
+                );
+                var purchases = context.Menu.GetMenuItem(FreeERPMenus.PurchasesGroup);
+                purchases.AddItem(
+                    new ApplicationMenuItem(
+                        FreeERPMenus.Supplier,
+                        l["Menu:Supplier"],
+                        "~/Suppliers/Supplier",
+                        icon: "fas fa-user-tie",
+                        order: 0
+                    )
+                    .RequirePermissions(FreeERPPermissions.Suppliers.Default)
+                );
+                purchases.AddItem(
+                    new ApplicationMenuItem(
+                        FreeERPMenus.PurchaseOrder,
+                        l["Menu:PurchaseOrder"],
+                        "~/Purchases/PurchaseOrder",
+                        icon: "fas fa-file-invoice",
+                        order: 1
+                    )
+                    .RequirePermissions(FreeERPPermissions.PurchaseOrders.Default)
+                );
+            });
+
+        }
+
+        private async Task ConfigureSalesMenuAsync(MenuConfigurationContext context)
+        {
+            await Task.Run(() =>
+            {
+                context.Menu.Items.Insert(
+                    4,
+                    new ApplicationMenuItem(
+                        FreeERPMenus.SalesGroup,
+                        l["Menu:SalesGroupName"],
+                        "~/",
+                        icon: "fas fa-gifts",
+                        order: 4
+                    )
+                    .RequirePermissions(false, new string[]{
+                        FreeERPPermissions.Customers.Default,
+                        FreeERPPermissions.SaleOrders.Default
+                    })
+                );
+                var sales = context.Menu.GetMenuItem(FreeERPMenus.SalesGroup);
+                sales.AddItem(
+                    new ApplicationMenuItem(
+                        FreeERPMenus.Customer,
+                        l["Menu:Customer"],
+                        "~/Customers/Customer",
+                        icon: "fas fa-user-tag",
+                        order: 0
+                    )
+                    .RequirePermissions(FreeERPPermissions.Customers.Default)
+                );
+                sales.AddItem(
+                    new ApplicationMenuItem(
+                        FreeERPMenus.SaleOrder,
+                        l["Menu:SaleOrder"],
+                        "~/Sales/SaleOrder",
+                        icon: "fas fa-file-invoice-dollar",
+                        order: 1
+                    )
+                    .RequirePermissions(FreeERPPermissions.SaleOrders.Default)
+                );
+            });
+
+        }
+
     }
 }

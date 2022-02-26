@@ -39,7 +39,7 @@
             public const string Delete = Default + ".Delete";
         }
 
-        public static class PurchaseOrder
+        public static class PurchaseOrders
         {
             public const string Default = PurchasesGroupName + ".PurchaseOrder";
             public const string Create = Default + ".Create";
@@ -76,7 +76,7 @@
             public const string Delete = Default + ".Delete";
         }
 
-        public static class SaleOrder
+        public static class SaleOrders
         {
             public const string Default = SalesGroupName + ".SaleOrder";
             public const string Create = Default + ".Create";

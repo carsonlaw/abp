@@ -2,7 +2,7 @@ using System;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
-namespace FreeERP.Purchase
+namespace FreeERP.Purchases
 {
     public class PurchaseOrderLine : Entity<Guid>
     {

@@ -2,7 +2,7 @@ using System;
 using System.Runtime.Serialization;
 using Volo.Abp;
 
-namespace FreeERP.Purchase
+namespace FreeERP.Purchases
 {
     public class PurchaseOrderLineltZeroException : BusinessException
     {
