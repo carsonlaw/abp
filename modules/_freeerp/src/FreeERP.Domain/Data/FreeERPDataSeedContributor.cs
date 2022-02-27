@@ -11,6 +11,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
 namespace FreeERP.Domain.Data
@@ -25,6 +26,7 @@ namespace FreeERP.Domain.Data
         private readonly IRepository<PurchaseOrder> _purchaseOrderRepository;
         private readonly ICurrentTenant _currentTenant;
         private readonly IGuidGenerator _guidGenerator;
+        private readonly IClock _clock;
 
         private Store store;
         private Category category;
@@ -40,7 +42,8 @@ namespace FreeERP.Domain.Data
             IProductRepository productRepository,
             IRepository<PurchaseOrder> purchaseOrderRepository,
             ICurrentTenant currentTenant,
-            IGuidGenerator guidGenerator
+            IGuidGenerator guidGenerator,
+            IClock clock
         )
         {
             _storeRepository = storeRepository;
@@ -51,6 +54,7 @@ namespace FreeERP.Domain.Data
             _purchaseOrderRepository = purchaseOrderRepository;
             _currentTenant = currentTenant;
             _guidGenerator = guidGenerator;
+            _clock = clock;
         }
 
 
@@ -116,10 +120,14 @@ namespace FreeERP.Domain.Data
         {
             if (await _purchaseOrderRepository.GetCountAsync() > 0)
                 return;
-            var order = new PurchaseOrder(_guidGenerator.Create()
+            var order = new PurchaseOrder(_guidGenerator.Create(),
+                    "20220101",
+                    _clock.Now,
+                    null,
+                    "description"
                     , _currentTenant.Id
                 );
-            order.AddLine(_guidGenerator.Create(), product.Id, null, store.Id, 10);
+            order.AddLine(_guidGenerator.Create(), product.Id, null, store.Id, 10, 100);
             await _purchaseOrderRepository.InsertAsync(
                 order,
                 autoSave: true

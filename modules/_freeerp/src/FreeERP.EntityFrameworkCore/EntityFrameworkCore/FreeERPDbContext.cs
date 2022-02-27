@@ -163,6 +163,8 @@ namespace FreeERP.EntityFrameworkCore
             builder.Entity<PurchaseOrder>(b =>
             {
                 b.ToTable(FreeERPConsts.DbTablePrefix + "PurchaseOrders", FreeERPConsts.DbSchema);
+                b.Property(p => p.OrderNo).IsRequired().HasMaxLength(PurchaseOrderConsts.MaxOrderNoLength);
+                b.Property(p => p.Description).HasMaxLength(PurchaseOrderConsts.MaxDescriptionLength);
                 b.HasMany(p => p.Lines);
             });
 

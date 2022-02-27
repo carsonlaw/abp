@@ -21,6 +21,12 @@ namespace FreeERP.Purchases
         }
 
 
+        public override async Task<IQueryable<PurchaseOrder>> WithDetailsAsync()
+        {
+            var query = await base.WithDetailsAsync();
+            query = query.Include(f => f.Lines);
+            return query;
+        }
 
     }
 }

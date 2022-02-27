@@ -7,6 +7,7 @@ using FreeERP.Purchases;
 using FreeERP.Web.Pages;
 using System;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
+using System.Collections.Generic;
 
 namespace FreeERP.Web.Pages;
 
@@ -35,26 +36,17 @@ public class PurchaseOrderCreateModel : FreeERPPageModel
     public class CreatePurchaseOrderViewModel
     {
         [Required]
-        [DynamicFormIgnore]
-        public Guid CategoryId { get; set; }
-
+        [DynamicMaxLength(typeof(PurchaseOrderConsts), nameof(PurchaseOrderConsts.MaxOrderNoLength))]
+        public virtual string OrderNo { get; protected set; }
         [Required]
-        [DynamicFormIgnore]
-        public Guid UnitId { get; set; }
+        public virtual DateTime OrderTime { get; protected set; }
 
-        [Required]
-        [DynamicMaxLength(typeof(PurchaseOrderConsts), nameof(PurchaseOrderConsts.MaxNameLength))]
-        public string Name { get; set; }
-        [Required]
-        [DynamicMaxLength(typeof(PurchaseOrderConsts), nameof(PurchaseOrderConsts.MaxNameLength))]
-        public string Code { get; set; }
+        public virtual Guid? SupplierId { get; protected set; }
 
-        [HiddenInput]
-        public Guid? MediaId { get; set; }
-        [DynamicMaxLength(typeof(PurchaseOrderConsts), nameof(PurchaseOrderConsts.MaxNameLength))]
-        public string Description { get; set; }
+        [DynamicMaxLength(typeof(PurchaseOrderConsts), nameof(PurchaseOrderConsts.MaxDescriptionLength))]
+        public virtual string Description { get; protected set; }
 
-        //public List<PurchaseOrderSKUCreateUpdateDto> Items { get; set; }
-        //public string ConcurrencyStamp { get; set; }
+
+        public virtual IList<PurchaseOrderLineCreateUpdateDto> Lines { get; protected set; }
     }
 }

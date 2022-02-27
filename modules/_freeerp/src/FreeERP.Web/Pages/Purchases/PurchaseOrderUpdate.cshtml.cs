@@ -2,6 +2,7 @@
 using FreeERP.Purchases;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
@@ -49,27 +50,18 @@ public class PurchaseOrderUpdateModel : FreeERPPageModel
     public class PurchaseOrderUpdateViewModel : IHasConcurrencyStamp
     {
         [Required]
-        [DynamicFormIgnore]
-        public Guid CategoryId { get; set; }
-
+        [DynamicMaxLength(typeof(PurchaseOrderConsts), nameof(PurchaseOrderConsts.MaxOrderNoLength))]
+        public virtual string OrderNo { get; protected set; }
         [Required]
-        [DynamicFormIgnore]
-        public Guid UnitId { get; set; }
+        public virtual DateTime OrderTime { get; protected set; }
 
-        [Required]
-        [DynamicMaxLength(typeof(PurchaseOrderConsts), nameof(PurchaseOrderConsts.MaxNameLength))]
-        public string Name { get; set; }
+        public virtual Guid? SupplierId { get; protected set; }
 
-        [Required]
-        [DynamicMaxLength(typeof(PurchaseOrderConsts), nameof(PurchaseOrderConsts.MaxNameLength))]
-        public string Code { get; set; }
+        [DynamicMaxLength(typeof(PurchaseOrderConsts), nameof(PurchaseOrderConsts.MaxDescriptionLength))]
+        public virtual string Description { get; protected set; }
 
-        [HiddenInput]
-        public Guid? MediaId { get; set; }
 
-        [DynamicMaxLength(typeof(PurchaseOrderConsts), nameof(PurchaseOrderConsts.MaxNameLength))]
-        public string Description { get; set; }
-        //public List<PurchaseOrderSKUCreateUpdateDto> Items { get; set; }
+        public virtual IList<PurchaseOrderLineCreateUpdateDto> Lines { get; protected set; }
         [HiddenInput]
         public string ConcurrencyStamp { get; set; }
     }

@@ -14,6 +14,8 @@ namespace FreeERP.Purchases
         public virtual Guid StoreId { get; protected set; }
         [NotNull]
         public virtual long Number { get; protected set; }
+        [CanBeNull]
+        public virtual decimal? UnitPrice { get; protected set; }
 
         private PurchaseOrderLine()
         { }
@@ -22,19 +24,25 @@ namespace FreeERP.Purchases
             [NotNull] Guid productId,
             [CanBeNull] Guid? productSkuId,
             [NotNull] Guid storeId,
-            [NotNull] long number)
+            [NotNull] long number,
+            [CanBeNull] decimal? unitPrice)
          : base(id)
         {
             ProductId = productId;
             ProductSkuId = productSkuId;
             StoreId = storeId;
             AddNumber(number);
+            ChangeUnitPrice(unitPrice);
         }
         public virtual void AddNumber(long number)
         {
             Number += number;
             if (Number < 0)
                 throw new PurchaseOrderLineltZeroException(ProductId, Number);
+        }
+        public virtual void ChangeUnitPrice(decimal? price)
+        {
+            UnitPrice = price;
         }
     }
 }

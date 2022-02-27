@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Services;
@@ -12,18 +13,33 @@ namespace FreeERP.Purchases
         {
             CategroyRepository = repository;
         }
-        public virtual async Task<PurchaseOrder> CreateAsync([NotNull] string name, [NotNull] string desc, [CanBeNull] int? sort = null)
+        public virtual async Task<PurchaseOrder> CreateAsync(
+            [NotNull] string orderNo,
+            [NotNull] DateTime orderTime,
+            [CanBeNull] Guid? supplierId,
+            [CanBeNull] string description)
         {
             await Task.CompletedTask;
-            if (!sort.HasValue) sort = 0;
-            return new PurchaseOrder(GuidGenerator.Create(), CurrentTenant.Id);
+            return new PurchaseOrder(
+                GuidGenerator.Create(),
+                orderNo,
+                orderTime,
+                supplierId,
+                description,
+                CurrentTenant.Id);
         }
 
-        public virtual async Task<PurchaseOrder> UpdateAsync([NotNull] PurchaseOrder purchaseOrder, [NotNull] string name, [NotNull] string desc, [CanBeNull] int? sort = null)
+        public virtual async Task<PurchaseOrder> UpdateAsync([NotNull] PurchaseOrder purchaseOrder,
+            [NotNull] string orderNo,
+            [NotNull] DateTime orderTime,
+            [CanBeNull] Guid? supplierId,
+            [CanBeNull] string description)
         {
             await Task.CompletedTask;
-            //purchaseOrder.SetName(name);
-            //purchaseOrder.SetDescription(desc);
+            purchaseOrder.SetOrderNo(orderNo);
+            purchaseOrder.SetOrderTime(orderTime);
+            purchaseOrder.SetSupplierId(supplierId);
+            purchaseOrder.SetDescription(description);
 
 
             return purchaseOrder;
