@@ -1,0 +1,55 @@
+﻿@page
+@using FreeERP.Web.Components
+@using FreeERP.Web.Menus
+@using FreeERP.Web.Pages;
+
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Uppy
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPageToolbar
+
+@inherits FreeERPPageBase
+
+@model PurchaseOrderUpdateModel
+
+@{
+    PageLayout.Content.Title = L["Menu:PurchaseOrder"].Value;
+    PageLayout.Content.BreadCrumb.Add(L["Menu:FreeERP"].Value);
+    PageLayout.Content.MenuItemName = FreeERPMenus.PurchaseOrder;
+}
+@section scripts {
+<abp-script-bundle>
+    <abp-script type="typeof(UppyScriptContributor)" />
+    <abp-script src="/Pages/Purchases/PurchaseOrderCreate.js" />
+</abp-script-bundle>
+}
+
+@section content_toolbar {
+@await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new { pageName =
+typeof(PurchaseOrderUpdateModel).FullName
+})
+}
+
+
+<abp-card>
+    <abp-card-header title="@L["New"].Value"></abp-card-header>
+    <abp-card-body>
+        <div class="mb-3">
+            @if (Model.ViewModel.MediaId != null)
+            {
+                <img height="120" src="/api/app/media/@Model.ViewModel.MediaId" />
+                <br />
+            }
+            <label class="form-label">@L["CoverImage"]</label>
+            <input type="file" id="PurchaseOrderImage" class="form-control" />
+        </div>
+
+        <abp-dynamic-form abp-model="ViewModel" asp-page="/Purchases/PurchaseOrderUpdate">
+
+            <abp-input asp-for="Id" />
+            <abp-form-content />
+        </abp-dynamic-form>
+
+    </abp-card-body>
+    <abp-card-footer>
+        <abp-button button-type="Primary" type="submit" text="@L["Submit"].Value" />
+    </abp-card-footer>
+</abp-card>

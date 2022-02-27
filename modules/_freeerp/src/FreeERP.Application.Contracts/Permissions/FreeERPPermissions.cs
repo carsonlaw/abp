@@ -41,7 +41,7 @@
 
         public static class PurchaseOrders
         {
-            public const string Default = PurchasesGroupName + ".PurchaseOrder";
+            public const string Default = PurchasesGroupName + ".PurchaseOrders";
             public const string Create = Default + ".Create";
             public const string Update = Default + ".Update";
             public const string Delete = Default + ".Delete";
@@ -78,7 +78,7 @@
 
         public static class SaleOrders
         {
-            public const string Default = SalesGroupName + ".SaleOrder";
+            public const string Default = SalesGroupName + ".SaleOrders";
             public const string Create = Default + ".Create";
             public const string Update = Default + ".Update";
             public const string Delete = Default + ".Delete";

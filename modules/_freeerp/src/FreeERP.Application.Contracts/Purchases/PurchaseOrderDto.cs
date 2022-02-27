@@ -11,8 +11,8 @@ namespace FreeERP.Purchases
     [Serializable]
     public class PurchaseOrderDto : EntityDto<Guid>, IHasConcurrencyStamp
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
+        // public string Name { get; set; }
+        // public string Description { get; set; }
         public string ConcurrencyStamp { get; set; }
     }
 }

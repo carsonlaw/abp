@@ -112,6 +112,7 @@ namespace FreeERP.Web
 
 
                 options.Conventions.AddPageRoute("/Products/ProductUpdate", "/Products/ProductUpdate/{Id}");
+                options.Conventions.AddPageRoute("/Purchases/PurchaseOrderUpdate", "Purchases/PurchaseOrderUpdate/{Id}");
             });
             Configure<AbpPageToolbarOptions>(options =>
             {
