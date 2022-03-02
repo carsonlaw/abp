@@ -13,7 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace FreeERP.Migrations
 {
     [DbContext(typeof(FreeERPDbContext))]
-    [Migration("20220217091339_init")]
+    [Migration("20220228114637_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -558,7 +558,7 @@ namespace FreeERP.Migrations
                     b.ToTable("ERPProductUnits", (string)null);
                 });
 
-            modelBuilder.Entity("FreeERP.Purchase.PurchaseOrder", b =>
+            modelBuilder.Entity("FreeERP.Purchases.PurchaseOrder", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -585,6 +585,10 @@ namespace FreeERP.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("DeletionTime");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
@@ -603,6 +607,20 @@ namespace FreeERP.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("LastModifierId");
 
+                    b.Property<string>("OrderNo")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<DateTime>("OrderTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("numeric");
+
+                    b.Property<Guid?>("SupplierId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("uuid")
                         .HasColumnName("TenantId");
@@ -612,7 +630,7 @@ namespace FreeERP.Migrations
                     b.ToTable("ERPPurchaseOrders", (string)null);
                 });
 
-            modelBuilder.Entity("FreeERP.Purchase.PurchaseOrderLine", b =>
+            modelBuilder.Entity("FreeERP.Purchases.PurchaseOrderLine", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -631,6 +649,9 @@ namespace FreeERP.Migrations
 
                     b.Property<Guid>("StoreId")
                         .HasColumnType("uuid");
+
+                    b.Property<decimal?>("UnitPrice")
+                        .HasColumnType("numeric");
 
                     b.HasKey("Id");
 
@@ -2712,9 +2733,9 @@ namespace FreeERP.Migrations
                     b.Navigation("SmallerUnit");
                 });
 
-            modelBuilder.Entity("FreeERP.Purchase.PurchaseOrderLine", b =>
+            modelBuilder.Entity("FreeERP.Purchases.PurchaseOrderLine", b =>
                 {
-                    b.HasOne("FreeERP.Purchase.PurchaseOrder", null)
+                    b.HasOne("FreeERP.Purchases.PurchaseOrder", null)
                         .WithMany("Lines")
                         .HasForeignKey("PurchaseOrderId");
                 });
@@ -3016,7 +3037,7 @@ namespace FreeERP.Migrations
                     b.Navigation("BiggerUnits");
                 });
 
-            modelBuilder.Entity("FreeERP.Purchase.PurchaseOrder", b =>
+            modelBuilder.Entity("FreeERP.Purchases.PurchaseOrder", b =>
                 {
                     b.Navigation("Lines");
                 });

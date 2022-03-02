@@ -470,6 +470,11 @@ namespace FreeERP.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: true),
+                    OrderNo = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
+                    OrderTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    SupplierId = table.Column<Guid>(type: "uuid", nullable: true),
+                    Description = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: true),
+                    Price = table.Column<decimal>(type: "numeric", nullable: true),
                     ExtraProperties = table.Column<string>(type: "text", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -984,6 +989,7 @@ namespace FreeERP.Migrations
                     ProductSkuId = table.Column<Guid>(type: "uuid", nullable: true),
                     StoreId = table.Column<Guid>(type: "uuid", nullable: false),
                     Number = table.Column<long>(type: "bigint", nullable: false),
+                    UnitPrice = table.Column<decimal>(type: "numeric", nullable: true),
                     PurchaseOrderId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using FreeERP.Customers;
 using FreeERP.Products;
 using FreeERP.Purchases;
 using FreeERP.Stories;
+using FreeERP.Suppliers;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
@@ -19,6 +21,8 @@ namespace FreeERP.Domain.Data
     public class FreeERPDataSeedContributor : IDataSeedContributor, ITransientDependency
     {
         private readonly IStoreRepository _storeRepository;
+        private readonly ISupplierRepository _supplierRepository;
+        private readonly ICustomerRepository _customerRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IProductRepository _productRepository;
         private readonly IProductUnitRepository _productUnitRepository;
@@ -33,9 +37,13 @@ namespace FreeERP.Domain.Data
         private Product product;
         private ProductUnit productUnit;
         private ProductProperty productProperty;
+        private Supplier supplier;
+        private Customer customer;
 
         public FreeERPDataSeedContributor(
             IStoreRepository storeRepository,
+            ISupplierRepository supplierRepository,
+            ICustomerRepository customerRepository,
             ICategoryRepository categoryRepository,
             IProductUnitRepository productUnitRepository,
             IProductPropertyRepository productPropertyRepository,
@@ -47,6 +55,8 @@ namespace FreeERP.Domain.Data
         )
         {
             _storeRepository = storeRepository;
+            _supplierRepository = supplierRepository;
+            _customerRepository = customerRepository;
             _categoryRepository = categoryRepository;
             _productUnitRepository = productUnitRepository;
             _productPropertyRepository = productPropertyRepository;
@@ -63,6 +73,8 @@ namespace FreeERP.Domain.Data
             using (_currentTenant.Change(context?.TenantId))
             {
                 await CreateStoreAsync();
+                await CreateSupplierAsync();
+                await CreateCustomerAsync();
                 await CreateCategoryAsync();
                 await CreateProductUnitAsync();
                 await CreateProductPropertyAsync();
@@ -123,7 +135,7 @@ namespace FreeERP.Domain.Data
             var order = new PurchaseOrder(_guidGenerator.Create(),
                     "20220101",
                     _clock.Now,
-                    null,
+                    supplier.Id,
                     "description"
                     , _currentTenant.Id
                 );
@@ -165,6 +177,28 @@ namespace FreeERP.Domain.Data
 
             store = await _storeRepository.InsertAsync(
                 new Store(_guidGenerator.Create(), "test", "test", 0, _currentTenant.Id),
+                autoSave: true
+            );
+        }
+
+        private async Task CreateSupplierAsync()
+        {
+            if (await _supplierRepository.GetCountAsync() > 0)
+                return;
+
+            supplier = await _supplierRepository.InsertAsync(
+                new Supplier(_guidGenerator.Create(), "test", "test", 0, _currentTenant.Id),
+                autoSave: true
+            );
+        }
+
+        private async Task CreateCustomerAsync()
+        {
+            if (await _customerRepository.GetCountAsync() > 0)
+                return;
+
+            customer = await _customerRepository.InsertAsync(
+                new Customer(_guidGenerator.Create(), "test", "test", 0, _currentTenant.Id),
                 autoSave: true
             );
         }

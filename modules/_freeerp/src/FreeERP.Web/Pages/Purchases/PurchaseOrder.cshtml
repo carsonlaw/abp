@@ -21,6 +21,14 @@
     <abp-script src="/Pages/Purchases/PurchaseOrder.js" />
 </abp-script-bundle>
 }
+@section styles
+{
+<style>
+    .input-group-sm div {
+        width: 33%
+    }
+</style>
+}
 @section content_toolbar {
 @await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new { pageName = typeof(PurchaseOrderModel).FullName
 })
@@ -32,17 +40,28 @@
         <abp-card-body>
             <form id="PurchaseOrderFilterForm" method="post">
                 <abp-row>
-                    <abp-column size-lg="_5" size-md="_4">
-                        <div class="mb-2">
-                            @await Component.InvokeAsync(typeof(CategoryWidgetViewComponent),new CategoryWidgetModel(){
-                            Id="PurchaseOrderCate", InputName="CategoryId", SelectText=L["CategorySelect"].Value })
+                    <abp-column size-lg="_4" size-md="_12">
+
+                    </abp-column>
+                    <abp-column size-lg="_4" size-md="_12">
+                        <div class="input-group">
+                            <div class="mb-3"><span class="input-group-text border-end-0 rounded-0 rounded-start">
+                                    订单时间
+                                </span>
+                            </div>
+                            <abp-input asp-for="@Model.OrderTimeBegin" style="width:7.2em"
+                                class="border-start-0 rounded-0 rounded-end" suppress-label="true" type="date" />
+                            <span class="input-group-addon">-</span>
+                            <abp-input asp-for="@Model.OrderTimeEnd" style="width:7.2em" suppress-label="true"
+                                type="date" />
                         </div>
                     </abp-column>
-                    <abp-column size-lg="_5" size-md="_4">
+
+                    <abp-column size-lg="_3" size-md="_6">
                         <abp-input asp-for="@Model.Filter" suppress-label="true" type="text" />
                     </abp-column>
 
-                    <abp-column size-lg="_2" size-md="_4">
+                    <abp-column size-lg="_1" size-md="_6">
                         <div class="d-grid gap-2">
                             <abp-button button-type="Primary" type="submit">
                                 <i class="fa fa-search" aria-hidden="true"></i>@L["Search"].Value
