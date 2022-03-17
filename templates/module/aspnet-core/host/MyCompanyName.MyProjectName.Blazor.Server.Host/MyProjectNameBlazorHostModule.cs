@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Builder;
@@ -39,6 +40,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.SettingManagement.Blazor.Server;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
@@ -75,6 +77,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host;
     typeof(AbpTenantManagementApplicationModule),
     typeof(AbpTenantManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+    typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AbpPermissionManagementApplicationModule),
     typeof(AbpSettingManagementBlazorServerModule),
     typeof(AbpSettingManagementApplicationModule),
@@ -211,7 +214,7 @@ public class MyProjectNameBlazorHostModule : AbpModule
 #endif
     }
 
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
         var env = context.GetEnvironment();
         var app = context.GetApplicationBuilder();
@@ -252,12 +255,9 @@ public class MyProjectNameBlazorHostModule : AbpModule
 
         using (var scope = context.ServiceProvider.CreateScope())
         {
-            AsyncHelper.RunSync(async () =>
-            {
-                await scope.ServiceProvider
-                    .GetRequiredService<IDataSeeder>()
-                    .SeedAsync();
-            });
+            await scope.ServiceProvider
+                .GetRequiredService<IDataSeeder>()
+                .SeedAsync();
         }
     }
 }
