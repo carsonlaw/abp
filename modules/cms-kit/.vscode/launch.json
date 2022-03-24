@@ -13,7 +13,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             "OS-COMMENT4": "If you have changed target frameworks, make sure to update the program path.",
-            "program": "${workspaceFolder}/host/Volo.CmsKit.Web.Unified/bin/Debug/net5.0/Volo.CmsKit.Web.Unified.dll",
+            "program": "${workspaceFolder}/host/Volo.CmsKit.Web.Unified/bin/Debug/net6.0/Volo.CmsKit.Web.Unified.dll",
             "args": [],
             "cwd": "${workspaceFolder}/host/Volo.CmsKit.Web.Unified",
             "stopAtEntry": false,
