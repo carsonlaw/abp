@@ -1,9 +1,0 @@
-{
-  "ConnectionStrings": {
-<<<<<<< Updated upstream
-    "Default": "Server=(localdb)\\.\\MSSQLLocalDB;Database=CmsKit_Unified;Trusted_Connection=True"
-=======
-    "Default": "Server=localhost;Database=CmsKit_Unified;Uid=sa;Password=asdf1234!@#$"
->>>>>>> Stashed changes
-  }
-}

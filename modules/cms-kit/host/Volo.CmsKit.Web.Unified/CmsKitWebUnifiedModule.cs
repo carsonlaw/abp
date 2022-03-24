@@ -182,6 +182,10 @@ public class CmsKitWebUnifiedModule : AbpModule
                         new ReactionDefinition(StandardReactions.ThumbsDown),
                 }));
         });
+        Configure<Abp.Timing.AbpClockOptions>(options =>
+        {
+            options.Kind = DateTimeKind.Utc;
+        });
 
         Configure<CmsKitRatingOptions>(options =>
         {
