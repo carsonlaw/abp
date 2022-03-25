@@ -23,7 +23,7 @@ public class PurchaseOrderModel : FreeERPPageModel
 
     public async Task OnGetAsync()
     {
-
+        await Task.CompletedTask;
         OrderTimeBegin = Clock.Now.AddDays(-1);
         OrderTimeEnd = Clock.Now;
 

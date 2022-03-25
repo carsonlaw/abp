@@ -194,6 +194,19 @@ namespace FreeERP.Web
                     }
                 );
 
+                options.Configure<FreeERP.Web.Pages.PurchaseOrderModel>(
+                    toolbar =>
+                    {
+                        toolbar.AddButton(
+                            LocalizableString.Create<FreeERPResource>("PurchaseOrderNew"),
+                            icon: "plus",
+                            name: "CreatePurchaseOrder",
+                            id: "CreatePurchaseOrder",
+                            requiredPolicyName: FreeERPPermissions.PurchaseOrders.Create
+                        );
+                    }
+                );
+
             });
 
             Configure<AbpTenantResolveOptions>(options =>

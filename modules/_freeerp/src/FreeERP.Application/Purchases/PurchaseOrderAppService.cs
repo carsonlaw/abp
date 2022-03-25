@@ -37,7 +37,7 @@ namespace FreeERP.Purchases
         [Authorize(FreeERPPermissions.PurchaseOrders.Create)]
         public override async Task<PurchaseOrderDto> CreateAsync(PurchaseOrderCreateUpdateDto input)
         {
-            var entity = await _manager.CreateAsync(input.BatchNo, input.OrderTime, input.SupplierId, input.Description);
+            var entity = await _manager.CreateAsync(input.OrderNo, input.OrderTime, input.SupplierId, input.Description);
             foreach (var line in input.Lines)
             {
                 entity.AddLine(GuidGenerator.Create(), line.ProductId, line.ProductSkuId, line.StoreId, line.Number, line.UnitPrice);
@@ -50,7 +50,7 @@ namespace FreeERP.Purchases
         public override async Task<PurchaseOrderDto> UpdateAsync(Guid id, PurchaseOrderCreateUpdateDto input)
         {
             var entity = await _repository.GetAsync(id, true);
-            entity = await _manager.UpdateAsync(entity, input.BatchNo, input.OrderTime, input.SupplierId, input.Description);
+            entity = await _manager.UpdateAsync(entity, input.OrderNo, input.OrderTime, input.SupplierId, input.Description);
             entity.Lines.Clear();
             foreach (var line in input.Lines)
             {

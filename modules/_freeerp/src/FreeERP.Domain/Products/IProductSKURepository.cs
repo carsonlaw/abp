@@ -10,5 +10,6 @@ namespace FreeERP.Products
     {
         Task DeleteByProductIdAsync(Guid Id);
         Task<List<ProductSKU>> GetListByProductIdsAsync(IEnumerable<Guid> Ids);
+        Task<ProductSKU> GetBySKUCode(string code);
     }
 }

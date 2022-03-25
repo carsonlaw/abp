@@ -31,22 +31,28 @@ public class PurchaseOrderCreateModel : FreeERPPageModel
         await PurchaseOrderAppService.CreateAsync(dto);
         return NoContent();
     }
+    public async Task OnGetAsync()
+    {
+        await Task.CompletedTask;
+        if (ViewModel == null) ViewModel = new CreatePurchaseOrderViewModel();
+        ViewModel.OrderTime = Clock.Now;
+    }
 
     [AutoMap(typeof(PurchaseOrderCreateUpdateDto), ReverseMap = true)]
     public class CreatePurchaseOrderViewModel
     {
-        [Required]
         [DynamicMaxLength(typeof(PurchaseOrderConsts), nameof(PurchaseOrderConsts.MaxOrderNoLength))]
-        public virtual string OrderNo { get; protected set; }
+        public virtual string OrderNo { get; set; }
         [Required]
-        public virtual DateTime OrderTime { get; protected set; }
+        public virtual DateTime OrderTime { get; set; }
 
-        public virtual Guid? SupplierId { get; protected set; }
+        [DynamicFormIgnore]
+        public virtual Guid? SupplierId { get; set; }
 
         [DynamicMaxLength(typeof(PurchaseOrderConsts), nameof(PurchaseOrderConsts.MaxDescriptionLength))]
-        public virtual string Description { get; protected set; }
+        public virtual string Description { get; set; }
 
-
-        public virtual IList<PurchaseOrderLineCreateUpdateDto> Lines { get; protected set; }
+        [DynamicFormIgnore]
+        public virtual IList<PurchaseOrderLineCreateUpdateDto> Lines { get; set; }
     }
 }

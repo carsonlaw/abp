@@ -33,14 +33,15 @@ typeof(PurchaseOrderCreateModel).FullName
 <abp-card>
     <abp-card-header title="@L["New"].Value"></abp-card-header>
     <abp-card-body>
-        <div class="mb-3">
-            <label class="form-label">@L["CoverImage"]</label>
-            <input type="file" id="PurchaseOrderImage" class="form-control" />
-        </div>
 
         <abp-dynamic-form abp-model="ViewModel" asp-page="/Purchases/PurchaseOrderCreate">
 
             <abp-form-content />
+            <div class="mb-3">
+                <label>选择产品</label>
+                <input type="text" id="tbProductCode" class="form-control"></input>
+            </div>
+            <abp-table striped-rows="true" id="OrderLineTable" class="nowrap"></abp-table>
         </abp-dynamic-form>
 
     </abp-card-body>

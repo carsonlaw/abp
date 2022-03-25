@@ -14,10 +14,9 @@ namespace FreeERP.Purchases
     [Serializable]
     public class PurchaseOrderCreateUpdateDto : IHasConcurrencyStamp
     {
-        [NotNull]
-        [Required]
+        [CanBeNull]
         [DynamicMaxLength(typeof(PurchaseOrderConsts), nameof(PurchaseOrderConsts.MaxOrderNoLength))]
-        public virtual string BatchNo { get; set; }
+        public virtual string OrderNo { get; set; }
         [NotNull]
         public virtual DateTime OrderTime { get; set; }
         [CanBeNull]

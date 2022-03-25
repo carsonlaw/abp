@@ -8,6 +8,7 @@ namespace FreeERP.Products
     public interface IProductAppService
     {
         Task<ProductDto> GetAsync(Guid id);
+        Task<ProductDto> GetProductDOrSKUByCode(string code);
         Task<PagedResultDto<ProductDto>> GetListAsync(ProductGetListInput input);
 
         Task<ProductDto> CreateAsync(ProductCreateUpdateDto input);

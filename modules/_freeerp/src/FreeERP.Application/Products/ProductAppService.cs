@@ -83,6 +83,38 @@ namespace FreeERP.Products
             return ObjectMapper.Map<Product, ProductDto>(entity);
         }
 
+        public async Task<ProductDto> GetProductDOrSKUByCode(string code)
+        {
+            var query = await _repository.WithDetailsAsync();
+            query = query.Where(f => f.Code == code);
+            List<ProductSKU> skus;
+            var categories = await _categoryService.GetAllListFromCache();
+            var units = await _productUnitService.GetAllListFromCache();
+            var entity = await AsyncExecuter.SingleOrDefaultAsync(query);
+            if (entity == null)
+            {
+                skus = new List<ProductSKU>() {
+                    await _skuRepository.GetBySKUCode(code)
+                };
+                if (skus[0] != null)
+                    entity = await _repository.FindAsync(skus[0].ProductId, true);
+            }
+            else
+            {
+                skus = await _skuRepository.GetListByProductIdsAsync(new Guid[] {
+                    entity.Id
+                });
+            }
+            var dto = ObjectMapper.Map<Product, ProductDto>(entity);
+            if (dto != null)
+            {
+                dto.CategoryName = categories.FirstOrDefault(f => f.Id == dto.CategoryId)?.Name;
+                dto.UnitName = units.FirstOrDefault(f => f.Id == dto.UnitId)?.Name;
+                dto.Items = ObjectMapper.Map<List<ProductSKU>, List<ProductSKUDto>>(skus);
+            }
+            return dto;
+        }
+
         public async Task<PagedResultDto<ProductDto>> GetListAsync(ProductGetListInput input)
         {
             var query = await _repository.WithDetailsAsync();

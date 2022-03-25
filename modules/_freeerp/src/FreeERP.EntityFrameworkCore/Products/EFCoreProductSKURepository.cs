@@ -18,7 +18,11 @@ namespace FreeERP.Products
         public EFCoreProductSKURepository(IDbContextProvider<FreeERPDbContext> dbContextProvider) : base(dbContextProvider)
         {
         }
-
+        public virtual async Task<ProductSKU> GetBySKUCode(string code)
+        {
+            var query = await GetQueryableAsync();
+            return await query.FirstOrDefaultAsync(f => f.Code == code);
+        }
         public virtual async Task DeleteByProductIdAsync(Guid Id)
         {
             await DeleteAsync(f => f.ProductId == Id);

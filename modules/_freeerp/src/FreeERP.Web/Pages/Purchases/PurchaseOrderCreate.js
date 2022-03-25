@@ -6,9 +6,51 @@ $(function () {
     var $buttonSubmit = $("button");
     var $formCreate = $("form");
     var $MediaId = $('#ViewModel_MediaId');
+    var $tbProductCode = $('#tbProductCode');
     var UPPY_FILE_ID = "uppy-upload-file";
+    var dataTable;
 
     var fileUploadUri = "/api/app/media/product";
+
+    function InitTable() {
+        dataTable = $("#OrderLineTable").DataTable(abp.libs.datatables.normalizeConfiguration({
+            processing: true,
+            serverSide: false,
+            paging: false,
+            searching: false,
+            scrollCollapse: true,
+            scrollX: true,
+            ordering: false,
+            columnDefs: [{
+                title: l("CategoryName"),
+                data: "categoryName"
+            }, {
+                title: l("Name"),
+                orderable: true,
+                data: "name"
+            },
+            {
+                title: l("Code"),
+                orderable: true,
+                data: "code"
+            },
+            {
+                title: l("StockNum"),
+                orderable: true,
+                data: "stockNum"
+            },
+            {
+                title: l("ProductUnit"),
+                orderable: true,
+                data: "unitName"
+            },
+            {
+                title: l("Description"),
+                orderable: true,
+                data: "description"
+            }]
+        }));
+    }
 
     function submitCoverImage() {
         abp.ui.setBusy();
@@ -95,6 +137,32 @@ $(function () {
         e.preventDefault();
         submitCoverImage();
     });
+    $tbProductCode.on("keypress", function (e) {
+        if (e.keyCode == "13") {
+            var code = $tbProductCode.val();
+            $tbProductCode.val('');
+            freeERP.products.product.getProductDOrSKUByCode(code)
+                .then(function (r) {
+                    if (!r) {
+                        abp.notify.warn(l('NoProductByCode'));
+                        return;
+                    }
+                    var data = dataTable.data();
+                    var added = false;
+                    $.each(data, function (i, v) {
+                        if (r.id == v.id) {
+                            added = true;
+                            return false;
+                        }
+                    });
+                    if (added) {
+                        abp.notify.warn(l('ProductAdded'));
+                        return;
+                    }
+                    dataTable.row.add(r).draw(false);
+                })
+        }
+    })
 
-
+    InitTable();
 })
