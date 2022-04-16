@@ -2,15 +2,11 @@ $(function () {
 
     var l = abp.localization.getResource("FreeERP");
 
-    var $fileInput = $('#ProductImage');
     var $buttonSubmit = $("button");
     var $formCreate = $("form");
-    var $MediaId = $('#ViewModel_MediaId');
     var $tbProductCode = $('#tbProductCode');
-    var UPPY_FILE_ID = "uppy-upload-file";
     var dataTable;
-
-    var fileUploadUri = "/api/app/media/product";
+    var storeSelect;
 
     function InitTable() {
         dataTable = $("#OrderLineTable").DataTable(abp.libs.datatables.normalizeConfiguration({
@@ -48,72 +44,58 @@ $(function () {
                 title: l("Description"),
                 orderable: true,
                 data: "description"
+            },
+            {
+                title: l("ProductNum"),
+                render: function (d, t, r, i) {
+                    return '<input type="hidden" name="ViewModel.Lines[' + i.row + '].ProductId" value="' + r.id + '">'
+                        + '<input type="hidden" name="ViewModel.Lines[' + i.row + '].ProductSkuId" value="">'
+                        + '<input type="number" data-val="true" data-val-digits="" data-val-range-min="1" class="form-control" name="ViewModel.Lines[' + i.row + '].Number" value="0"></input>'
+                }
+            },
+            {
+                title: l("ProductPrice"),
+                render: function (d, t, r, i) {
+                    return '<input type="number" data-val="true" class="form-control" name="ViewModel.Lines[' + i.row + '].UnitPrice" value="0"></input>'
+                }
+            },
+            {
+                title: l("ProductStore"),
+                render: function (d, t, r, i) {
+                    return getStoreHtml(storeSelect, i);
+                }
             }]
         }));
     }
 
-    function submitCoverImage() {
-        abp.ui.setBusy();
-
-        var UPPY_OPTIONS = {
-            endpoint: fileUploadUri,
-            formData: true,
-            fieldName: "file",
-            method: "post",
-            headers: getUppyHeaders()
-        };
-
-        var UPPY = Uppy.Core().use(Uppy.XHRUpload, UPPY_OPTIONS);
-
-        UPPY.reset();
-
-        var file = $fileInput[0].files[0];
-
-        if (file) {
-
-            UPPY.addFile({
-                id: UPPY_FILE_ID,
-                name: file.name, // file name
-                type: file.type, // file type
-                data: file, // file
-            });
-
-            UPPY.upload().then((result) => {
-                if (result.failed.length > 0) {
-                    abp.message.error(l("UploadFailedMessage"));
-                    abp.ui.clearBusy();
-                } else {
-                    $MediaId.val(result.successful[0].response.body.id);
-
-                    $formCreate.submit();
-                }
-            });
-        }
-        else {
-            $formCreate.submit();
-        }
+    function getStoreHtml(data, i) {
+        var html = '<select name="ViewModel.Lines[' + i.row + '].StoreId" class="form-control">'
+        data.forEach(item => {
+            html += '<option value="' + item.id + '">' + item.name + '</option>';
+        });
+        html += '</select>'
+        return html
     }
+
+    function InitStoreSelect() {
+        return freeERP.stories.store.getSelectData()
+            .then(function (r) {
+                storeSelect = r;
+                console.log(r);
+            })
+    }
+
 
     $formCreate.on('submit', function (e) {
         e.preventDefault();
 
         if ($formCreate.valid()) {
-            if (!$('#ProductCreateCate').val()) {
-                abp.notify.error(l('NotBeNull', l('CategoryName')));
-                abp.ui.clearBusy();
-                return false;
-            }
-            if (!$('#ProductCreateUnit').val()) {
-                abp.notify.error(l('NotBeNull', l('ProductUnit')));
-                abp.ui.clearBusy();
-                return false;
-            }
 
             $formCreate.ajaxSubmit({
                 success: function (result) {
                     abp.notify.success(l('SuccessfullySaved'));
                     abp.ui.clearBusy();
-                    location.href = "/Products/Product";
+                    location.href = "/Purchases/PurchaseOrder";
                 },
                 error: function (result) {
                     abp.notify.error(result.responseJSON.error.message);
@@ -126,23 +108,19 @@ $(function () {
         }
     });
 
-    function getUppyHeaders() {
-        var headers = {};
-        headers[abp.security.antiForgery.tokenHeaderName] = abp.security.antiForgery.getToken();
-
-        return headers;
-    }
-
     $buttonSubmit.click(function (e) {
         e.preventDefault();
-        submitCoverImage();
+        //submitCoverImage();
+        $formCreate.submit();
     });
     $tbProductCode.on("keypress", function (e) {
         if (e.keyCode == "13") {
+            abp.ui.setBusy();
             var code = $tbProductCode.val();
             $tbProductCode.val('');
             freeERP.products.product.getProductDOrSKUByCode(code)
                 .then(function (r) {
+                    abp.ui.clearBusy();
                     if (!r) {
                         abp.notify.warn(l('NoProductByCode'));
                         return;
@@ -163,6 +141,8 @@ $(function () {
                 })
         }
     })
-
-    InitTable();
+    InitStoreSelect()
+        .then(function () {
+            InitTable();
+        });
 })

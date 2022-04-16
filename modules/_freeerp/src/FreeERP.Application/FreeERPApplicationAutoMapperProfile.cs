@@ -30,6 +30,7 @@ namespace FreeERP
             CreateMap<Supplier, SupplierDto>();
             CreateMap<Customer, CustomerDto>();
             CreateMap<PurchaseOrder, PurchaseOrderDto>();
+            CreateMap<PurchaseOrderLine, PurchaseOrderLineDto>();
         }
     }
 }

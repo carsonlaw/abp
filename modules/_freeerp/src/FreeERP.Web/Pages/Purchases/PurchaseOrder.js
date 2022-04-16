@@ -54,8 +54,27 @@ $(function () {
                         }
                     ]
                 }
-            }
-
+            },
+            {
+                title: l("orderNo"),
+                orderable: true,
+                data: "orderNo"
+            },
+            {
+                title: l("description"),
+                orderable: true,
+                data: "description"
+            },
+            {
+                title: l("orderTime"),
+                orderable: true,
+                data: "orderTime"
+            },
+            {
+                title: l("price"),
+                orderable: true,
+                data: "price"
+            },
         ]
     }));
 

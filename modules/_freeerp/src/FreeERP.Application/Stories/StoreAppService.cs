@@ -62,6 +62,14 @@ namespace FreeERP.Stories
             return await _repository.GetAsync(f => f.Id == id, true);
         }
 
+        public async Task<IList<StoreSelectDto>> GetSelectData()
+        {
+            return (await GetAllListFromCache()).Select(f=>new StoreSelectDto(){
+                Id = f.Id,                
+                Name = f.Name
+            }).ToList();
+        }
+
         public override async Task<PagedResultDto<StoreDto>> GetListAsync(StoreGetListInput input)
         {
             var list = (await GetAllListFromCache()).AsQueryable();

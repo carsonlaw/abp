@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using JetBrains.Annotations;
 using Volo.Abp.Application.Dtos;
@@ -19,6 +20,7 @@ namespace FreeERP.Purchases
         [NotNull]
         public virtual Guid StoreId { get; set; }
         [NotNull]
+        [Range(1, long.MaxValue)]
         public virtual long Number { get; set; }
         [CanBeNull]
         public virtual decimal? UnitPrice { get; set; }

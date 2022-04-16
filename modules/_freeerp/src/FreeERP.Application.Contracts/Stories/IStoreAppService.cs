@@ -11,5 +11,6 @@ namespace FreeERP.Stories
     {
 
         Task<IList<StoreDto>> GetAllListFromCache();
+        Task<IList<StoreSelectDto>> GetSelectData();
     }
 }

@@ -49,6 +49,7 @@ public class PurchaseOrderCreateModel : FreeERPPageModel
         [DynamicFormIgnore]
         public virtual Guid? SupplierId { get; set; }
 
+        [TextArea]
         [DynamicMaxLength(typeof(PurchaseOrderConsts), nameof(PurchaseOrderConsts.MaxDescriptionLength))]
         public virtual string Description { get; set; }
 

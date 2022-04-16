@@ -18,18 +18,18 @@ namespace FreeERP.Purchases
         // public string Description { get; set; }
         [Required]
         [DynamicMaxLength(typeof(PurchaseOrderConsts), nameof(PurchaseOrderConsts.MaxOrderNoLength))]
-        public virtual string OrderNo { get; protected set; }
+        public virtual string OrderNo { get; set; }
         [Required]
-        public virtual DateTime OrderTime { get; protected set; }
+        public virtual DateTime OrderTime { get; set; }
         [CanBeNull]
-        public virtual Guid? SupplierId { get; protected set; }
+        public virtual Guid? SupplierId { get; set; }
         [CanBeNull]
         [DynamicMaxLength(typeof(PurchaseOrderConsts), nameof(PurchaseOrderConsts.MaxDescriptionLength))]
-        public virtual string Description { get; protected set; }
+        public virtual string Description { get; set; }
         [CanBeNull]
-        public virtual decimal? Price { get; protected set; }
+        public virtual decimal? Price { get; set; }
 
-        public virtual IList<PurchaseOrderLineDto> Lines { get; protected set; }
+        public virtual IList<PurchaseOrderLineDto> Lines { get; set; }
         public string ConcurrencyStamp { get; set; }
     }
 
