@@ -14,11 +14,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.39" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.43" />
     <ProjectReference Include="..\FreeERP.Application.Tests\FreeERP.Application.Tests.csproj" />
     <ProjectReference Include="..\..\src\FreeERP.Web\FreeERP.Web.csproj" />
-    <PackageReference Include="Volo.Abp.AspNetCore.TestBase" Version="5.0.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.TestBase" Version="5.3.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +26,13 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="coverlet.collector" Version="3.1.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <!-- https://github.com/NuGet/Home/issues/4412 -->
