@@ -5,11 +5,11 @@ $(function () {
     var $buttonSubmit = $("button");
     var $formCreate = $("form");
     var $tbProductCode = $('#tbProductCode');
-    var dataTable;
-    var storeSelect;
+    var $lineTable;
+    var storeSelectData;
 
     function InitTable() {
-        dataTable = $("#OrderLineTable").DataTable(abp.libs.datatables.normalizeConfiguration({
+        $lineTable = $("#OrderLineTable").DataTable(abp.libs.datatables.normalizeConfiguration({
             processing: true,
             serverSide: false,
             paging: false,
@@ -62,7 +62,7 @@ $(function () {
             {
                 title: l("ProductStore"),
                 render: function (d, t, r, i) {
-                    return getStoreHtml(storeSelect, i);
+                    return getStoreHtml(storeSelectData, i);
                 }
             }]
         }));
@@ -80,7 +80,7 @@ $(function () {
     function InitStoreSelect() {
         return freeERP.stories.store.getSelectData()
             .then(function (r) {
-                storeSelect = r;
+                storeSelectData = r;
                 console.log(r);
             })
     }
@@ -125,7 +125,7 @@ $(function () {
                         abp.notify.warn(l('NoProductByCode'));
                         return;
                     }
-                    var data = dataTable.data();
+                    var data = $lineTable.data();
                     var added = false;
                     $.each(data, function (i, v) {
                         if (r.id == v.id) {
@@ -137,7 +137,7 @@ $(function () {
                         abp.notify.warn(l('ProductAdded'));
                         return;
                     }
-                    dataTable.row.add(r).draw(false);
+                    $lineTable.row.add(r).draw(false);
                 })
         }
     })
