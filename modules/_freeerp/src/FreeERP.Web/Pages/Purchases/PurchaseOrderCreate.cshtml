@@ -38,6 +38,11 @@ typeof(PurchaseOrderCreateModel).FullName
 
             <abp-form-content />
             <div class="mb-3">
+                <label>选择供应商</label>
+                @await Component.InvokeAsync(typeof(SupplierSelectWidget),new SupplierSelectWidgetModel(){
+                Id="SupplierId", InputName="SupplierId" })
+            </div>
+            <div class="mb-3">
                 <label>选择产品</label>
                 <input type="text" id="tbProductCode" class="form-control"></input>
             </div>
