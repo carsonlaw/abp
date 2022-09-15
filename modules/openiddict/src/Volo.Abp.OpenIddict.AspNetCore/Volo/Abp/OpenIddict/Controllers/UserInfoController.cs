@@ -11,13 +11,15 @@ using Volo.Abp.Security.Claims;
 namespace Volo.Abp.OpenIddict.Controllers;
 
 [Route("connect/userinfo")]
+[IgnoreAntiforgeryToken]
 [Authorize(AuthenticationSchemes = OpenIddictServerAspNetCoreDefaults.AuthenticationScheme)]
+[ApiExplorerSettings(IgnoreApi = true)]
 public class UserInfoController : AbpOpenIdDictControllerBase
 {
     [HttpGet]
     [HttpPost]
     [Produces("application/json")]
-    public async Task<IActionResult> Userinfo()
+    public virtual async Task<IActionResult> Userinfo()
     {
         var user = await UserManager.GetUserAsync(User);
         if (user == null)
@@ -40,7 +42,7 @@ public class UserInfoController : AbpOpenIdDictControllerBase
         if (User.HasScope(OpenIddictConstants.Scopes.Profile))
         {
             claims[AbpClaimTypes.TenantId] = user.TenantId;
-            claims[OpenIddictConstants.Claims.Name] = user.UserName;
+            claims[OpenIddictConstants.Claims.PreferredUsername] = user.UserName;
             claims[OpenIddictConstants.Claims.FamilyName] = user.Surname;
         }
 

@@ -667,7 +667,12 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsActive")
+<<<<<<< HEAD
                         .HasColumnType("boolean");
+=======
+                        .HasColumnType("bit")
+                        .HasColumnName("IsActive");
+>>>>>>> 902c761f1340371e2678d99d596ff431cdebb0a4
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -1882,6 +1887,10 @@ namespace Volo.CmsKit.Migrations
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit")
+                        .HasColumnName("IsActive");
 
                     b.Property<string>("Name")
                         .HasMaxLength(64)

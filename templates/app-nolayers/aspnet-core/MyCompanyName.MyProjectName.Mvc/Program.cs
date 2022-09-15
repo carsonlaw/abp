@@ -1,8 +1,7 @@
-using System;
 using MyCompanyName.MyProjectName.Data;
 using Serilog;
 using Serilog.Events;
-
+using Volo.Abp.Data;
 
 namespace MyCompanyName.MyProjectName;
 
@@ -31,7 +30,6 @@ public class Program
         {
             loggerConfiguration.MinimumLevel.Override("Volo.Abp", LogEventLevel.Warning);
             loggerConfiguration.MinimumLevel.Override("Microsoft", LogEventLevel.Warning);
-            loggerConfiguration.MinimumLevel.Override("IdentityServer4.Startup", LogEventLevel.Warning);
         }
 
         Log.Logger = loggerConfiguration.CreateLogger();
@@ -43,6 +41,10 @@ public class Program
                 .UseAutofac()
                 .UseSerilog();
             await builder.AddApplicationAsync<MyProjectNameModule>();
+            if (IsMigrateDatabase(args))
+            {
+                builder.Services.AddDataMigrationEnvironment();
+            }
             var app = builder.Build();
             await app.InitializeApplicationAsync();
 
