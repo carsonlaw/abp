@@ -56,22 +56,22 @@ $(function () {
                 }
             },
             {
-                title: l("orderNo"),
+                title: l("OrderNo"),
                 orderable: true,
                 data: "orderNo"
             },
             {
-                title: l("description"),
+                title: l("Description"),
                 orderable: true,
                 data: "description"
             },
             {
-                title: l("orderTime"),
+                title: l("OrderTime"),
                 orderable: true,
                 data: "orderTime"
             },
             {
-                title: l("price"),
+                title: l("OrderPrice"),
                 orderable: true,
                 data: "price"
             },

@@ -44,6 +44,7 @@ public class PurchaseOrderCreateModel : FreeERPPageModel
         [DynamicMaxLength(typeof(PurchaseOrderConsts), nameof(PurchaseOrderConsts.MaxOrderNoLength))]
         public virtual string OrderNo { get; set; }
         [Required]
+        [DataType(DataType.Date)]
         public virtual DateTime OrderTime { get; set; }
 
         [DynamicFormIgnore]
