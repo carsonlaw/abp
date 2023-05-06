@@ -22,7 +22,7 @@ namespace FreeERP.Products
 
         private ProductUnit()
         { }
-        protected internal ProductUnit(
+        public ProductUnit(
             Guid id,
             string name,
             string description,

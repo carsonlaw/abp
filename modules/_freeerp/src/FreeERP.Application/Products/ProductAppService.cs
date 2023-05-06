@@ -88,8 +88,8 @@ namespace FreeERP.Products
             var query = await _repository.WithDetailsAsync();
             query = query.Where(f => f.Code == code);
             List<ProductSKU> skus;
-            var categories = await _categoryService.GetAllListFromCache();
-            var units = await _productUnitService.GetAllListFromCache();
+            var categories = await _categoryService.GetListAsync(new CategoryGetListInput() { });
+            var units = await _productUnitService.GetListAsync(new ProductUnitGetListInput() { });
             var entity = await AsyncExecuter.SingleOrDefaultAsync(query);
             if (entity == null)
             {
@@ -108,8 +108,8 @@ namespace FreeERP.Products
             var dto = ObjectMapper.Map<Product, ProductDto>(entity);
             if (dto != null)
             {
-                dto.CategoryName = categories.FirstOrDefault(f => f.Id == dto.CategoryId)?.Name;
-                dto.UnitName = units.FirstOrDefault(f => f.Id == dto.UnitId)?.Name;
+                dto.CategoryName = categories.Items.FirstOrDefault(f => f.Id == dto.CategoryId)?.Name;
+                dto.UnitName = units.Items.FirstOrDefault(f => f.Id == dto.UnitId)?.Name;
                 dto.Items = ObjectMapper.Map<List<ProductSKU>, List<ProductSKUDto>>(skus);
             }
             return dto;
@@ -130,8 +130,8 @@ namespace FreeERP.Products
             query = query.PageBy(input);
             var entities = await AsyncExecuter.ToListAsync(query);
 
-            var categories = await _categoryService.GetAllListFromCache();
-            var units = await _productUnitService.GetAllListFromCache();
+            var categories = await _categoryService.GetListAsync(new CategoryGetListInput() { });
+            var units = await _productUnitService.GetListAsync(new ProductUnitGetListInput() { });
             var items = await _skuRepository.GetListByProductIdsAsync(entities.Select(f => f.Id));
 
             var entityDtos = new List<ProductDto>();
@@ -139,8 +139,8 @@ namespace FreeERP.Products
             foreach (var entity in entities)
             {
                 var dto = ObjectMapper.Map<Product, ProductDto>(entity);
-                dto.CategoryName = categories.FirstOrDefault(f => f.Id == dto.CategoryId)?.Name;
-                dto.UnitName = units.FirstOrDefault(f => f.Id == dto.UnitId)?.Name;
+                dto.CategoryName = categories.Items.FirstOrDefault(f => f.Id == dto.CategoryId)?.Name;
+                dto.UnitName = units.Items.FirstOrDefault(f => f.Id == dto.UnitId)?.Name;
                 entityDtos.Add(dto);
             }
 

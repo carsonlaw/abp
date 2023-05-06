@@ -8,8 +8,10 @@ using FreeERP;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
+using System.Text.Json.Serialization;
 
 namespace FreeERP.Stories;
+
 
 public class Store : FullAuditedAggregateRoot<Guid>, IMultiTenant
 {

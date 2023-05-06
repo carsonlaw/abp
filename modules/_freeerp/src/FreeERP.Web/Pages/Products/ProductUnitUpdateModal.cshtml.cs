@@ -30,7 +30,7 @@ public class ProductUnitUpdateModalModel : FreeERPPageModel
         var category = await ProductUnitAppService.GetAsync(Id);
 
         ViewModel = ObjectMapper.Map<ProductUnitDto, ProductUnitUpdateViewModel>(category);
-        ViewModel.Pid = category.SmallerUnit?.Id;
+        ViewModel.Pid = category.SmallerUnitId;
     }
 
     public async Task<IActionResult> OnPostAsync()

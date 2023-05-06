@@ -64,47 +64,26 @@ namespace FreeERP.Stories
 
         public async Task<IList<StoreSelectDto>> GetSelectData()
         {
-            return (await GetAllListFromCache()).Select(f=>new StoreSelectDto(){
-                Id = f.Id,                
+            var input = new StoreGetListInput() { };
+            var list = await CreateFilteredQueryAsync(input);
+
+            return list.Select(f => new StoreSelectDto()
+            {
+                Id = f.Id,
                 Name = f.Name
             }).ToList();
-        }
-
-        public override async Task<PagedResultDto<StoreDto>> GetListAsync(StoreGetListInput input)
-        {
-            var list = (await GetAllListFromCache()).AsQueryable();
-            var length = list.Count();
-            list = list.WhereIf(!string.IsNullOrWhiteSpace(input.Filter), f => f.Name.Contains(input.Filter));
-            if (string.IsNullOrEmpty(input.Sorting))
-                list = list.OrderBy(f => f.Sort);
-            else
-                list = list.OrderBy(input.Sorting);
-            list = list.Skip(input.SkipCount).Take(input.MaxResultCount);
-            return new PagedResultDto<StoreDto>(length, list.ToList());
         }
 
 
         protected override async Task<IQueryable<Store>> CreateFilteredQueryAsync(StoreGetListInput input)
         {
-            var ret = await base.CreateFilteredQueryAsync(input);
-            ret = ret.WhereIf(!string.IsNullOrWhiteSpace(input.Filter), f => f.Name.Contains(input.Filter));
-
-            return ret;
-        }
-
-        public async Task<IList<StoreDto>> GetAllListFromCache()
-        {
-            return await _cache.GetOrAddAsync(
+            var list = await _cache.GetOrAddAsync(
                 FreeERPDomainCacheKeys.Store.AllList,
                 async () =>
                 {
                     Logger.Log(LogLevel.Debug, $"no cache key '{FreeERPDomainCacheKeys.Store.AllList}'");
-                    var input = new StoreGetListInput()
-                    {
-                    };
 
-                    var query = await CreateFilteredQueryAsync(input);
-                    query = ApplyDefaultSorting(query);
+                    var query = await base.CreateFilteredQueryAsync(new StoreGetListInput() { });
                     return await MapToGetListOutputDtosAsync(query.ToList());
                 },
                 () => new DistributedCacheEntryOptions
@@ -112,8 +91,13 @@ namespace FreeERP.Stories
                     AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(FreeERPDomainCacheKeys.Store.AllListMin)
                 }
             );
+            var query = ObjectMapper.Map<IList<StoreDto>, IList<Store>>(list).AsQueryable();
 
+            query = query.WhereIf(!string.IsNullOrWhiteSpace(input.Filter), f => f.Name.Contains(input.Filter));
+
+            return query;
         }
+
 
 
 

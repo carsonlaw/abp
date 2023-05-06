@@ -64,27 +64,13 @@ namespace FreeERP.Products
 
         protected override async Task<IQueryable<ProductUnit>> CreateFilteredQueryAsync(ProductUnitGetListInput input)
         {
-            var ret = await base.CreateFilteredQueryAsync(input);
-            ret = ret.WhereIf(!string.IsNullOrWhiteSpace(input.Filter), f => f.Name.Contains(input.Filter));
-            ret = ret.WhereIf(input.Pid != null || !input.PidNullIsAll, f => f.SmallerUnit.Id == input.Pid);
-
-            return ret;
-        }
-
-        public async Task<IList<ProductUnitDto>> GetAllListFromCache()
-        {
-            return await _cache.GetOrAddAsync(
+            var list = await _cache.GetOrAddAsync(
                 FreeERPDomainCacheKeys.ProductUnit.AllList,
                 async () =>
                 {
                     Logger.Log(LogLevel.Debug, $"no cache key '{FreeERPDomainCacheKeys.ProductUnit.AllList}'");
-                    var input = new ProductUnitGetListInput()
-                    {
-                        PidNullIsAll = true,
-                    };
 
-                    var query = await CreateFilteredQueryAsync(input);
-                    query = ApplyDefaultSorting(query);
+                    var query = await base.CreateFilteredQueryAsync(new ProductUnitGetListInput() { });
                     return await MapToGetListOutputDtosAsync(query.ToList());
                 },
                 () => new DistributedCacheEntryOptions
@@ -92,19 +78,24 @@ namespace FreeERP.Products
                     AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(FreeERPDomainCacheKeys.ProductUnit.AllListMin)
                 }
             );
+            var ret = ObjectMapper.Map<IList<ProductUnitDto>, IList<ProductUnit>>(list).AsQueryable();
+            ret = ret.WhereIf(!string.IsNullOrWhiteSpace(input.Filter), f => f.Name.Contains(input.Filter));
+            ret = ret.WhereIf(input.Pid != null || !input.PidNullIsAll, f => f.SmallerUnit == null || f.SmallerUnit.Id == input.Pid);
 
+            return ret;
         }
+
 
         public async Task<IList<ProductUnitDto>> GetUnitTree()
         {
-            var list = await GetAllListFromCache();
-            return await buildTree(list, null);
+            var list = await base.GetListAsync(new ProductUnitGetListInput() { });
+            return await buildTree(list.Items.ToList(), null);
 
         }
 
         private async Task<IList<ProductUnitDto>> buildTree(IList<ProductUnitDto> query, Guid? pid)
         {
-            var list = (query.Where(f => (pid == null && f.SmallerUnit == null) || (f.SmallerUnit != null && f.SmallerUnit.Id == pid))
+            var list = (query.Where(f => (pid == null && f.SmallerUnitId == null) || (f.SmallerUnitId != null && f.SmallerUnitId == pid))
                 .ToList()
             );
 

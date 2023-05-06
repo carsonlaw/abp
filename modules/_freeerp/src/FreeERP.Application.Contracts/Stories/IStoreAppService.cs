@@ -9,8 +9,6 @@ namespace FreeERP.Stories
 {
     public interface IStoreAppService : ICrudAppService<StoreDto, Guid, StoreGetListInput, StoreCreateUpdateDto, StoreCreateUpdateDto>
     {
-
-        Task<IList<StoreDto>> GetAllListFromCache();
         Task<IList<StoreSelectDto>> GetSelectData();
     }
 }
