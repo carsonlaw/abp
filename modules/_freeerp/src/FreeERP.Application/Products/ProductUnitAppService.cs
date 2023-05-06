@@ -80,7 +80,7 @@ namespace FreeERP.Products
             );
             var ret = ObjectMapper.Map<IList<ProductUnitDto>, IList<ProductUnit>>(list).AsQueryable();
             ret = ret.WhereIf(!string.IsNullOrWhiteSpace(input.Filter), f => f.Name.Contains(input.Filter));
-            ret = ret.WhereIf(input.Pid != null || !input.PidNullIsAll, f => f.SmallerUnit != null && f.SmallerUnit.Id == input.Pid);
+            ret = ret.WhereIf(input.Pid != null || !input.PidNullIsAll, f => (input.Pid == null && f.SmallerUnit == null) || (f.SmallerUnit != null && f.SmallerUnit.Id == input.Pid));
 
             return ret;
         }
@@ -88,7 +88,7 @@ namespace FreeERP.Products
 
         public async Task<IList<ProductUnitDto>> GetUnitTree()
         {
-            var list = await base.GetListAsync(new ProductUnitGetListInput() { });
+            var list = await base.GetListAsync(new ProductUnitGetListInput() { PidNullIsAll = true });
             return await buildTree(list.Items.ToList(), null);
 
         }
