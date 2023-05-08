@@ -56,31 +56,11 @@ namespace FreeERP.Products
             await base.DeleteAsync(id);
         }
 
-        public async Task<IList<CategoryDto>> GetAllListFromCache()
-        {
-            return await _cache.GetOrAddAsync(FreeERPDomainCacheKeys.Category.AllList,
-                        async () =>
-                        {
-                            Logger.Log(LogLevel.Debug, $"no cache key '{FreeERPDomainCacheKeys.Category.AllList}'");
-                            var input = new CategoryGetListInput()
-                            {
-                                PidNullIsAll = true,
-                            };
-                            var query = await CreateFilteredQueryAsync(input);
-                            query = ApplyDefaultSorting(query);
-                            return await MapToGetListOutputDtosAsync(query.ToList());
-                        },
-                        () => new DistributedCacheEntryOptions
-                        {
-                            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(FreeERPDomainCacheKeys.Category.AllListMin)
-                        }
-                        );
-        }
 
         public async Task<IList<CategoryDto>> GetCategoryTree()
         {
-            var list = await GetAllListFromCache();
-            return await buildTree(list, null);
+            var list = await base.GetListAsync(new CategoryGetListInput() { PidNullIsAll = true });
+            return await buildTree(list.Items.ToList(), null);
         }
 
         [Authorize(FreeERPPermissions.Categories.Create)]
@@ -107,7 +87,23 @@ namespace FreeERP.Products
         }
         protected override async Task<IQueryable<Category>> CreateFilteredQueryAsync(CategoryGetListInput input)
         {
-            var ret = await base.CreateFilteredQueryAsync(input);
+            var list = await _cache.GetOrAddAsync(FreeERPDomainCacheKeys.Category.AllList,
+                        async () =>
+                        {
+                            Logger.Log(LogLevel.Debug, $"no cache key '{FreeERPDomainCacheKeys.Category.AllList}'");
+
+                            var query = await base.CreateFilteredQueryAsync(new CategoryGetListInput()
+                            {
+                                PidNullIsAll = true,
+                            });
+                            return await MapToGetListOutputDtosAsync(query.ToList());
+                        },
+                        () => new DistributedCacheEntryOptions
+                        {
+                            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(FreeERPDomainCacheKeys.Category.AllListMin)
+                        }
+                        );
+            var ret = ObjectMapper.Map<IList<CategoryDto>, IList<Category>>(list).AsQueryable();
             ret = ret.WhereIf(!string.IsNullOrWhiteSpace(input.Filter), f => f.Name.Contains(input.Filter));
             ret = ret.WhereIf(input.Pid != null || !input.PidNullIsAll, f => f.Pid == input.Pid);
             return ret;
