@@ -37,6 +37,16 @@ public class AbpSelectTagHelper : AbpTagHelper<AbpSelectTagHelper, AbpSelectTagH
     public string AutocompleteSelectedItemName { get; set; }
 
     public string AutocompleteSelectedItemValue { get; set; }
+    
+    public string AutocompleteParentSelector { get; set; }
+
+    public string AllowClear { get; set; }
+
+    public string Placeholder { get; set; }
+
+    [HtmlAttributeName("floating-label")]
+
+    public bool FloatingLabel { get; set; }
 
     public AbpSelectTagHelper(AbpSelectTagHelperService tagHelperService)
         : base(tagHelperService)

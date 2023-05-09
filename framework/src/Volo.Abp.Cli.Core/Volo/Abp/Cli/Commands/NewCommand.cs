@@ -40,7 +40,8 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         ILocalEventBus eventBus, 
         IBundlingService bundlingService,
         ITemplateInfoProvider templateInfoProvider, 
-        TemplateProjectBuilder templateProjectBuilder) :
+        TemplateProjectBuilder templateProjectBuilder,
+        AngularThemeConfigurer angularThemeConfigurer) :
         base(connectionStringProvider,
             solutionPackageVersionFinder, 
             cmdHelper, 
@@ -50,7 +51,8 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
             initialMigrationCreator,
             themePackageAdder, 
             eventBus, 
-            bundlingService)
+            bundlingService,
+            angularThemeConfigurer)
     {
         TemplateInfoProvider = templateInfoProvider;
         TemplateProjectBuilder = templateProjectBuilder;
@@ -103,9 +105,14 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         if (!skipInstallLibs)
         {
             await RunInstallLibsForWebTemplateAsync(projectArgs);
+            ConfigureAngularJsonForThemeSelection(projectArgs);
         }
         
-        await RunBundleForBlazorWasmTemplateAsync(projectArgs);
+        var skipBundling = commandLineArgs.Options.ContainsKey(Options.SkipBundling.Long) || commandLineArgs.Options.ContainsKey(Options.SkipBundling.Short);
+        if (!skipBundling)
+        {
+            await RunBundleForBlazorWasmOrMauiBlazorTemplateAsync(projectArgs);
+        }
             
         await ConfigurePwaSupportForAngular(projectArgs);
 
@@ -140,6 +147,8 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         sb.AppendLine("--no-random-port                            (Use template's default ports)");
         sb.AppendLine("--separate-auth-server                      (if supported by the template)");
         sb.AppendLine("--local-framework-ref --abp-path <your-local-abp-repo-path>  (keeps local references to projects instead of replacing with NuGet package references)");
+        sb.AppendLine("-sib|--skip-installing-libs                      (Doesn't run `abp install-libs` command after project creation)");
+        sb.AppendLine("-sb|--skip-bundling                             (Doesn't run `abp bundle` command after Blazor Wasm project creation)");
         sb.AppendLine("");
         sb.AppendLine("Examples:");
         sb.AppendLine("");

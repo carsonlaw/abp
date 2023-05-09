@@ -6,7 +6,6 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Features;
-using Volo.Abp.Localization;
 
 namespace Volo.Abp.FeatureManagement;
 
@@ -134,5 +133,10 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
         }
 
         await AuthorizationService.CheckAsync(policyName);
+    }
+
+    public virtual async Task DeleteAsync([NotNull] string providerName, string providerKey)
+    {
+        await FeatureManager.DeleteAsync(providerName, providerKey);
     }
 }

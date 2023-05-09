@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Localization;
@@ -19,6 +20,7 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
     private Dictionary<string, ILocalizationDictionary> _dictionaries;
     private bool _subscribedForChanges;
     private readonly object _syncObj = new object();
+    private LocalizationResourceBase _resource;
 
     protected VirtualFileLocalizationResourceContributorBase(string virtualPath)
     {
@@ -27,6 +29,7 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
 
     public virtual void Initialize(LocalizationResourceInitializationContext context)
     {
+        _resource = context.Resource;
         _virtualFileProvider = context.ServiceProvider.GetRequiredService<IVirtualFileProvider>();
     }
 
@@ -96,9 +99,15 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
             }
 
             var dictionary = CreateDictionaryFromFile(file);
+
+            if (dictionary == null)
+            {
+                continue;
+            }
+            
             if (dictionaries.ContainsKey(dictionary.CultureName))
             {
-                throw new AbpException($"{file.GetVirtualOrPhysicalPathOrNull()} dictionary has a culture name '{dictionary.CultureName}' which is already defined!");
+                throw new AbpException($"{file.GetVirtualOrPhysicalPathOrNull()} dictionary has a culture name '{dictionary.CultureName}' which is already defined! Localization resource: {_resource.ResourceName}");
             }
 
             dictionaries[dictionary.CultureName] = dictionary;
@@ -109,6 +118,7 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
 
     protected abstract bool CanParseFile(IFileInfo file);
 
+    [CanBeNull]
     protected virtual ILocalizationDictionary CreateDictionaryFromFile(IFileInfo file)
     {
         using (var stream = file.CreateReadStream())
@@ -117,5 +127,6 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
         }
     }
 
+    [CanBeNull] 
     protected abstract ILocalizationDictionary CreateDictionaryFromFileContent(string fileContent);
 }

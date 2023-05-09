@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Volo.Abp.Auditing;
@@ -37,7 +38,7 @@ public class AbpAuditingOptions
     /// Default: true.
     /// </summary>
     public bool AlwaysLogOnException { get; set; }
-    
+
     /// <summary>
     /// Disables/enables audit logging for integration services.
     /// Default: false.
@@ -58,6 +59,11 @@ public class AbpAuditingOptions
     /// </summary>
     public bool IsEnabledForGetRequests { get; set; }
 
+    /// <summary>
+    /// Default: false.
+    /// </summary>
+    public bool DisableLogActionInfo { get; set; }
+
     public AbpAuditingOptions()
     {
         IsEnabled = true;
@@ -71,7 +77,8 @@ public class AbpAuditingOptions
         IgnoredTypes = new List<Type>
             {
                 typeof(Stream),
-                typeof(Expression)
+                typeof(Expression),
+                typeof(CancellationToken)
             };
 
         EntityHistorySelectors = new EntityHistorySelectorList();

@@ -1,0 +1,13 @@
+{
+  "ConnectionStrings": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+    "Default": "Host=localhost;Port=5432;Database=cmskit;User ID=postgres;Password=123456;"
+=======
+    "Default": "Server=(localdb)\\MSSQLLocalDB;Database=CmsKit_Unified;Trusted_Connection=True"
+>>>>>>> 902c761f1340371e2678d99d596ff431cdebb0a4
+=======
+    "Default": "Server=(localdb)\\MSSQLLocalDB;Database=CmsKit_Unified;Trusted_Connection=True;TrustServerCertificate=True"
+>>>>>>> ab33c31e6f24edabd22dca714546d778338f1d7a
+  }
+}

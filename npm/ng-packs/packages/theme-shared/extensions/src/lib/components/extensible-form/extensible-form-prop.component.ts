@@ -1,4 +1,4 @@
-import { EXTENSIONS_FORM_PROP_DATA, EXTENSIONS_FORM_PROP } from './../../tokens/extensions.token';
+import { EXTENSIONS_FORM_PROP, EXTENSIONS_FORM_PROP_DATA } from './../../tokens/extensions.token';
 import { ABP, AbpValidators, ConfigStateService, TrackByService } from '@abp/ng.core';
 import {
   AfterViewInit,
@@ -16,8 +16,8 @@ import {
 } from '@angular/core';
 import {
   ControlContainer,
-  FormGroup,
   FormGroupDirective,
+  UntypedFormGroup,
   ValidatorFn,
   Validators,
 } from '@angular/forms';
@@ -32,6 +32,7 @@ import { FormProp } from '../../models/form-props';
 import { PropData } from '../../models/props';
 import { selfFactory } from '../../utils/factory.util';
 import { addTypeaheadTextSuffix } from '../../utils/typeahead.util';
+import { eThemeSharedComponents } from '../../enums/components';
 
 @Component({
   selector: 'abp-extensible-form-prop',
@@ -56,9 +57,11 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   @ViewChild('field') private fieldRef!: ElementRef<HTMLElement>;
 
-  public injectorForCustomComponent: Injector;
+  public injectorForCustomComponent?: Injector;
 
   asterisk = '';
+
+  containerClassName = 'mb-3';
 
   options$: Observable<ABP.Option<any>[]> = of([]);
 
@@ -68,7 +71,9 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   typeaheadModel: any;
 
-  private readonly form: FormGroup;
+  passwordKey = eThemeSharedComponents.PasswordComponent;
+
+  private readonly form: UntypedFormGroup;
 
   disabledFn = (data: PropData) => false;
 
@@ -90,7 +95,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
       ? text$.pipe(
           debounceTime(300),
           distinctUntilChanged(),
-          switchMap(text => this.prop.options(this.data, text)),
+          switchMap(text => this.prop?.options?.(this.data, text) || of([])),
         )
       : of([]);
 
@@ -104,7 +109,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   get isInvalid() {
     const control = this.form.get(this.prop.name);
-    return control.touched && control.invalid;
+    return control?.touched && control.invalid;
   }
 
   constructor(
@@ -134,6 +139,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   ngAfterViewInit() {
     if (this.first && this.fieldRef) {
       this.fieldRef.nativeElement.focus();
+      this.cdRef.detectChanges();
     }
   }
 
@@ -158,6 +164,8 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
         return 'time';
       case ePropType.Typeahead:
         return 'typeahead';
+      case ePropType.PasswordInputGroup:
+        return 'passwordinputgroup';
       default:
         return prop.options ? 'select' : 'input';
     }
@@ -176,6 +184,8 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
         return 'email';
       case ePropType.Password:
         return 'password';
+      case ePropType.PasswordInputGroup:
+        return 'passwordinputgroup';
       default:
         return 'hidden';
     }
@@ -183,7 +193,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   ngOnChanges({ prop, data }: SimpleChanges) {
     const currentProp = prop?.currentValue as FormProp;
-    const { options, readonly, disabled, validators, template } = currentProp || {};
+    const { options, readonly, disabled, validators, className, template } = currentProp || {};
     if (template) {
       this.injectorForCustomComponent = Injector.create({
         providers: [
@@ -210,6 +220,9 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
     if (validators) {
       this.validators = validators(this.data);
       this.setAsterisk();
+    }
+    if (className !== undefined) {
+      this.containerClassName = className;
     }
 
     const [keyControl, valueControl] = this.getTypeaheadControls();

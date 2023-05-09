@@ -106,7 +106,10 @@ var abp = abp || {};
         var value = resource.texts[key];
         if (value === undefined) {            
             for (var i = 0; i < resource.baseResources.length; i++){
-                var result = abp.localization.internal.localize(key, resource.baseResources[i]);
+                var basedArguments = Array.prototype.slice.call(arguments, 0);
+                basedArguments[1] = resource.baseResources[i];
+
+                var result = abp.localization.internal.localize.apply(this, basedArguments);
                 if (result.found){
                     return result;
                 }
@@ -132,14 +135,20 @@ var abp = abp || {};
         if (sourceName === '_') { //A convention to suppress the localization
             return key;
         }
+        
+        if (sourceName) {
+            return abp.localization.internal.localize.apply(this, arguments).value;
+        }
 
-        sourceName = sourceName || abp.localization.defaultResourceName;
-        if (!sourceName) {
+        if (!abp.localization.defaultResourceName) {
             abp.log.warn('Localization source name is not specified and the defaultResourceName was not defined!');
             return key;
         }
 
-        return abp.localization.internal.localize(key, sourceName).value;
+        var copiedArguments = Array.prototype.slice.call(arguments, 0);
+        copiedArguments.splice(1, 1, abp.localization.defaultResourceName);
+
+        return abp.localization.internal.localize.apply(this, copiedArguments).value;
     };
 
     abp.localization.isLocalized = function (key, sourceName) {
@@ -201,12 +210,10 @@ var abp = abp || {};
 
     abp.auth = abp.auth || {};
 
-    abp.auth.policies = abp.auth.policies || {};
-
     abp.auth.grantedPolicies = abp.auth.grantedPolicies || {};
 
     abp.auth.isGranted = function (policyName) {
-        return abp.auth.policies[policyName] != undefined && abp.auth.grantedPolicies[policyName] != undefined;
+        return abp.auth.grantedPolicies[policyName] != undefined;
     };
 
     abp.auth.isAnyGranted = function () {

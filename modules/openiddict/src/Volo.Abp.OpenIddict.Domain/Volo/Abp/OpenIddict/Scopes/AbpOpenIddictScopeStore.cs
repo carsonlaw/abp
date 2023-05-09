@@ -7,7 +7,9 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using OpenIddict.Abstractions;
+using Volo.Abp.Data;
 using Volo.Abp.Guids;
 using Volo.Abp.Uow;
 
@@ -18,8 +20,9 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
     public AbpOpenIddictScopeStore(
         IOpenIddictScopeRepository repository,
         IUnitOfWorkManager unitOfWorkManager,
-        IGuidGenerator guidGenerator)
-        : base(repository, unitOfWorkManager, guidGenerator)
+        IGuidGenerator guidGenerator,
+        AbpOpenIddictIdentifierConverter identifierConverter)
+        : base(repository, unitOfWorkManager, guidGenerator, identifierConverter)
     {
 
     }
@@ -47,7 +50,15 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
    {
        Check.NotNull(scope, nameof(scope));
 
-       await Repository.DeleteAsync(scope.Id, autoSave: true, cancellationToken: cancellationToken);
+       try
+       {
+           await Repository.DeleteAsync(scope.Id, autoSave: true, cancellationToken: cancellationToken);
+       }
+       catch (AbpDbConcurrencyException e)
+       {
+           Logger.LogException(e);
+           throw new OpenIddictExceptions.ConcurrencyException(e.Message, e.InnerException);
+       }
    }
 
    public virtual async ValueTask<OpenIddictScopeModel> FindByIdAsync(string identifier, CancellationToken cancellationToken)
@@ -384,7 +395,15 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
 
         var entity = await Repository.GetAsync(scope.Id, cancellationToken: cancellationToken);
 
-        await Repository.UpdateAsync(scope.ToEntity(entity), autoSave: true, cancellationToken: cancellationToken);
+        try
+        {
+            await Repository.UpdateAsync(scope.ToEntity(entity), autoSave: true, cancellationToken: cancellationToken);
+        }
+        catch (AbpDbConcurrencyException e)
+        {
+            Logger.LogException(e);
+            throw new OpenIddictExceptions.ConcurrencyException(e.Message, e.InnerException);
+        }
 
         scope = (await Repository.FindAsync(entity.Id, cancellationToken: cancellationToken)).ToModel();
     }

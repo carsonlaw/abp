@@ -1,6 +1,6 @@
 # ABP Framework
 
-![build and test](https://img.shields.io/github/workflow/status/abpframework/abp/build%20and%20test/dev?style=flat-square)
+![build and test](https://img.shields.io/github/actions/workflow/status/abpframework/abp/build-and-test.yml?branch=dev&style=flat-square)
 [![codecov](https://codecov.io/gh/abpframework/abp/branch/dev/graph/badge.svg?token=jUKLCxa6HF)](https://codecov.io/gh/abpframework/abp)
 [![NuGet](https://img.shields.io/nuget/v/Volo.Abp.Core.svg?style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core)
 [![NuGet (with prereleases)](https://img.shields.io/nuget/vpre/Volo.Abp.Core.svg?style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core)
@@ -9,7 +9,7 @@
 
 [![ABP Discord server](https://img.shields.io/discord/951497912645476422?label=Discord)](https://discord.gg/abp)
 
-ABP Framework is a complete **infrastructure** based on the **ASP.NET Core** to create **modern web applications** and **APIs** by following the software development **best practices** and the **latest technologies**. Check out https://abp.io
+ABP Framework is a complete **infrastructure** based on **ASP.NET Core** to create **modern web applications** and **APIs** by following the software development **best practices** and the **latest technologies**. Check out https://abp.io
 
 ## Getting Started
 
@@ -49,7 +49,7 @@ ABP provides a **full stack developer experience**.
 
 <img src="docs/en/images/ddd-microservice-simple.png">
 
-ABP offers a complete, **modular** and **layered** software architecture based on **[Domain Driven Design](https://docs.abp.io/en/abp/latest/Domain-Driven-Design)** principles and patterns. It also provides the necessary infrastructure and guiding to [implement this architecture](https://docs.abp.io/en/abp/latest/Domain-Driven-Design-Implementation-Guide).
+ABP offers a complete, **modular** and **layered** software architecture based on **[Domain Driven Design](https://docs.abp.io/en/abp/latest/Domain-Driven-Design)** principles and patterns. It also provides the necessary infrastructure and guidance to [implement this architecture](https://docs.abp.io/en/abp/latest/Domain-Driven-Design-Implementation-Guide).
 
 ABP Framework is suitable for **[microservice solutions](https://docs.abp.io/en/abp/latest/Microservice-Architecture)** as well as monolithic applications.
 

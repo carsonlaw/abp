@@ -227,6 +227,11 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
         ChangeTracker.Tracked += ChangeTracker_Tracked;
         ChangeTracker.StateChanged += ChangeTracker_StateChanged;
+
+        if (UnitOfWorkManager is AlwaysDisableTransactionsUnitOfWorkManager)
+        {
+            Database.AutoTransactionBehavior = AutoTransactionBehavior.Never;
+        }
     }
 
     protected virtual void ChangeTracker_Tracked(object sender, EntityTrackedEventArgs e)
@@ -459,6 +464,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
     {
         if (entry.State == EntityState.Modified && entry.Properties.Any(x => x.IsModified && x.Metadata.ValueGenerated == ValueGenerated.Never))
         {
+            IncrementEntityVersionProperty(entry);
             SetModificationAuditProperties(entry);
 
             if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
@@ -574,6 +580,11 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         AuditPropertySetter?.SetDeletionProperties(entry.Entity);
     }
 
+    protected virtual void IncrementEntityVersionProperty(EntityEntry entry)
+    {
+        AuditPropertySetter?.IncrementEntityVersionProperty(entry.Entity);
+    }
+
     protected virtual void ConfigureBaseProperties<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
         where TEntity : class
     {
@@ -618,23 +629,19 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 return;
             }
 
-            var dateTimeValueConverter = new AbpDateTimeValueConverter(Clock);
-
-            var dateTimePropertyInfos = typeof(TEntity).GetProperties()
-                .Where(property =>
-                    (property.PropertyType == typeof(DateTime) ||
-                     property.PropertyType == typeof(DateTime?)) &&
-                    property.CanWrite &&
-                    ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableDateTimeNormalizationAttribute>(property) == null
-                ).ToList();
-
-            dateTimePropertyInfos.ForEach(property =>
+            foreach (var property in mutableEntityType.GetProperties().
+                         Where(property => property.PropertyInfo != null &&
+                                           (property.PropertyInfo.PropertyType == typeof(DateTime) || property.PropertyInfo.PropertyType == typeof(DateTime?)) &&
+                                           property.PropertyInfo.CanWrite &&
+                                           ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableDateTimeNormalizationAttribute>(property.PropertyInfo) == null))
             {
-                modelBuilder
+				modelBuilder
                     .Entity<TEntity>()
                     .Property(property.Name)
-                    .HasConversion(dateTimeValueConverter);
-            });
+                    .HasConversion(property.ClrType == typeof(DateTime)
+                        ? new AbpDateTimeValueConverter(Clock)
+                        : new AbpNullableDateTimeValueConverter(Clock));
+            }
         }
     }
 

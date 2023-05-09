@@ -22,11 +22,13 @@ public class StaticFeatureSaver : IStaticFeatureSaver, ITransientDependency
     protected IFeatureDefinitionRecordRepository FeatureRepository { get; }
     protected IFeatureDefinitionSerializer FeatureSerializer { get; }
     protected IDistributedCache Cache { get; }
-    protected IApplicationNameAccessor ApplicationNameAccessor { get; }
+    protected IApplicationInfoAccessor ApplicationInfoAccessor { get; }
     protected IAbpDistributedLock DistributedLock { get; }
     protected AbpFeatureOptions FeatureOptions { get; }
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
     protected AbpDistributedCacheOptions CacheOptions { get; }
+    
+    protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
     public StaticFeatureSaver(
         IStaticFeatureDefinitionStore staticStore,
@@ -35,25 +37,26 @@ public class StaticFeatureSaver : IStaticFeatureSaver, ITransientDependency
         IFeatureDefinitionSerializer featureSerializer,
         IDistributedCache cache,
         IOptions<AbpDistributedCacheOptions> cacheOptions,
-        IApplicationNameAccessor applicationNameAccessor,
+        IApplicationInfoAccessor applicationInfoAccessor,
         IAbpDistributedLock distributedLock,
         IOptions<AbpFeatureOptions> featureManagementOptions,
-        ICancellationTokenProvider cancellationTokenProvider)
+        ICancellationTokenProvider cancellationTokenProvider,
+        IUnitOfWorkManager unitOfWorkManager)
     {
         StaticStore = staticStore;
         FeatureGroupRepository = featureGroupRepository;
         FeatureRepository = featureRepository;
         FeatureSerializer = featureSerializer;
         Cache = cache;
-        ApplicationNameAccessor = applicationNameAccessor;
+        ApplicationInfoAccessor = applicationInfoAccessor;
         DistributedLock = distributedLock;
         CancellationTokenProvider = cancellationTokenProvider;
+        UnitOfWorkManager = unitOfWorkManager;
         FeatureOptions = featureManagementOptions.Value;
         CacheOptions = cacheOptions.Value;
     }
 
-    [UnitOfWork]
-    public virtual async Task SaveAsync()
+    public async Task SaveAsync()
     {
         await using var applicationLockHandle = await DistributedLock.TryAcquireAsync(
             GetApplicationDistributedLockKey()
@@ -99,19 +102,40 @@ public class StaticFeatureSaver : IStaticFeatureSaver, ITransientDependency
                 throw new AbpException("Could not acquire distributed lock for saving static features!");
             }
 
-            var hasChangesInGroups = await UpdateChangedFeatureGroupsAsync(featureGroupRecords);
-            var hasChangesInFeatures = await UpdateChangedFeaturesAsync(featureRecords);
-
-            if (hasChangesInGroups ||hasChangesInFeatures)
+            using (var unitOfWork = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: true))
             {
-                await Cache.SetStringAsync(
-                    GetCommonStampCacheKey(),
-                    Guid.NewGuid().ToString(),
-                    new DistributedCacheEntryOptions {
-                        SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
-                    },
-                    CancellationTokenProvider.Token
-                );
+                try
+                {
+                    var hasChangesInGroups = await UpdateChangedFeatureGroupsAsync(featureGroupRecords);
+                    var hasChangesInFeatures = await UpdateChangedFeaturesAsync(featureRecords);
+
+                    if (hasChangesInGroups ||hasChangesInFeatures)
+                    {
+                        await Cache.SetStringAsync(
+                            GetCommonStampCacheKey(),
+                            Guid.NewGuid().ToString(),
+                            new DistributedCacheEntryOptions {
+                                SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
+                            },
+                            CancellationTokenProvider.Token
+                        );
+                    }
+                }
+                catch
+                {
+                    try
+                    {
+                        await unitOfWork.RollbackAsync();
+                    }
+                    catch
+                    {
+                        /* ignored */
+                    }
+                    
+                    throw;
+                }
+
+                await unitOfWork.CompleteAsync();
             }
         }
 
@@ -249,7 +273,7 @@ public class StaticFeatureSaver : IStaticFeatureSaver, ITransientDependency
 
     private string GetApplicationDistributedLockKey()
     {
-        return $"{CacheOptions.KeyPrefix}_{ApplicationNameAccessor.ApplicationName}_AbpFeatureUpdateLock";
+        return $"{CacheOptions.KeyPrefix}_{ApplicationInfoAccessor.ApplicationName}_AbpFeatureUpdateLock";
     }
 
     private string GetCommonDistributedLockKey()
@@ -259,7 +283,7 @@ public class StaticFeatureSaver : IStaticFeatureSaver, ITransientDependency
 
     private string GetApplicationHashCacheKey()
     {
-        return $"{CacheOptions.KeyPrefix}_{ApplicationNameAccessor.ApplicationName}_AbpFeaturesHash";
+        return $"{CacheOptions.KeyPrefix}_{ApplicationInfoAccessor.ApplicationName}_AbpFeaturesHash";
     }
 
     private string GetCommonStampCacheKey()

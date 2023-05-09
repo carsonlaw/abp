@@ -22,11 +22,13 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
     protected IPermissionDefinitionRecordRepository PermissionRepository { get; }
     protected IPermissionDefinitionSerializer PermissionSerializer { get; }
     protected IDistributedCache Cache { get; }
-    protected IApplicationNameAccessor ApplicationNameAccessor { get; }
+    protected IApplicationInfoAccessor ApplicationInfoAccessor { get; }
     protected IAbpDistributedLock DistributedLock { get; }
     protected AbpPermissionOptions PermissionOptions { get; }
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
     protected AbpDistributedCacheOptions CacheOptions { get; }
+
+    protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
     public StaticPermissionSaver(
         IStaticPermissionDefinitionStore staticStore,
@@ -35,25 +37,26 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         IPermissionDefinitionSerializer permissionSerializer,
         IDistributedCache cache,
         IOptions<AbpDistributedCacheOptions> cacheOptions,
-        IApplicationNameAccessor applicationNameAccessor,
+        IApplicationInfoAccessor applicationInfoAccessor,
         IAbpDistributedLock distributedLock,
         IOptions<AbpPermissionOptions> permissionOptions,
-        ICancellationTokenProvider cancellationTokenProvider)
+        ICancellationTokenProvider cancellationTokenProvider,
+        IUnitOfWorkManager unitOfWorkManager)
     {
+        UnitOfWorkManager = unitOfWorkManager;
         StaticStore = staticStore;
         PermissionGroupRepository = permissionGroupRepository;
         PermissionRepository = permissionRepository;
         PermissionSerializer = permissionSerializer;
         Cache = cache;
-        ApplicationNameAccessor = applicationNameAccessor;
+        ApplicationInfoAccessor = applicationInfoAccessor;
         DistributedLock = distributedLock;
         CancellationTokenProvider = cancellationTokenProvider;
         PermissionOptions = permissionOptions.Value;
         CacheOptions = cacheOptions.Value;
     }
 
-    [UnitOfWork]
-    public virtual async Task SaveAsync()
+    public async Task SaveAsync()
     {
         await using var applicationLockHandle = await DistributedLock.TryAcquireAsync(
             GetApplicationDistributedLockKey()
@@ -99,19 +102,40 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
                 throw new AbpException("Could not acquire distributed lock for saving static permissions!");
             }
 
-            var hasChangesInGroups = await UpdateChangedPermissionGroupsAsync(permissionGroupRecords);
-            var hasChangesInPermissions = await UpdateChangedPermissionsAsync(permissionRecords);
-
-            if (hasChangesInGroups ||hasChangesInPermissions)
+            using (var unitOfWork = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: true))
             {
-                await Cache.SetStringAsync(
-                    GetCommonStampCacheKey(),
-                    Guid.NewGuid().ToString(),
-                    new DistributedCacheEntryOptions {
-                        SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
-                    },
-                    CancellationTokenProvider.Token
-                );
+                try
+                {
+                    var hasChangesInGroups = await UpdateChangedPermissionGroupsAsync(permissionGroupRecords);
+                    var hasChangesInPermissions = await UpdateChangedPermissionsAsync(permissionRecords);
+
+                    if (hasChangesInGroups || hasChangesInPermissions)
+                    {
+                        await Cache.SetStringAsync(
+                            GetCommonStampCacheKey(),
+                            Guid.NewGuid().ToString(),
+                            new DistributedCacheEntryOptions {
+                                SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
+                            },
+                            CancellationTokenProvider.Token
+                        );
+                    }
+                }
+                catch
+                {
+                    try
+                    {
+                        await unitOfWork.RollbackAsync();
+                    }
+                    catch
+                    {
+                        /* ignored */
+                    }
+                    
+                    throw;
+                }
+
+                await unitOfWork.CompleteAsync();
             }
         }
 
@@ -136,7 +160,8 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
 
         foreach (var permissionGroupRecord in permissionGroupRecords)
         {
-            var permissionGroupRecordInDatabase = permissionGroupRecordsInDatabase.GetOrDefault(permissionGroupRecord.Name);
+            var permissionGroupRecordInDatabase =
+                permissionGroupRecordsInDatabase.GetOrDefault(permissionGroupRecord.Name);
             if (permissionGroupRecordInDatabase == null)
             {
                 /* New group */
@@ -249,7 +274,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
 
     private string GetApplicationDistributedLockKey()
     {
-        return $"{CacheOptions.KeyPrefix}_{ApplicationNameAccessor.ApplicationName}_AbpPermissionUpdateLock";
+        return $"{CacheOptions.KeyPrefix}_{ApplicationInfoAccessor.ApplicationName}_AbpPermissionUpdateLock";
     }
 
     private string GetCommonDistributedLockKey()
@@ -259,7 +284,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
 
     private string GetApplicationHashCacheKey()
     {
-        return $"{CacheOptions.KeyPrefix}_{ApplicationNameAccessor.ApplicationName}_AbpPermissionsHash";
+        return $"{CacheOptions.KeyPrefix}_{ApplicationInfoAccessor.ApplicationName}_AbpPermissionsHash";
     }
 
     private string GetCommonStampCacheKey()

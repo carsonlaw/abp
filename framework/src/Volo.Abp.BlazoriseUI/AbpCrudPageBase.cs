@@ -176,6 +176,7 @@ public abstract class AbpCrudPageBase<
 {
     [Inject] protected TAppService AppService { get; set; }
     [Inject] protected IStringLocalizer<AbpUiResource> UiLocalizer { get; set; }
+    [Inject] public IAbpEnumLocalizer AbpEnumLocalizer { get; set; }
 
     protected virtual int PageSize { get; } = LimitedResultRequestDto.DefaultMaxResultCount;
 
@@ -308,7 +309,7 @@ public abstract class AbpCrudPageBase<
     {
         CurrentSorting = e.Columns
             .Where(c => c.SortDirection != SortDirection.Default)
-            .Select(c => c.Field + (c.SortDirection == SortDirection.Descending ? " DESC" : ""))
+            .Select(c => c.SortField + (c.SortDirection == SortDirection.Descending ? " DESC" : ""))
             .JoinAsString(",");
         CurrentPage = e.Page;
 
@@ -607,7 +608,8 @@ public abstract class AbpCrudPageBase<
                     yield return new TableColumn
                     {
                         Title = lookupPropertyDefinition.GetLocalizedDisplayName(StringLocalizerFactory),
-                        Data = $"ExtraProperties[{propertyInfo.Name}]"
+                        Data = $"ExtraProperties[{propertyInfo.Name}]",
+                        PropertyName = propertyInfo.Name
                     };
                 }
                 else
@@ -615,7 +617,8 @@ public abstract class AbpCrudPageBase<
                     var column = new TableColumn
                     {
                         Title = propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory),
-                        Data = $"ExtraProperties[{propertyInfo.Name}]"
+                        Data = $"ExtraProperties[{propertyInfo.Name}]",
+                        PropertyName = propertyInfo.Name
                     };
 
                     if (propertyInfo.IsDate() || propertyInfo.IsDateTime())
@@ -626,7 +629,7 @@ public abstract class AbpCrudPageBase<
                     if (propertyInfo.Type.IsEnum)
                     {
                         column.ValueConverter = (val) =>
-                            EnumHelper.GetLocalizedMemberName(propertyInfo.Type, val.As<ExtensibleObject>().ExtraProperties[propertyInfo.Name], StringLocalizerFactory);
+                            AbpEnumLocalizer.GetString(propertyInfo.Type, val.As<ExtensibleObject>().ExtraProperties[propertyInfo.Name], new IStringLocalizer[]{ StringLocalizerFactory.CreateDefaultOrNull() });
                     }
 
                     yield return column;

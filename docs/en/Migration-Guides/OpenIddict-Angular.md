@@ -16,14 +16,14 @@
 - In **MyApplication.HttpApi.Host.csproj** replace **project references**:
 
   ```csharp
-  <PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="6.0.0-rc.1" />
-  <PackageReference Include="Volo.Abp.Account.Web.IdentityServer" Version="6.0.0-rc.1" />
+  <PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="6.0.*" />
+  <PackageReference Include="Volo.Abp.Account.Web.IdentityServer" Version="6.0.*" />
   ```
 
   with   
 
   ```csharp
-  <PackageReference Include="Volo.Abp.Account.Web.OpenIddict" Version="6.0.0-rc.1" />
+  <PackageReference Include="Volo.Abp.Account.Web.OpenIddict" Version="6.0.*" />
   ```
 
 - In the **MyApplicationHttpApiHostModule.cs** replace usings and **module dependencies**:
@@ -112,18 +112,18 @@
 
 ## IdentityServer
 
-This project is renamed to **AuthServer** after v6.0.0-rc1. You can also refactor and rename your project to *AuthServer* for easier updates in the future.
+This project is renamed to **AuthServer** after v6.0.0. You can also refactor and rename your project to *AuthServer* for easier updates in the future.
 
 - In **MyApplication.IdentityServer.csproj** replace **project references**:
 
   ```csharp
-  <PackageReference Include="Volo.Abp.Account.Web.IdentityServer" Version="6.0.0-rc.1" />
+  <PackageReference Include="Volo.Abp.Account.Web.IdentityServer" Version="6.0.*" />
   ```
 
   with   
 
   ```csharp
-  <PackageReference Include="Volo.Abp.Account.Web.OpenIddict" Version="6.0.0-rc.1" />
+  <PackageReference Include="Volo.Abp.Account.Web.OpenIddict" Version="6.0.*" />
   ```
 
 - In the **MyApplicationIdentityServerModule.cs** replace usings and **module dependencies**:

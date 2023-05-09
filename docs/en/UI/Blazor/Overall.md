@@ -88,13 +88,13 @@ There are a set of standard libraries that comes pre-installed and supported by 
 * [Twitter Bootstrap](https://getbootstrap.com/) as the fundamental HTML/CSS framework.
 * [Blazorise](https://github.com/stsrki/Blazorise) as a component library that supports the Bootstrap and adds extra components like Data Grid and Tree.
 * [FontAwesome](https://fontawesome.com/) as the fundamental CSS font library.
-* [Flag Icon](https://github.com/lipis/flag-icon-css) as a library to show flags of countries.
+* [Flag Icon](https://github.com/lipis/flag-icons) as a library to show flags of countries.
 
 These libraries are selected as the base libraries and available to the applications and modules.
 
 > Bootstrap's JavaScript part is not used since the Blazorise library already provides the necessary functionalities to the Bootstrap components in a native way.
 
-> Beginning from June, 2021, the Blazorise library has dual licenses; open source & commercial. Based on your yearly revenue, you may need to buy a commercial license. See [this post](https://blazorise.com/news/announcing-2022-blazorise-plans-and-pricing-updates) to learn more.
+> Beginning from June, 2021, the Blazorise library has dual licenses; open source & commercial. Based on your yearly revenue, you may need to buy a commercial license. See [this post](https://blazorise.com/news/announcing-2022-blazorise-plans-and-pricing-updates) to learn more. The Blazorise license is bundled with ABP Commercial and commercial customers doesn’t need to buy an extra Blazorise license.
 
 ### The Layout
 

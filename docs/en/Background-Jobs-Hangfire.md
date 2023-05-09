@@ -66,6 +66,8 @@ After you have installed these NuGet packages, you need to configure your projec
   }
 ````
 
+> You have to configure a storage for Hangfire.
+
 2. If you want to use hangfire's dashboard, you can add `UseHangfireDashboard` call in the `OnApplicationInitialization` method in `Module` class
 
 ````csharp
@@ -75,8 +77,8 @@ After you have installed these NuGet packages, you need to configure your projec
             
     // ... others
     
-    app.UseHangfireDashboard();
- 
+    app.UseHangfireDashboard(); //should add to the request pipeline before the app.UseConfiguredEndpoints()
+    app.UseConfiguredEndpoints();
  }
 ````
 

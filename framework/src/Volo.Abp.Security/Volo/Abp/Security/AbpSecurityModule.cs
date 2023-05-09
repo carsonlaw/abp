@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Security.Encryption;
+using Volo.Abp.SecurityLog;
 
 namespace Volo.Abp.Security;
 
@@ -17,6 +18,15 @@ public class AbpSecurityModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        var applicationName = context.Services.GetApplicationName();
+        if (!applicationName.IsNullOrEmpty())
+        {
+            Configure<AbpSecurityLogOptions>(options =>
+            {
+                options.ApplicationName = applicationName;
+            });
+        }
+
         var configuration = context.Services.GetConfiguration();
         context.Services.Configure<AbpStringEncryptionOptions>(options =>
         {
@@ -53,7 +63,7 @@ public class AbpSecurityModule : AbpModule
     {
         var contributorTypes = new List<Type>();
 
-        services.OnRegistred(context =>
+        services.OnRegistered(context =>
         {
             if (typeof(IAbpClaimsPrincipalContributor).IsAssignableFrom(context.ImplementationType))
             {

@@ -38,10 +38,12 @@ using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Json;
+using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
+using Volo.Abp.Validation.Localization;
 
 namespace Volo.Abp.AspNetCore.Mvc;
 
@@ -52,7 +54,8 @@ namespace Volo.Abp.AspNetCore.Mvc;
     typeof(AbpAspNetCoreMvcContractsModule),
     typeof(AbpUiNavigationModule),
     typeof(AbpGlobalFeaturesModule),
-    typeof(AbpDddApplicationModule)
+    typeof(AbpDddApplicationModule),
+    typeof(AbpJsonSystemTextJsonModule)
     )]
 public class AbpAspNetCoreMvcModule : AbpModule
 {
@@ -145,7 +148,7 @@ public class AbpAspNetCoreMvcModule : AbpModule
             mvcCoreBuilder.AddAbpRazorRuntimeCompilation();
         }
 
-        mvcCoreBuilder.AddAbpHybridJson();
+        mvcCoreBuilder.AddAbpJson();
 
         context.Services.ExecutePreConfiguredActions(mvcBuilder);
 
@@ -172,10 +175,17 @@ public class AbpAspNetCoreMvcModule : AbpModule
         context.Services.Replace(ServiceDescriptor.Singleton<IValidationAttributeAdapterProvider, AbpValidationAttributeAdapterProvider>());
         context.Services.AddSingleton<ValidationAttributeAdapterProvider>();
 
-        Configure<MvcOptions>(mvcOptions =>
-        {
-            mvcOptions.AddAbp(context.Services);
-        });
+        context.Services.AddOptions<MvcOptions>()
+            .Configure<IServiceProvider>((mvcOptions, serviceProvider) =>
+            {
+                mvcOptions.AddAbp(context.Services);
+
+                // serviceProvider is root service provider.
+                var stringLocalizer = serviceProvider.GetRequiredService<IStringLocalizer<AbpValidationResource>>();
+                mvcOptions.ModelBindingMessageProvider.SetValueIsInvalidAccessor(_ => stringLocalizer["The value '{0}' is invalid."]);
+                mvcOptions.ModelBindingMessageProvider.SetNonPropertyValueMustBeANumberAccessor(() => stringLocalizer["The field must be a number."]);
+                mvcOptions.ModelBindingMessageProvider.SetValueMustBeANumberAccessor(value => stringLocalizer["The field {0} must be a number.", value]);
+            });
 
         Configure<AbpEndpointRouterOptions>(options =>
         {

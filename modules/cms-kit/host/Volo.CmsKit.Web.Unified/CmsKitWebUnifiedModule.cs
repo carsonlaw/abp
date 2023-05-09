@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -174,6 +175,17 @@ public class CmsKitWebUnifiedModule : AbpModule
         Configure<CmsKitCommentOptions>(options =>
         {
             options.EntityTypes.Add(new CommentEntityTypeDefinition("quote"));
+            options.IsRecaptchaEnabled = true;
+            options.AllowedExternalUrls = new Dictionary<string, List<string>>
+            {
+                {
+                    "quote",
+                    new List<string>
+                    {
+                        "https://abp.io/"
+                    }
+                }
+            };
         });
 
         Configure<CmsKitMediaOptions>(options =>

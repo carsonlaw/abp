@@ -43,7 +43,7 @@
     "Done": "Kész",
     "Open": "Nyisd ki",
     "Closed": "Zárva",
-    "RecentQuestionFrom": "Friss kérdés tőle",
+    "RecentQuestionFrom": "Friss kérdés tőle {0}",
     "Stackoverflow": "Stackoverflow",
     "Votes": "szavazatokat",
     "Answer": "Válasz",
@@ -176,7 +176,7 @@
     "Events_Page_MetaTitle": "ABP közösségi események",
     "Events_Page_MetaDescription": "Az ABP Team által rendezett élő műsorok hétköznapi előadások, tele közösségi tartalommal, demókkal, kérdésekkel és válaszokkal, valamint az ABP-ben zajló eseményekről szóló vitákkal.",
     "Events_Page_Title": "ABP <span class=\"gradient-community\">közösségi</span> beszélgetések",
-    "Events_Page_WritingFromUser": "Olvassa el {0} írását az ABP közösségben.",
+    "Members_Page_WritingFromUser": "Olvassa el {0} írását az ABP közösségben.",
     "Post_Create_Page_MetaTitle": "Új bejegyzés",
     "Post_Create_Page_MetaDescription": "Hozzon létre bejegyzést, hogy megossza tapasztalatait az ABP keretrendszerrel kapcsolatban, és hozzájáruljon az ABP közösséghez.",
     "Post_Create_Page_CreateNewPost": "Új bejegyzés létrehozása",
@@ -184,6 +184,7 @@
     "Layout_Title": "{0} | ABP-közösség",
     "Layout_MetaDescription": "Az ABP Community egy olyan környezet, ahol az emberek megoszthatnak bejegyzéseket az ABP keretrendszerről, és követhetik a projekteket.",
     "Index_Page_CommunityIntroduction": "Ez az ABP Framework, a .NET és a szoftverfejlesztés központja. Elolvashatja a cikkeket, megnézheti az oktatóvideókat, tájékozódhat az ABP fejlesztési előrehaladásáról és az ABP-vel kapcsolatos eseményekről, segíthet más fejlesztőknek, és megoszthatja szakértelmét az ABP közösséggel.",
-    "TagsInArticle": "Címkék a cikkben"
+    "TagsInArticle": "Címkék a cikkben",
+    "IConsentToMedium": "Hozzájárulok a bejegyzés közzétételéhez a https://medium.com/volosoft oldalon."
   }
 }
