@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "FreeERP": {
+      "path": "FreeERP.abpmdl.json"
+    }
+  }
+}

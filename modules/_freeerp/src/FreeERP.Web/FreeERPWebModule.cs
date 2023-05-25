@@ -12,7 +12,6 @@ using FreeERP.Web.Menus;
 using Microsoft.OpenApi.Models;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
-using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI;
@@ -45,22 +44,14 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Timing;
+using Polly;
 
 namespace FreeERP.Web
 {
     [DependsOn(
-        typeof(FreeERPHttpApiModule),
-        typeof(FreeERPApplicationModule),
-        typeof(FreeERPEntityFrameworkCoreModule),
-        typeof(AbpAutofacModule),
-        typeof(AbpIdentityWebModule),
-        typeof(AbpSettingManagementWebModule),
-        typeof(AbpAccountWebIdentityServerModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
-        typeof(AbpTenantManagementWebModule),
-        typeof(AbpAspNetCoreSerilogModule),
-        typeof(AbpSwashbuckleModule)
+        typeof(FreeERPApplicationContractsModule),
+        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
+        typeof(AbpAutoMapperModule)
         )]
     public class FreeERPWebModule : AbpModule
     {
@@ -68,17 +59,12 @@ namespace FreeERP.Web
         {
             context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
-                options.AddAssemblyResource(
-                    typeof(FreeERPResource),
-                    typeof(FreeERPDomainModule).Assembly,
-                    typeof(FreeERPDomainSharedModule).Assembly,
-                    typeof(FreeERPApplicationModule).Assembly,
-                    typeof(FreeERPApplicationContractsModule).Assembly,
-                    typeof(FreeERPWebModule).Assembly
-                );
+                options.AddAssemblyResource(typeof(FreeERPResource), typeof(FreeERPWebModule).Assembly);
             });
-            context.Services.PostConfigure<AbpJsonOptions>(option =>
+
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
             {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(FreeERPWebModule).Assembly);
             });
         }
 
@@ -87,16 +73,23 @@ namespace FreeERP.Web
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
-            ConfigureUrls(configuration);
-            ConfigureBundles();
-            ConfigureAuthentication(context, configuration);
-            ConfigureAutoMapper();
+            //ConfigureBundles();
+            //ConfigureAuthentication(context, configuration);
+            ConfigureAutoMapper(context);
             ConfigureVirtualFileSystem(hostingEnvironment);
-            ConfigureLocalizationServices();
+           // ConfigureLocalizationServices();
             ConfigureNavigationServices();
-            ConfigureAutoApiControllers();
-            ConfigureSwaggerServices(context.Services);
+            //ConfigureAutoApiControllers();
+            //ConfigureSwaggerServices(context.Services);
             ConfigureFreeERPOption();
+        }
+
+        private void ConfigureVirtualFileSystem(IWebHostEnvironment hostingEnvironment)
+        {
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<FreeERPWebModule>();
+            });
         }
 
         private void ConfigureFreeERPOption()
@@ -215,13 +208,7 @@ namespace FreeERP.Web
             });
         }
 
-        private void ConfigureUrls(IConfiguration configuration)
-        {
-            Configure<AppUrlOptions>(options =>
-            {
-                options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
-            });
-        }
+        
 
         private void ConfigureBundles()
         {
@@ -237,40 +224,24 @@ namespace FreeERP.Web
             });
         }
 
-        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
-        {
-            context.Services.AddAuthentication()
-                .AddJwtBearer(options =>
-                {
-                    options.Authority = configuration["AuthServer:Authority"];
-                    options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
-                    options.Audience = "FreeERP";
-                });
-        }
+        
 
-        private void ConfigureAutoMapper()
+        private void ConfigureAutoMapper(ServiceConfigurationContext context)
         {
+            context.Services.AddAutoMapperObjectMapper<FreeERPWebModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
-                options.AddMaps<FreeERPWebModule>();
+                options.AddMaps<FreeERPWebModule>(validate: true);
+            });
+
+            Configure<RazorPagesOptions>(options =>
+            {
+                //Configure authorization.
             });
         }
+    
 
-        private void ConfigureVirtualFileSystem(IWebHostEnvironment hostingEnvironment)
-        {
-            if (hostingEnvironment.IsDevelopment())
-            {
-                Configure<AbpVirtualFileSystemOptions>(options =>
-                {
-                    options.FileSets.ReplaceEmbeddedByPhysical<FreeERPDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}FreeERP.Domain.Shared"));
-                    options.FileSets.ReplaceEmbeddedByPhysical<FreeERPDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}FreeERP.Domain"));
-                    options.FileSets.ReplaceEmbeddedByPhysical<FreeERPApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}FreeERP.Application.Contracts"));
-                    options.FileSets.ReplaceEmbeddedByPhysical<FreeERPApplicationModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}FreeERP.Application"));
-                    options.FileSets.ReplaceEmbeddedByPhysical<FreeERPWebModule>(hostingEnvironment.ContentRootPath);
-                });
-            }
-        }
-
+        
         private void ConfigureLocalizationServices()
         {
             Configure<AbpClockOptions>(options =>
@@ -330,43 +301,43 @@ namespace FreeERP.Web
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            var app = context.GetApplicationBuilder();
-            var env = context.GetEnvironment();
+            //var app = context.GetApplicationBuilder();
+            //var env = context.GetEnvironment();
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //}
 
-            app.UseAbpRequestLocalization();
+            //app.UseAbpRequestLocalization();
 
-            if (!env.IsDevelopment())
-            {
-                app.UseErrorPage();
-            }
+            //if (!env.IsDevelopment())
+            //{
+            //    app.UseErrorPage();
+            //}
 
-            app.UseCorrelationId();
-            app.UseStaticFiles();
-            app.UseRouting();
-            app.UseAuthentication();
-            app.UseJwtTokenMiddleware();
+            //app.UseCorrelationId();
+            //app.UseStaticFiles();
+            //app.UseRouting();
+            //app.UseAuthentication();
+            //app.UseJwtTokenMiddleware();
 
-            if (MultiTenancyConsts.IsEnabled)
-            {
-                app.UseMultiTenancy();
-            }
+            //if (MultiTenancyConsts.IsEnabled)
+            //{
+            //    app.UseMultiTenancy();
+            //}
 
-            app.UseUnitOfWork();
-            app.UseIdentityServer();
-            app.UseAuthorization();
-            app.UseSwagger();
-            app.UseAbpSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "FreeERP API");
-            });
-            app.UseAuditing();
-            app.UseAbpSerilogEnrichers();
-            app.UseConfiguredEndpoints();
+            //app.UseUnitOfWork();
+            //app.UseIdentityServer();
+            //app.UseAuthorization();
+            //app.UseSwagger();
+            //app.UseAbpSwaggerUI(options =>
+            //{
+            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "FreeERP API");
+            //});
+            //app.UseAuditing();
+            //app.UseAbpSerilogEnrichers();
+            //app.UseConfiguredEndpoints();
         }
     }
 }

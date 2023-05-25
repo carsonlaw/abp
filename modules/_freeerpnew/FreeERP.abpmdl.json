@@ -1,0 +1,111 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {},
+      "host": {}
+    }
+  },
+  "packages": {
+    "FreeERP.Domain.Shared": {
+      "path": "src/FreeERP.Domain.Shared/FreeERP.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "FreeERP.Domain": {
+      "path": "src/FreeERP.Domain/FreeERP.Domain.abppkg.json",
+      "folder": "src"
+    },
+    "FreeERP.Application.Contracts": {
+      "path": "src/FreeERP.Application.Contracts/FreeERP.Application.Contracts.abppkg.json",
+      "folder": "src"
+    },
+    "FreeERP.Application": {
+      "path": "src/FreeERP.Application/FreeERP.Application.abppkg.json",
+      "folder": "src"
+    },
+    "FreeERP.EntityFrameworkCore": {
+      "path": "src/FreeERP.EntityFrameworkCore/FreeERP.EntityFrameworkCore.abppkg.json",
+      "folder": "src"
+    },
+    "FreeERP.MongoDB": {
+      "path": "src/FreeERP.MongoDB/FreeERP.MongoDB.abppkg.json",
+      "folder": "src"
+    },
+    "FreeERP.HttpApi": {
+      "path": "src/FreeERP.HttpApi/FreeERP.HttpApi.abppkg.json",
+      "folder": "src"
+    },
+    "FreeERP.HttpApi.Client": {
+      "path": "src/FreeERP.HttpApi.Client/FreeERP.HttpApi.Client.abppkg.json",
+      "folder": "src"
+    },
+    "FreeERP.TestBase": {
+      "path": "test/FreeERP.TestBase/FreeERP.TestBase.abppkg.json",
+      "folder": "test"
+    },
+    "FreeERP.EntityFrameworkCore.Tests": {
+      "path": "test/FreeERP.EntityFrameworkCore.Tests/FreeERP.EntityFrameworkCore.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "FreeERP.MongoDB.Tests": {
+      "path": "test/FreeERP.MongoDB.Tests/FreeERP.MongoDB.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "FreeERP.Domain.Tests": {
+      "path": "test/FreeERP.Domain.Tests/FreeERP.Domain.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "FreeERP.Application.Tests": {
+      "path": "test/FreeERP.Application.Tests/FreeERP.Application.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "FreeERP.HttpApi.Host": {
+      "path": "host/FreeERP.HttpApi.Host/FreeERP.HttpApi.Host.abppkg.json",
+      "folder": "host"
+    },
+    "FreeERP.Web": {
+      "path": "src/FreeERP.Web/FreeERP.Web.abppkg.json",
+      "folder": "src"
+    },
+    "FreeERP.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/FreeERP.HttpApi.Client.ConsoleTestApp/FreeERP.HttpApi.Client.ConsoleTestApp.abppkg.json",
+      "folder": "test"
+    },
+    "FreeERP.Web.Host": {
+      "path": "host/FreeERP.Web.Host/FreeERP.Web.Host.abppkg.json",
+      "folder": "host"
+    },
+    "FreeERP.AuthServer": {
+      "path": "host/FreeERP.AuthServer/FreeERP.AuthServer.abppkg.json",
+      "folder": "host"
+    },
+    "FreeERP.Host.Shared": {
+      "path": "host/FreeERP.Host.Shared/FreeERP.Host.Shared.abppkg.json",
+      "folder": "host"
+    },
+    "FreeERP.Web.Unified": {
+      "path": "host/FreeERP.Web.Unified/FreeERP.Web.Unified.abppkg.json",
+      "folder": "host"
+    },
+    "FreeERP.Blazor": {
+      "path": "src/FreeERP.Blazor/FreeERP.Blazor.abppkg.json",
+      "folder": "src"
+    },
+    "FreeERP.Blazor.Host": {
+      "path": "host/FreeERP.Blazor.Host/FreeERP.Blazor.Host.abppkg.json",
+      "folder": "host"
+    },
+    "FreeERP.Blazor.Server": {
+      "path": "src/FreeERP.Blazor.Server/FreeERP.Blazor.Server.abppkg.json",
+      "folder": "src"
+    },
+    "FreeERP.Blazor.WebAssembly": {
+      "path": "src/FreeERP.Blazor.WebAssembly/FreeERP.Blazor.WebAssembly.abppkg.json",
+      "folder": "src"
+    },
+    "FreeERP.Blazor.Server.Host": {
+      "path": "host/FreeERP.Blazor.Server.Host/FreeERP.Blazor.Server.Host.abppkg.json",
+      "folder": "host"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.prod.json",
+  "compilerOptions": {
+    "paths": {
+      "@free-eRP": [
+        "projects/free-eRP/src/public-api.ts"
+      ],
+      "@free-eRP/config": [
+        "projects/free-eRP/config/src/public-api.ts"
+      ],
+      "@proxy": ["projects/free-eRP/src/lib/proxy/index.ts"],
+      "@proxy/*": ["projects/free-eRP/src/lib/proxy/*"]
+    }
+  }
+}
