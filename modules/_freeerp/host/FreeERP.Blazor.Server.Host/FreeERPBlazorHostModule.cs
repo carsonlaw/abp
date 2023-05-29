@@ -119,30 +119,30 @@ public class FreeERPBlazorHostModule : AbpModule
 
         Configure<AbpDbContextOptions>(options =>
         {
-            options.UsePostgreSql();
+            options.UseNpgsql();
         });
 
         Configure<AbpBundlingOptions>(options =>
         {
-                // MVC UI
-                options.StyleBundles.Configure(
-                BasicThemeBundles.Styles.Global,
-                bundle =>
-                {
-                    bundle.AddFiles("/global-styles.css");
-                }
-            );
+            // MVC UI
+            options.StyleBundles.Configure(
+            BasicThemeBundles.Styles.Global,
+            bundle =>
+            {
+                bundle.AddFiles("/global-styles.css");
+            }
+        );
 
-                //BLAZOR UI
-                options.StyleBundles.Configure(
-                BlazorBasicThemeBundles.Styles.Global,
-                bundle =>
-                {
-                    bundle.AddFiles("/blazor-global-styles.css");
-                        //You can remove the following line if you don't use Blazor CSS isolation for components
-                        bundle.AddFiles("/FreeERP.Blazor.Server.Host.styles.css");
-                }
-            );
+            //BLAZOR UI
+            options.StyleBundles.Configure(
+            BlazorBasicThemeBundles.Styles.Global,
+            bundle =>
+            {
+                bundle.AddFiles("/blazor-global-styles.css");
+                //You can remove the following line if you don't use Blazor CSS isolation for components
+                bundle.AddFiles("/FreeERP.Blazor.Server.Host.styles.css");
+            }
+        );
         });
 
         if (hostingEnvironment.IsDevelopment())
@@ -212,11 +212,11 @@ public class FreeERPBlazorHostModule : AbpModule
             options.AppAssembly = typeof(FreeERPBlazorHostModule).Assembly;
         });
 
-            Configure<AppUrlOptions>(options =>
-            {
-                options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
-                options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"]?.Split(',') ?? Array.Empty<string>());
-            });
+        Configure<AppUrlOptions>(options =>
+        {
+            options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
+            options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"]?.Split(',') ?? Array.Empty<string>());
+        });
 
 #if DEBUG
         context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());

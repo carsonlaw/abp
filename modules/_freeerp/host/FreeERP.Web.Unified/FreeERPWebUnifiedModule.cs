@@ -88,7 +88,7 @@ public class FreeERPWebUnifiedModule : AbpModule
 
         Configure<AbpDbContextOptions>(options =>
         {
-            options.UsePostgreSql();
+            options.UseNpgsql();
         });
 
         if (hostingEnvironment.IsDevelopment())
@@ -148,7 +148,7 @@ public class FreeERPWebUnifiedModule : AbpModule
 #if DEBUG
         context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
 #endif
-        
+
     }
 
     public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)

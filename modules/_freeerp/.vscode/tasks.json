@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/src/FreeERP.Web/FreeERP.Web.csproj",
+                "${workspaceFolder}/host/FreeERP.Blazor.Server.Host/FreeERP.Blazor.Server.Host.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],

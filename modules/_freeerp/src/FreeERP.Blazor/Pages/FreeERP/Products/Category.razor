@@ -1,0 +1,44 @@
+@page "/FreeErp/Products/Category"
+@attribute [Authorize(FreeERPPermissions.Categories.Default)]
+@using Microsoft.Extensions.Localization
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.BlazoriseUI.Components.ObjectExtending
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@inject AbpBlazorMessageLocalizerHelper<FreeERPResource> LH
+
+@using global::FreeERP.Products
+
+@inherits AbpCrudPageBase<ICategoryAppService,CategoryDto,Guid,CategoryGetListInput,CategoryCreateUpdateDto,CategoryCreateUpdateDto>
+
+<Card>
+    <CardHeader>
+        @* ************************* PAGE HEADER ************************* *@
+        <PageHeader Title="@L["Users"]"
+                    BreadcrumbItems="@BreadcrumbItems"
+                    Toolbar="@Toolbar" />
+    </CardHeader>
+    <CardBody class="row">
+
+        <Column ColumnSize="ColumnSize.Is8">
+        </Column>
+        <Column ColumnSize="ColumnSize.Is4" class="form-group row" style="text-align:right;">
+            <label for="inputPassword" class="col-sm-4 col-form-label pt-1">  @L["Search"] </label>
+            <div class="col-sm-8">
+                <TextEdit class="form-control-sm" id="inputPassword" Text="@GetListInput.Filter" 
+                TextChanged="@OnSearchTextChanged" 
+                />
+            </div>
+        </Column>
+
+        @* ************************* DATA GRID ************************* *@
+        <AbpExtensibleDataGrid TItem="CategoryDto"
+                               Data="Entities"
+                               ReadData="OnDataGridReadAsync"
+                               TotalItems="TotalCount"
+                               ShowPager="true"
+                               PageSize="PageSize"
+                               CurrentPage="@CurrentPage"
+                               Columns="@ProductCategoryTableColumns">
+        </AbpExtensibleDataGrid>
+    </CardBody>
+</Card>

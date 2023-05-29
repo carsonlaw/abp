@@ -6,7 +6,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "buildDbmigrator",
-            "program": "${workspaceFolder}/src/FreeERP.DbMigrator/bin/Debug/net6.0/FreeERP.DbMigrator.dll",
+            "program": "${workspaceFolder}/src/FreeERP.DbMigrator/bin/Debug/net7.0/FreeERP.DbMigrator.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/FreeERP.DbMigrator",
             "stopAtEntry": false,
@@ -21,9 +21,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/FreeERP.Web/bin/Debug/net6.0/FreeERP.Web.dll",
+            "program": "${workspaceFolder}/host/FreeERP.Blazor.Server.Host/bin/Debug/net7.0/FreeERP.Blazor.Server.Host.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/FreeERP.Web",
+            "cwd": "${workspaceFolder}/host/FreeERP.Blazor.Server.Host",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
