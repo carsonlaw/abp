@@ -16,6 +16,8 @@ namespace FreeERP.Blazor.Pages.FreeERP.Products;
 
 public partial class Category
 {
+    protected string CategoryName;
+    protected string CategoryModelName;
     public Category()
     {
         ObjectMapperContext = typeof(FreeERPBlazorModule);
@@ -30,21 +32,47 @@ public partial class Category
     protected PageToolbar Toolbar { get; } = new();
     private List<TableColumn> ProductCategoryTableColumns => TableColumns.Get<Category>();
 
+    protected override Task OnInitializedAsync()
+    {
+        CategoryName = L["CategorySelect"];
+        CategoryModelName = L["CategoryParentSelect"];
+        return base.OnInitializedAsync();
+    }
+
     /// <summary>
     /// 重设Breadcrumb
     /// </summary>
     /// <returns></returns>
     protected override ValueTask SetBreadcrumbItemsAsync()
     {
-        BreadcrumbItems.Add(new Volo.Abp.BlazoriseUI.BreadcrumbItem(L["Menu:IdentityManagement"].Value));
-        BreadcrumbItems.Add(new Volo.Abp.BlazoriseUI.BreadcrumbItem(L["Users"].Value));
+        BreadcrumbItems.Add(new Volo.Abp.BlazoriseUI.BreadcrumbItem(L["Menu:ProductsGroupName"].Value));
+        BreadcrumbItems.Add(new Volo.Abp.BlazoriseUI.BreadcrumbItem(L["Menu:Category"].Value));
         return base.SetBreadcrumbItemsAsync();
     }
-    protected virtual async Task OnSearchTextChanged(string value)
+
+    protected override ValueTask SetEntityActionsAsync()
     {
-        GetListInput.Filter = value;
-        CurrentPage = 1;
-        await GetEntitiesAsync();
+        EntityActions
+            .Get<Category>()
+            .AddRange(new EntityAction[]
+            {
+                    new EntityAction
+                    {
+                        Text = L["Edit"],
+                        Visible = (data) => HasUpdatePermission,
+                        Clicked = async (data) => await OpenEditModalAsync(data.As<CategoryDto>())
+                    },
+
+                    new EntityAction
+                    {
+                        Text = L["Delete"],
+                        Visible = (data) => HasDeletePermission, //&& CurrentUser.GetId() != data.As<CategoryDto>().Id,
+                        Clicked = async (data) => await DeleteEntityAsync(data.As<CategoryDto>()),
+                        ConfirmationMessage = (data) => GetDeleteConfirmationMessage(data.As<CategoryDto>())
+                    }
+            });
+
+        return base.SetEntityActionsAsync();
     }
 
     protected override ValueTask SetTableColumnsAsync()
@@ -79,17 +107,22 @@ public partial class Category
 
         ProductCategoryTableColumns.AddRange(GetExtensionTableColumns("FreeERP",
         "ProductCategory"));
-        return base.SetEntityActionsAsync();
+        return base.SetTableColumnsAsync();
     }
 
     protected override ValueTask SetToolbarItemsAsync()
     {
-        Toolbar.AddButton(L["NewUser"], OpenCreateModalAsync,
+        Toolbar.AddButton(L["CategoryNew"], OpenCreateModalAsync,
             IconName.Add,
             requiredPolicyName: CreatePolicyName);
 
         return base.SetToolbarItemsAsync();
     }
 
+    protected virtual async Task OnSearchTextChanged()
+    {
+        CurrentPage = 1;
+        await GetEntitiesAsync();
+    }
 
 }

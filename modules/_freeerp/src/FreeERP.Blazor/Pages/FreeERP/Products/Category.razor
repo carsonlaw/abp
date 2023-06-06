@@ -13,20 +13,31 @@
 <Card>
     <CardHeader>
         @* ************************* PAGE HEADER ************************* *@
-        <PageHeader Title="@L["Users"]"
+        <PageHeader Title=""
                     BreadcrumbItems="@BreadcrumbItems"
                     Toolbar="@Toolbar" />
     </CardHeader>
     <CardBody class="row">
 
-        <Column ColumnSize="ColumnSize.Is8">
+        <Column ColumnSize="ColumnSize.Is2">
         </Column>
-        <Column ColumnSize="ColumnSize.Is4" class="form-group row" style="text-align:right;">
-            <label for="inputPassword" class="col-sm-4 col-form-label pt-1">  @L["Search"] </label>
-            <div class="col-sm-8">
-                <TextEdit class="form-control-sm" id="inputPassword" Text="@GetListInput.Filter" 
-                TextChanged="@OnSearchTextChanged" 
-                />
+        <Column ColumnSize="ColumnSize.Is10" class="form-group row" style="text-align:right;">
+            <FreeERP.Blazor.components.products.CategorySelect 
+                cssClass="col-sm-6" 
+                @bind-CurrentName="CategoryName"
+                @bind-CurrentId="GetListInput.Pid" /> 
+            
+            <div class="col-sm-6">
+                <Addons>
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit class="form-control-sm" id="inputSearch" @bind-Text="GetListInput.Filter" 
+                            Placeholder=""
+                        />
+                    </Addon>
+                    <Addon AddonType="AddonType.End">
+                        <Button Color="Color.Secondary" Clicked="OnSearchTextChanged">@L["Search"]</Button>
+                    </Addon>
+                </Addons>
             </div>
         </Column>
 
@@ -42,3 +53,62 @@
         </AbpExtensibleDataGrid>
     </CardBody>
 </Card>
+
+@* ************************* CREATE MODAL ************************* *@
+@if (HasCreatePermission)
+{
+    <Modal @ref="CreateModal" Closing="@ClosingCreateModal">
+        <ModalContent Centered="true">
+            <Form>
+                <ModalHeader>
+                    <ModalTitle>@L["CategoryNew"]</ModalTitle>
+                    <CloseButton Clicked="CloseCreateModalAsync" />
+                </ModalHeader>
+                <ModalBody>
+                    <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FreeERP.Blazor.components.products.CategorySelect 
+                                    @bind-CurrentName="CategoryModelName"
+                                    @bind-CurrentId="NewEntity.Pid" /> 
+                            </Field>
+                            <Field>
+                                <FieldLabel>@L["CategoryName"]</FieldLabel>
+                                <TextEdit @bind-Text="NewEntity.Name"  Autofocus="true">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>@L["Slug"]</FieldLabel>
+                                <TextEdit @bind-Text="NewEntity.Slug">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>@L["Sort"]</FieldLabel>
+                                <NumericEdit TValue="int" @bind-Value="NewEntity.Sort">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </NumericEdit>
+                            </Field>
+                        </Validation>
+                        @* <ExtensionProperties TEntityType="CategoryCreateUpdateDto" TResourceType="FreeERPResource" Entity="@NewEntity" LH="@LH" /> *@
+                    </Validations>
+                </ModalBody>
+                <ModalFooter>
+                    <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
+                    <SubmitButton Clicked="@CreateEntityAsync" />
+                </ModalFooter>
+            </Form>
+        </ModalContent>
+    </Modal>
+}

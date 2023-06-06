@@ -23,7 +23,7 @@ namespace FreeERP.Web.Components
             SupplierSelectWidgetModel model
             )
         {
-
+            await Task.CompletedTask;
             return View("~/Components/SupplierSelectWidget/Default.cshtml", model);
         }
 
