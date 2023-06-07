@@ -35,7 +35,6 @@ public partial class Category
     protected override Task OnInitializedAsync()
     {
         CategoryName = L["CategorySelect"];
-        CategoryModelName = L["CategoryParentSelect"];
         return base.OnInitializedAsync();
     }
 
@@ -117,6 +116,35 @@ public partial class Category
             requiredPolicyName: CreatePolicyName);
 
         return base.SetToolbarItemsAsync();
+    }
+
+    protected override Task OpenCreateModalAsync()
+    {
+        CategoryModelName = L["CategoryParentSelect"];
+        return base.OpenCreateModalAsync();
+    }
+    protected override async Task OpenEditModalAsync(CategoryDto entity)
+    {
+        CategoryModelName = await getCategoryNameById(entity.Pid);
+        await base.OpenEditModalAsync(entity);
+    }
+
+    private async Task<string> getCategoryNameById(Guid? id)
+    {
+        if (!id.HasValue)
+            return L["CategoryParentSelect"];
+        var obj = await AppService.GetAsync(id.Value);
+        return obj.Name;
+    }
+
+    protected override Task OnUpdatingEntityAsync()
+    {
+        return base.OnUpdatingEntityAsync();
+    }
+
+    protected override string GetDeleteConfirmationMessage(CategoryDto entity)
+    {
+        return base.GetDeleteConfirmationMessage(entity);
     }
 
     protected virtual async Task OnSearchTextChanged()

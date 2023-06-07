@@ -20,6 +20,7 @@ namespace FreeERP
             CreateMap<MediaDescriptor, MediaDescriptorDto>();
             CreateMap<Category, CategoryDto>();
             CreateMap<CategoryDto, Category>();
+            CreateMap<CategoryDto, CategoryCreateUpdateDto>();
             CreateMap<Product, ProductDto>()
                 .ForMember(d => d.StockNum, o => o.MapFrom(s => s.Stocks.Sum(st => st.StockNum)));
 

@@ -112,3 +112,63 @@
         </ModalContent>
     </Modal>
 }
+
+@* ************************* EDIT MODAL ************************* *@
+@if (HasUpdatePermission)
+{
+    <Modal @ref="EditModal" Closing="@ClosingEditModal">
+        <ModalContent Centered="true">
+            <Form>
+                <ModalHeader>
+                    <ModalTitle>@L["Edit"]</ModalTitle>
+                    <CloseButton Clicked="CloseEditModalAsync" />
+                </ModalHeader>
+                <ModalBody>
+                    <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
+                        <input type="hidden" name="ConcurrencyStamp" @bind-value="EditingEntity.ConcurrencyStamp" />
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FreeERP.Blazor.components.products.CategorySelect 
+                                    @bind-CurrentName="CategoryModelName"
+                                    @bind-CurrentId="EditingEntity.Pid" /> 
+                            </Field>
+                            <Field>
+                                <FieldLabel>@L["CategoryName"]</FieldLabel>
+                                <TextEdit @bind-Text="EditingEntity.Name"  Autofocus="true">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>@L["Slug"]</FieldLabel>
+                                <TextEdit @bind-Text="EditingEntity.Slug">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </Field>
+                        </Validation>
+                        <Validation MessageLocalizer="@LH.Localize">
+                            <Field>
+                                <FieldLabel>@L["Sort"]</FieldLabel>
+                                <NumericEdit TValue="int" @bind-Value="EditingEntity.Sort">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </NumericEdit>
+                            </Field>
+                        </Validation>
+                        
+                    </Validations>
+                </ModalBody>
+                <ModalFooter>
+                    <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
+                    <SubmitButton Clicked="@UpdateEntityAsync" />
+                </ModalFooter>
+            </Form>
+        </ModalContent>
+    </Modal>
+}
