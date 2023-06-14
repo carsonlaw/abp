@@ -16,8 +16,8 @@ namespace FreeERP.Blazor.Pages.FreeERP.Products;
 
 public partial class Category
 {
-    protected string CategoryName;
-    protected string CategoryModelName;
+    protected string? CategoryName;
+    protected string? CategoryModelName;
     public Category()
     {
         ObjectMapperContext = typeof(FreeERPBlazorModule);
@@ -140,6 +140,11 @@ public partial class Category
     protected override Task OnUpdatingEntityAsync()
     {
         return base.OnUpdatingEntityAsync();
+    }
+    protected override async Task OnUpdatedEntityAsync()
+    {
+        await InvokeAsync(StateHasChanged);
+        await base.OnUpdatedEntityAsync();
     }
 
     protected override string GetDeleteConfirmationMessage(CategoryDto entity)

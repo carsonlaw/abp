@@ -126,7 +126,10 @@ namespace FreeERP.Products
 
             var totalCount = await AsyncExecuter.CountAsync(query);
 
-            query = query.OrderBy(input.Sorting);
+            if (string.IsNullOrWhiteSpace(input.Sorting))
+                query = query.OrderByDescending(f => f.CreationTime);
+            else
+                query = query.OrderBy(input.Sorting);
             query = query.PageBy(input);
             var entities = await AsyncExecuter.ToListAsync(query);
 
