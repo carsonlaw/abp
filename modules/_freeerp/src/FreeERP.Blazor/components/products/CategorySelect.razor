@@ -1,10 +1,10 @@
 @inherits FreeERPComponentBase
 <Dropdown class="@cssClass" Display="Display.InlineBlock">
-    <DropdownToggle  Color="Color.Primary">@CurrentName</DropdownToggle>
+    <DropdownToggle Color="Color.Primary">@CurrentName</DropdownToggle>
     <DropdownMenu>
-        <FreeERP.Blazor.components.products.CategorySelectMenu 
-            Categorys="@Categorys" 
-            @bind-CurrentId = "CurrentId"
-            @bind-CurrentName = "CurrentName" />
+        <FreeERP.Blazor.components.products.CategorySelectMenu
+            Categorys="@Categorys"
+            @bind-CurrentId="CurrentId"
+            @bind-CurrentName="CurrentName"/>
     </DropdownMenu>
 </Dropdown>

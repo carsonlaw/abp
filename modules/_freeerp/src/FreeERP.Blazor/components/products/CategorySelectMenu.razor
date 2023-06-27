@@ -1,23 +1,23 @@
 @inherits FreeERPComponentBase
-    @if (Categorys != null)
+@if (Categorys != null)
+{
+    foreach (var item in Categorys)
     {
-        foreach (var item in Categorys)
+        if (item.Items != null && item.Items.Count > 0)
         {
-            if (item.Items != null && item.Items.Count > 0)
-            {
-                <Dropdown>
-                    <DropdownToggle Clicked="()=>CategoryClicked(item)">@item.Name</DropdownToggle>
-                    <DropdownMenu>
-                        <FreeERP.Blazor.components.products.CategorySelectMenu 
-                            Categorys="@item.Items" 
-                            @bind-CurrentId = "CurrentId"
-                            @bind-CurrentName = "CurrentName" />
-                    </DropdownMenu>
-                </Dropdown>
-            }
-            else
-            {
-                <DropdownItem Clicked="()=>CategoryClicked(item)">@item.Name</DropdownItem>
-            }
+            <Dropdown>
+                <DropdownToggle Clicked="() => CategoryClicked(item)">@item.Name</DropdownToggle>
+                <DropdownMenu>
+                    <FreeERP.Blazor.components.products.CategorySelectMenu
+                        Categorys="@item.Items"
+                        @bind-CurrentId="CurrentId"
+                        @bind-CurrentName="CurrentName"/>
+                </DropdownMenu>
+            </Dropdown>
+        }
+        else
+        {
+            <DropdownItem Clicked="() => CategoryClicked(item)">@item.Name</DropdownItem>
         }
     }
+}
